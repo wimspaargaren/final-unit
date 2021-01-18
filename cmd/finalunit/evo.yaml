@@ -1,0 +1,7 @@
+files:
+  - name: opts.go
+    ignore: true
+  - name: main.go
+    funcs:
+      - name: Generate
+        ignore: true

@@ -1,0 +1,13 @@
+custom_vals: "evo_test.go"
+files:
+  - name: password.go
+    funcs:
+      - name: ComparePassword
+        receiver_values: ["defaultManager"]
+        params:
+          - name: password
+            values: ["X","defaultPass"]
+          - name: hash
+            values: ["defaultHash"]
+      - name: GenerateHash
+        receiver_values: ["defaultManager"]

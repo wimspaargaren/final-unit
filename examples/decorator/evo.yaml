@@ -1,0 +1,10 @@
+custom_vals: "evo_test.go"
+files:
+  - name: decorator.go
+    funcs:
+      - name: ComparePassword
+        params:
+          - name: password
+            values: ["defaultPasswd"]
+          - name: hash
+            values: ["defaultHash","wrongHash"]
