@@ -1,0 +1,5 @@
+files:
+  - name: ignore.go
+    funcs:
+      - name: IgnoreMe
+        ignore: true

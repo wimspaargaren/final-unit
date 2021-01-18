@@ -1,0 +1,9 @@
+custom_vals: "evo_test.go"
+files:
+  - file:
+    - name: password.go
+      funcs:
+      - func: ComparePassword
+      params:
+        - name: password
+          values: ["X"]
