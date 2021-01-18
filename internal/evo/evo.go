@@ -9,6 +9,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/wimspaargaren/final-unit/internal/gen"
+	"github.com/wimspaargaren/final-unit/internal/testcase"
 	"github.com/wimspaargaren/final-unit/internal/tmplexec"
 	"github.com/wimspaargaren/final-unit/pkg/chance"
 )
@@ -210,12 +211,13 @@ func (p *Population) crossover(a, b *gen.Organism) (*gen.Organism, error) {
 			Dir:         af.Dir,
 			FileName:    af.FileName,
 			PackageName: af.PackageName,
-			TestCases:   make(map[string][]*gen.TestCase),
+			TestCases:   make(map[string][]*testcase.TestCase),
 		}
 		for funcName, testCaseList := range af.TestCases {
 			for j, testCase := range testCaseList {
 				if chance.IsChance(p.Opts.MutationRate) {
-					x.TestCases[funcName] = append(x.TestCases[funcName], p.Opts.OrgGenerator.FuncDeclToTestCase(testCase.FuncDecl, testCase.Pointer))
+					testCase.Create()
+					x.TestCases[funcName] = append(x.TestCases[funcName], testCase)
 					continue
 				}
 				if chance.IsChance(crossOverRate) {

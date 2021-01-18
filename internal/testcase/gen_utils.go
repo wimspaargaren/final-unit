@@ -1,4 +1,4 @@
-package gen
+package testcase
 
 import (
 	"go/ast"
@@ -7,7 +7,7 @@ import (
 )
 
 // IsBasicLit reports if an idenetifier is a basic literal
-func (g *Generator) IsBasicLit(identifier string) bool {
+func (g *TestCase) IsBasicLit(identifier string) bool {
 	switch identifier {
 	case "int",
 		"bool",
@@ -35,12 +35,12 @@ func (g *Generator) IsBasicLit(identifier string) bool {
 }
 
 // IsError checks if identifier is reserver error keyword
-func (g *Generator) IsError(identifier string) bool {
+func (g *TestCase) IsError(identifier string) bool {
 	return identifier == "error"
 }
 
 // IsBasicExpr checks if expr is basic expr
-func (g *Generator) IsBasicExpr(x ast.Expr) (string, bool) {
+func (g *TestCase) IsBasicExpr(x ast.Expr) (string, bool) {
 	if t, ok := x.(*ast.Ident); ok {
 		if t.Obj == nil {
 			if g.IsBasicLit(t.Name) {
@@ -52,7 +52,7 @@ func (g *Generator) IsBasicExpr(x ast.Expr) (string, bool) {
 }
 
 // GetUnnamedStructIdent retrieves an identifier for an unnamed struct field
-func (g *Generator) GetUnnamedStructIdent(fieldType ast.Expr, input *RecursionInput) *ast.Ident {
+func (g *TestCase) GetUnnamedStructIdent(fieldType ast.Expr, input *RecursionInput) *ast.Ident {
 	switch t := fieldType.(type) {
 	case *ast.Ident:
 		return t
