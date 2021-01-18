@@ -1,4 +1,4 @@
-package gen
+package testcase
 
 import (
 	"go/ast"
@@ -8,7 +8,7 @@ import (
 )
 
 // InterfaceGenDecl creates interface gen decl
-func (g *Generator) InterfaceGenDecl(input *RecursionInput, interfaceImplIdent *ast.Ident) *ast.GenDecl {
+func (g *TestCase) InterfaceGenDecl(input *RecursionInput, interfaceImplIdent *ast.Ident) *ast.GenDecl {
 	return &ast.GenDecl{
 		Tok: token.TYPE,
 		Specs: []ast.Spec{
@@ -26,14 +26,14 @@ func (g *Generator) InterfaceGenDecl(input *RecursionInput, interfaceImplIdent *
 }
 
 // ErrExprToValExpr converts error expression to val expression
-func (g *Generator) ErrExprToValExpr() *TypeExprToValExprRes {
+func (g *TestCase) ErrExprToValExpr() *TypeExprToValExprRes {
 	var errReturn ast.Expr
 	// Init default return value to nil
 	errReturn = &ast.Ident{
 		Name: "nil",
 	}
-	// if val generator provides true return err
-	if g.Opts.ValGenerator.Error() {
+	// if val TestCase provides true return err
+	if g.Opts.ValTestCase.Error() {
 		errReturn = &ast.CallExpr{
 			Fun: &ast.SelectorExpr{
 				X:   &ast.Ident{Name: "fmt"},
@@ -80,21 +80,21 @@ func (g *Generator) ErrExprToValExpr() *TypeExprToValExprRes {
 }
 
 // BasicExprToValExpr converts a basic identifier to an expression
-func (g *Generator) BasicExprToValExpr(identifier string) ast.Expr { // nolint: gocyclo
+func (g *TestCase) BasicExprToValExpr(identifier string) ast.Expr { // nolint: gocyclo
 	switch identifier {
 	case "int":
 		return &ast.BasicLit{
 			Kind:  token.INT,
-			Value: g.Opts.ValGenerator.Int(),
+			Value: g.Opts.ValTestCase.Int(),
 		}
 	case "bool":
 		return &ast.Ident{
-			Name: g.Opts.ValGenerator.Bool(),
+			Name: g.Opts.ValTestCase.Bool(),
 		}
 	case "string":
 		return &ast.BasicLit{
 			Kind:  token.STRING,
-			Value: g.Opts.ValGenerator.String(),
+			Value: g.Opts.ValTestCase.String(),
 		}
 	case "float32":
 		return &ast.CallExpr{
@@ -104,50 +104,50 @@ func (g *Generator) BasicExprToValExpr(identifier string) ast.Expr { // nolint: 
 			Args: []ast.Expr{
 				&ast.BasicLit{
 					Kind:  token.FLOAT,
-					Value: g.Opts.ValGenerator.Float32(),
+					Value: g.Opts.ValTestCase.Float32(),
 				},
 			},
 		}
 	case "float64":
 		return &ast.BasicLit{
 			Kind:  token.FLOAT,
-			Value: g.Opts.ValGenerator.Float64(),
+			Value: g.Opts.ValTestCase.Float64(),
 		}
 	case "byte":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.Byte())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.Byte())
 	case "rune":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.Rune())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.Rune())
 	case "uintptr":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.UInt())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.UInt())
 	case "uint":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.UInt())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.UInt())
 	case "uint8":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.UInt8())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.UInt8())
 	case "uint16":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.UInt16())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.UInt16())
 	case "uint32":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.UInt32())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.UInt32())
 	case "uint64":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.UInt64())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.UInt64())
 	case "int8":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.Int8())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.Int8())
 	case "int16":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.Int16())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.Int16())
 	case "int32":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.Int32())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.Int32())
 	case "int64":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.Int64())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.Int64())
 	case "complex64":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.Complex64())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.Complex64())
 	case "complex128":
-		return g.numericBasicType(identifier, g.Opts.ValGenerator.Complex128())
+		return g.numericBasicType(identifier, g.Opts.ValTestCase.Complex128())
 	default:
 		log.Warningf("basic lit not implemented yet: %s", identifier)
 	}
 	return &ast.BasicLit{}
 }
 
-func (g *Generator) numericBasicType(identifier, value string) ast.Expr {
+func (g *TestCase) numericBasicType(identifier, value string) ast.Expr {
 	return &ast.CallExpr{
 		Fun: &ast.Ident{
 			Name: identifier,

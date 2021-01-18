@@ -1,4 +1,4 @@
-package gen
+package testcase
 
 import (
 	"go/ast"

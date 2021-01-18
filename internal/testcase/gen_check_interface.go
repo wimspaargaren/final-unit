@@ -1,4 +1,4 @@
-package gen
+package testcase
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ func NewRecursionInputWithExpr(e ast.Expr, input *RecursionInput) *RecursionInpu
 }
 
 // ShouldReturnForInterface checks if should return because unimplementable interface
-func (g *Generator) ShouldReturnForInterface(expr ast.Expr, input *RecursionInput) bool {
+func (g *TestCase) ShouldReturnForInterface(expr ast.Expr, input *RecursionInput) bool {
 	if interfaceType, ok := expr.(*ast.InterfaceType); ok {
 		canGen := g.CheckIfCanGenInterface(interfaceType, input)
 		return !canGen
@@ -28,7 +28,7 @@ func (g *Generator) ShouldReturnForInterface(expr ast.Expr, input *RecursionInpu
 }
 
 // CheckIfCanGenInterface if any non exported values are present in an interface, we need to return it as nil
-func (g *Generator) CheckIfCanGenInterface(t *ast.InterfaceType, input *RecursionInput) bool {
+func (g *TestCase) CheckIfCanGenInterface(t *ast.InterfaceType, input *RecursionInput) bool {
 	// Detect interface cycles!
 	input.counter.Interfaces[t]++
 
@@ -57,7 +57,7 @@ func (g *Generator) CheckIfCanGenInterface(t *ast.InterfaceType, input *Recursio
 }
 
 // ShouldReturnForFunc checks if should return because unimplementable func type
-func (g *Generator) ShouldReturnForFunc(expr ast.Expr, input *RecursionInput) bool {
+func (g *TestCase) ShouldReturnForFunc(expr ast.Expr, input *RecursionInput) bool {
 	if funcType, ok := expr.(*ast.FuncType); ok {
 		canGen := g.CheckIfCanGenFunc(funcType, input)
 		return !canGen
@@ -66,7 +66,7 @@ func (g *Generator) ShouldReturnForFunc(expr ast.Expr, input *RecursionInput) bo
 }
 
 // CheckIfCanGenFunc check if we are able to gen func implementation
-func (g *Generator) CheckIfCanGenFunc(f *ast.FuncType, input *RecursionInput) bool {
+func (g *TestCase) CheckIfCanGenFunc(f *ast.FuncType, input *RecursionInput) bool {
 	funcOK := true
 	if f.Results == nil {
 		return true
@@ -87,7 +87,7 @@ func (g *Generator) CheckIfCanGenFunc(f *ast.FuncType, input *RecursionInput) bo
 }
 
 // CheckIfCanGenExpr recurse interface expression and discover if we find any non exported expressions
-func (g *Generator) CheckIfCanGenExpr(input *RecursionInput) bool { // nolint: funlen, gocyclo, gocognit
+func (g *TestCase) CheckIfCanGenExpr(input *RecursionInput) bool { // nolint: funlen, gocyclo, gocognit
 	if input.e == nil {
 		return true
 	}

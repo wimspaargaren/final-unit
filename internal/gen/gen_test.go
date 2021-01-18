@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"github.com/wimspaargaren/final-unit/internal/testcase"
 	"github.com/wimspaargaren/final-unit/pkg/values"
 	"github.com/wimspaargaren/final-unit/pkg/variables"
 )
@@ -1148,7 +1149,7 @@ func TestPrintStmtTestSuite(t *testing.T) {
 	suite.Run(t, new(PrintStmtTestSuite))
 }
 
-func (s *PrintStmtTestSuite) GetTestCase(files []*File, funcName string) []*TestCase {
+func (s *PrintStmtTestSuite) GetTestCase(files []*File, funcName string) []*testcase.TestCase {
 	for _, file := range files {
 		if x, ok := file.TestCases[funcName]; ok {
 			return x

@@ -1,11 +1,10 @@
-package gen
+package testcase
 
 import (
 	"go/ast"
 	"go/printer"
 	"go/token"
 	"strconv"
-	"unicode"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/wimspaargaren/final-unit/internal/importer"
@@ -84,13 +83,6 @@ func getArrayLen(expr ast.Expr) int {
 		return -1
 	}
 	return -1
-}
-
-func lowerCaseFirstLetter(str string) string {
-	for i, v := range str {
-		return string(unicode.ToLower(v)) + str[i+1:]
-	}
-	return ""
 }
 
 // NewRecursionInput creates new recursion input

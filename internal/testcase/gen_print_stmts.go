@@ -1,4 +1,4 @@
-package gen
+package testcase
 
 import (
 	"fmt"
@@ -8,6 +8,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/wimspaargaren/final-unit/internal/importer"
+	"github.com/wimspaargaren/final-unit/internal/utils"
 )
 
 // PrintRecursionInput input object for traversing the AST
@@ -26,7 +27,7 @@ type PrintResult struct {
 }
 
 // ResultsToPrintStmts converts a results list to print statements
-func (g *Generator) ResultsToPrintStmts(results *ast.FieldList, funcName string, pointer *importer.PkgResolverPointer) ([]ast.Expr, *PrintResult, []ast.Stmt) {
+func (g *TestCase) ResultsToPrintStmts(results *ast.FieldList, funcName string, pointer *importer.PkgResolverPointer) ([]ast.Expr, *PrintResult, []ast.Stmt) {
 	if results == nil {
 		return []ast.Expr{}, &PrintResult{}, []ast.Stmt{}
 	}
@@ -63,14 +64,14 @@ func (g *Generator) ResultsToPrintStmts(results *ast.FieldList, funcName string,
 }
 
 // FieldToPrintStmt convert field to print statement
-func (g *Generator) FieldToPrintStmt(field *ast.Field, funcName string, pointer *importer.PkgResolverPointer) ([]ast.Expr, *PrintResult) {
+func (g *TestCase) FieldToPrintStmt(field *ast.Field, funcName string, pointer *importer.PkgResolverPointer) ([]ast.Expr, *PrintResult) {
 	// Named returns
 	if len(field.Names) != 0 {
 		expressions := []ast.Expr{}
 		printResult := &PrintResult{}
 		for range field.Names {
 			newIdent := &ast.Ident{
-				Name: lowerCaseFirstLetter(g.Opts.VarGenerator.Generate()),
+				Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
 			}
 
 			res := g.TypeExpressionToPrintStmt(NewPrintRecursionInput(field.Type, newIdent.Name, pointer))
@@ -87,7 +88,7 @@ func (g *Generator) FieldToPrintStmt(field *ast.Field, funcName string, pointer 
 	}
 	// Normal returns
 	newIdent := &ast.Ident{
-		Name: lowerCaseFirstLetter(g.Opts.VarGenerator.Generate()),
+		Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
 	}
 	res := g.TypeExpressionToPrintStmt(NewPrintRecursionInput(field.Type, newIdent.Name, pointer))
 	if len(res.Stmts) == 0 {
@@ -99,7 +100,7 @@ func (g *Generator) FieldToPrintStmt(field *ast.Field, funcName string, pointer 
 }
 
 // TypeExpressionToPrintStmt converts type expression of a result to print statement
-func (g *Generator) TypeExpressionToPrintStmt(input *PrintRecursionInput) *PrintResult { // nolint: gocyclo, funlen
+func (g *TestCase) TypeExpressionToPrintStmt(input *PrintRecursionInput) *PrintResult { // nolint: gocyclo, funlen
 	switch t := input.e.(type) {
 	case *ast.Ident:
 		if t.Obj == nil {
@@ -191,7 +192,7 @@ func (g *Generator) TypeExpressionToPrintStmt(input *PrintRecursionInput) *Print
 }
 
 // IdentToPrintStmt converts ident to print statement
-func (g *Generator) IdentToPrintStmt(t, oType *ast.Ident, input *PrintRecursionInput) *PrintResult {
+func (g *TestCase) IdentToPrintStmt(t, oType *ast.Ident, input *PrintRecursionInput) *PrintResult {
 	prefix := CreatePrintfStmt([]ast.Expr{
 		BasicLitString(`{ "type": "%s", "var_name": "%s", "child": `),
 		BasicLitString("custom"),
@@ -211,7 +212,7 @@ func (g *Generator) IdentToPrintStmt(t, oType *ast.Ident, input *PrintRecursionI
 }
 
 // SelectorExprToPrintStmt converts a selector expression to a print statement
-func (g *Generator) SelectorExprToPrintStmt(input *PrintRecursionInput) *PrintResult {
+func (g *TestCase) SelectorExprToPrintStmt(input *PrintRecursionInput) *PrintResult {
 	t, ok := input.e.(*ast.SelectorExpr)
 	// Sanity check
 	if !ok {
@@ -245,7 +246,7 @@ func (g *Generator) SelectorExprToPrintStmt(input *PrintRecursionInput) *PrintRe
 }
 
 // ErrExprToPrintStmt converts err expression to print statement
-func (g *Generator) ErrExprToPrintStmt(input *PrintRecursionInput) *PrintResult {
+func (g *TestCase) ErrExprToPrintStmt(input *PrintRecursionInput) *PrintResult {
 	ifStmt := &ast.IfStmt{
 		Cond: &ast.BinaryExpr{
 			X:  &ast.Ident{Name: input.varName},
@@ -279,7 +280,7 @@ func (g *Generator) ErrExprToPrintStmt(input *PrintRecursionInput) *PrintResult 
 }
 
 // StarExprToPrintStmt converts a star expression to a print statement
-func (g *Generator) StarExprToPrintStmt(t *ast.StarExpr, input *PrintRecursionInput) *PrintResult {
+func (g *TestCase) StarExprToPrintStmt(t *ast.StarExpr, input *PrintRecursionInput) *PrintResult {
 	ifNilRes := []ast.Stmt{}
 	ifNilRes = append(ifNilRes, input.prefix...)
 	ifNilRes = append(ifNilRes, CreatePrintfStmt([]ast.Expr{
@@ -301,7 +302,7 @@ func (g *Generator) StarExprToPrintStmt(t *ast.StarExpr, input *PrintRecursionIn
 	}
 	// Create new identifier for pointer value
 	pointerValIdent := &ast.Ident{
-		Name: lowerCaseFirstLetter(g.Opts.VarGenerator.Generate()),
+		Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
 	}
 	newValStmt := &ast.AssignStmt{
 		Lhs: []ast.Expr{
@@ -345,7 +346,7 @@ func (g *Generator) StarExprToPrintStmt(t *ast.StarExpr, input *PrintRecursionIn
 }
 
 // StructExprToPrintStmt converts a struct expression to print statement
-func (g *Generator) StructExprToPrintStmt(input *PrintRecursionInput) *PrintResult { // nolint: funlen
+func (g *TestCase) StructExprToPrintStmt(input *PrintRecursionInput) *PrintResult { // nolint: funlen
 	t, ok := input.e.(*ast.StructType)
 	// Sanity check
 	if !ok {
@@ -455,7 +456,7 @@ func (g *Generator) StructExprToPrintStmt(input *PrintRecursionInput) *PrintResu
 }
 
 // MapExprToPrintStmt converts a map type to print statements
-func (g *Generator) MapExprToPrintStmt(t *ast.MapType, input *PrintRecursionInput) *PrintResult {
+func (g *TestCase) MapExprToPrintStmt(t *ast.MapType, input *PrintRecursionInput) *PrintResult {
 	res := []ast.Stmt{}
 
 	keyType, isBasicLit := g.IsBasicExpr(t.Key)
@@ -464,7 +465,7 @@ func (g *Generator) MapExprToPrintStmt(t *ast.MapType, input *PrintRecursionInpu
 	}
 
 	keyIdent := &ast.Ident{
-		Name: lowerCaseFirstLetter(g.Opts.VarGenerator.Generate()),
+		Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
 	}
 
 	rangeStmt := &ast.RangeStmt{
@@ -509,11 +510,11 @@ func (g *Generator) MapExprToPrintStmt(t *ast.MapType, input *PrintRecursionInpu
 }
 
 // ArrayExprToPrintStmt converts an array type to print statements
-func (g *Generator) ArrayExprToPrintStmt(t *ast.ArrayType, input *PrintRecursionInput) *PrintResult {
+func (g *TestCase) ArrayExprToPrintStmt(t *ast.ArrayType, input *PrintRecursionInput) *PrintResult {
 	res := []ast.Stmt{}
 
 	indexIdent := &ast.Ident{
-		Name: lowerCaseFirstLetter(g.Opts.VarGenerator.Generate()),
+		Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
 	}
 	stmt := &ast.ForStmt{
 		Init: &ast.AssignStmt{
@@ -574,7 +575,7 @@ func (g *Generator) ArrayExprToPrintStmt(t *ast.ArrayType, input *PrintRecursion
 }
 
 // BasicExprToPrintStmt converts a basic identifier to a print stmt
-func (g *Generator) BasicExprToPrintStmt(input *PrintRecursionInput, typeIdentifier, varIdentifier string) *PrintResult {
+func (g *TestCase) BasicExprToPrintStmt(input *PrintRecursionInput, typeIdentifier, varIdentifier string) *PrintResult {
 	// nolint: goconst
 	switch typeIdentifier {
 	case "bool",
