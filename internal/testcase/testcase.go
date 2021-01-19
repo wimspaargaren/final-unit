@@ -11,6 +11,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/wimspaargaren/final-unit/internal/decorator"
+	"github.com/wimspaargaren/final-unit/internal/ident"
 	"github.com/wimspaargaren/final-unit/internal/importer"
 	"github.com/wimspaargaren/final-unit/internal/utils"
 	"github.com/wimspaargaren/final-unit/pkg/values"
@@ -21,6 +22,7 @@ import (
 type Options struct {
 	ValTestCase  values.IGen
 	VarTestCase  variables.IGen
+	IdentGen     ident.IGen
 	MaxRecursion int
 }
 
@@ -108,6 +110,9 @@ type Dynamic struct {
 // Create converts a function declaration to a list of assignment statements
 // and declaration statements
 func (g *TestCase) Create() {
+	// Reset local scope counter whenever creating new testcase
+	g.Opts.IdentGen.ResetLocal()
+
 	// Get receiver statements and declarations
 	receiverResult := g.GetFuncReceiverStmts(g.FuncDecl.Recv, g.FuncDecl.Name.Name, g.Pointer)
 	// Get param statements and declarations
@@ -318,9 +323,7 @@ func (g *TestCase) FieldToAssignStmt(p *ast.Field, funcName string, pointer *imp
 	idents := []*ast.Ident{}
 	chanIdents := []*ast.Ident{}
 	for _, param := range p.Names {
-		newIdent := &ast.Ident{
-			Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
-		}
+		newIdent := g.Opts.IdentGen.Create(param)
 		_, fileName := filepath.Split(pointer.File)
 
 		// If decorators have been specified use to generate value statements
@@ -650,7 +653,6 @@ func (g *TestCase) InterfaceTypeToValExpr(input *RecursionInput) *TypeExprToValE
 
 	// Detect interface cycles!
 	input.counter.Interfaces[t]++
-
 	// Create name for interface implementation
 	interfaceImplIdent := &ast.Ident{
 		Name: strings.Title(g.Opts.VarTestCase.Generate()),
