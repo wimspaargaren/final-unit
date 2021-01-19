@@ -10,6 +10,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/wimspaargaren/final-unit/internal/decorator"
+	"github.com/wimspaargaren/final-unit/internal/ident"
 	"github.com/wimspaargaren/final-unit/internal/importer"
 	"github.com/wimspaargaren/final-unit/internal/testcase"
 	"github.com/wimspaargaren/final-unit/internal/utils"
@@ -62,7 +63,9 @@ type Options struct {
 	OrganismAmount   int
 	TestCasesPerFunc int
 	ValGenerator     values.IGen
-	VarGenerator     variables.IGen
+	// FIXME: Remove var generator as soon as IdentGen can be used everywhere
+	VarGenerator variables.IGen
+	IdentGen     ident.IGen
 }
 
 // DefaultOpts creates default generator options
@@ -73,6 +76,7 @@ func DefaultOpts() *Options {
 		TestCasesPerFunc: DefaultTestCasesPerFunc,
 		ValGenerator:     values.NewGenerator(),
 		VarGenerator:     variables.NewGenerator(),
+		IdentGen:         ident.New(),
 	}
 }
 
@@ -167,6 +171,7 @@ func (g *Generator) GetTestCasesForFunctionsInFile(f *ast.File, pointer *importe
 					ValTestCase:  g.Opts.ValGenerator,
 					VarTestCase:  g.Opts.VarGenerator,
 					MaxRecursion: g.Opts.MaxRecursion,
+					IdentGen:     g.Opts.IdentGen,
 				}, g.Deco)
 				testCase.Create()
 				testCases = append(testCases, testCase)

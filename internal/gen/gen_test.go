@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"github.com/wimspaargaren/final-unit/internal/ident"
 	"github.com/wimspaargaren/final-unit/internal/testcase"
 	"github.com/wimspaargaren/final-unit/pkg/values"
 	"github.com/wimspaargaren/final-unit/pkg/variables"
@@ -794,6 +795,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				TestCasesPerFunc: 1,
 				ValGenerator:     iGen,
 				VarGenerator:     variables.NewMock(),
+				IdentGen:         ident.NewMock(),
 			}
 			generator, err := New(test.Path, "", opts)
 			s.Require().NoError(err)
@@ -879,6 +881,7 @@ func (s *PrintStmtTestSuite) TestExamplesMultiFile() {
 				TestCasesPerFunc: 1,
 				ValGenerator:     iGen,
 				VarGenerator:     variables.NewMock(),
+				IdentGen:         ident.NewMock(),
 			}
 			generator, err := New(test.Path, "", opts)
 			s.Require().NoError(err)
@@ -1035,6 +1038,7 @@ func (s *PrintStmtTestSuite) TestExampleImports() {
 				MaxRecursion:     10,
 				ValGenerator:     iGen,
 				VarGenerator:     variables.NewMock(),
+				IdentGen:         ident.NewMock(),
 			}
 			generator, err := New(test.Path, "", opts)
 			s.Require().NoError(err)
@@ -1108,6 +1112,7 @@ func (s *PrintStmtTestSuite) TestChan() {
 				TestCasesPerFunc: 1,
 				ValGenerator:     iGen,
 				VarGenerator:     variables.NewMock(),
+				IdentGen:         ident.NewMock(),
 			}
 			generator, err := New(test.Path, "", opts)
 			s.Require().NoError(err)
