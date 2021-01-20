@@ -1,7 +1,6 @@
 package password
 
-type manager struct {
-}
+type manager struct{}
 
 func (m *manager) GenerateHash(password string) (string, error) {
 	return "", nil

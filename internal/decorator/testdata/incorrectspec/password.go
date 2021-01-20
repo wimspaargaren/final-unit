@@ -1,7 +1,6 @@
 package password
 
-type manager struct {
-}
+type manager struct{}
 
 func (m *manager) ComparePassword(password, hash string) (bool, error) {
 	return false, nil

@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/wimspaargaren/final-unit/internal/identlist"
 	"github.com/wimspaargaren/final-unit/internal/importer"
 )
 
@@ -86,12 +87,13 @@ func getArrayLen(expr ast.Expr) int {
 }
 
 // NewRecursionInput creates new recursion input
-func NewRecursionInput(valType ast.Expr, identifierName string, pointer *importer.PkgResolverPointer) *RecursionInput {
+func NewRecursionInput(valType ast.Expr, identifierName string, pointer *importer.PkgResolverPointer, ident *ast.Ident) *RecursionInput {
 	return &RecursionInput{
 		e:          valType,
 		varName:    identifierName,
 		pkgPointer: pointer,
 		counter:    FreshCycleInfo(),
+		identList:  identlist.New(ident),
 	}
 }
 

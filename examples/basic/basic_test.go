@@ -12,123 +12,123 @@ type BasicSuite struct {
 }
 
 func (s *BasicSuite) TestFooBar0() {
-	sNCEIXbgwF := Foo{}
-	sNCEI := &sNCEIXbgwF
-	ajNkf := -50
+	pointerF := Foo{}
+	f := &pointerF
+	x := -87
 
-	krDNh := sNCEI.Bar(ajNkf)
+	fyNGe := f.Bar(x)
 
-	s.EqualValues(string(`x is a negative integer`), krDNh)
+	s.EqualValues(string(`x is a negative integer`), fyNGe)
 
-	_ = krDNh
+	_ = fyNGe
 }
 
 func (s *BasicSuite) TestFooBar1() {
-	ziLZMiGhUL := Foo{}
-	ziLZM := &ziLZMiGhUL
-	rtvmX := 35
+	pointerF := Foo{}
+	f := &pointerF
+	x := 84
 
-	kgQMY := ziLZM.Bar(rtvmX)
+	dbtZV := f.Bar(x)
 
-	s.EqualValues(string(`x between 30 and 50`), kgQMY)
+	s.EqualValues(string(`x not recognized: 84`), dbtZV)
 
-	_ = kgQMY
+	_ = dbtZV
 }
 
 func (s *BasicSuite) TestFooBar2() {
-	rGXWUJGUbj := Foo{}
-	rGXWU := &rGXWUJGUbj
-	zeLdt := -22
+	pointerF := Foo{}
+	f := &pointerF
+	x := 1
 
-	feRXC := rGXWU.Bar(zeLdt)
+	nBsBX := f.Bar(x)
 
-	s.EqualValues(string(`x is a negative integer`), feRXC)
+	s.EqualValues(string(`x between zero and 10`), nBsBX)
 
-	_ = feRXC
+	_ = nBsBX
 }
 
 func (s *BasicSuite) TestFooBar3() {
-	zsbosljAei := Foo{}
-	zsbos := &zsbosljAei
-	sosAQ := 72
+	pointerF := Foo{}
+	f := &pointerF
+	x := 40
 
-	fdDwm := zsbos.Bar(sosAQ)
+	nZhNm := f.Bar(x)
 
-	s.EqualValues(string(`x not recognized: 72`), fdDwm)
+	s.EqualValues(string(`x between 30 and 50`), nZhNm)
 
-	_ = fdDwm
+	_ = nZhNm
 }
 
 func (s *BasicSuite) TestFooBar4() {
-	kAlMmAcgbP := Foo{}
-	kAlMm := &kAlMmAcgbP
-	kJKHc := -12
+	pointerF := Foo{}
+	f := &pointerF
+	x := 32
 
-	wNzHG := kAlMm.Bar(kJKHc)
+	lhVaY := f.Bar(x)
 
-	s.EqualValues(string(`x is a negative integer`), wNzHG)
+	s.EqualValues(string(`x between 30 and 50`), lhVaY)
 
-	_ = wNzHG
+	_ = lhVaY
 }
 
 func (s *BasicSuite) TestFooBar5() {
-	gJpOxaEeGT := Foo{}
-	gJpOx := &gJpOxaEeGT
-	dkWDP := -67
+	pointerF := Foo{}
+	f := &pointerF
+	x := -51
 
-	tWyMy := gJpOx.Bar(dkWDP)
+	lrnKk := f.Bar(x)
 
-	s.EqualValues(string(`x is a negative integer`), tWyMy)
+	s.EqualValues(string(`x is a negative integer`), lrnKk)
 
-	_ = tWyMy
+	_ = lrnKk
 }
 
 func (s *BasicSuite) TestFooBar6() {
-	hSAJJjUiuN := Foo{}
-	hSAJJ := &hSAJJjUiuN
-	gDcQh := -6
+	pointerF := Foo{}
+	f := &pointerF
+	x := 15
 
-	kFQsA := hSAJJ.Bar(gDcQh)
+	tqjfx := f.Bar(x)
 
-	s.EqualValues(string(`x is a negative integer`), kFQsA)
+	s.EqualValues(string(`x between 10 and 20`), tqjfx)
 
-	_ = kFQsA
+	_ = tqjfx
 }
 
 func (s *BasicSuite) TestFooBar7() {
-	jvcmjNnsqo := Foo{}
-	jvcmj := &jvcmjNnsqo
-	mIUgm := -85
+	pointerF := Foo{}
+	f := &pointerF
+	x := 88
 
-	nFWbN := jvcmj.Bar(mIUgm)
+	zgzvJ := f.Bar(x)
 
-	s.EqualValues(string(`x is a negative integer`), nFWbN)
+	s.EqualValues(string(`x not recognized: 88`), zgzvJ)
 
-	_ = nFWbN
+	_ = zgzvJ
 }
 
 func (s *BasicSuite) TestFooBar8() {
-	mPrSGyVGxA := Foo{}
-	mPrSG := &mPrSGyVGxA
-	qXkSX := 62
+	pointerF := Foo{}
+	f := &pointerF
+	x := -2
 
-	nwomu := mPrSG.Bar(qXkSX)
+	icPjU := f.Bar(x)
 
-	s.EqualValues(string(`x not recognized: 62`), nwomu)
+	s.EqualValues(string(`x is a negative integer`), icPjU)
 
-	_ = nwomu
+	_ = icPjU
 }
 
 func (s *BasicSuite) TestFooBar9() {
-	kOyqDGOTmc := Foo{}
-	kOyqD := &kOyqDGOTmc
-	sMsyX := 11
+	pointerF := Foo{}
+	f := &pointerF
+	x := -69
 
-	btdqz := kOyqD.Bar(sMsyX)
+	cpXHV := f.Bar(x)
 
-	s.EqualValues(string(`x between 10 and 20`), btdqz)
+	s.EqualValues(string(`x is a negative integer`), cpXHV)
 
-	_ = btdqz
+	_ = cpXHV
 }
 
 func TestBasicSuite(t *testing.T) {

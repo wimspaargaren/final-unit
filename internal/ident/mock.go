@@ -20,7 +20,7 @@ func (m *Mock) Create(i *ast.Ident) *ast.Ident {
 // CreateGlobal mocks global creation
 func (m *Mock) CreateGlobal(i *ast.Ident) *ast.Ident {
 	return &ast.Ident{
-		Name: "alfa",
+		Name: "Alfa",
 	}
 }
 

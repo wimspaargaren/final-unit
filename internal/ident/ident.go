@@ -4,6 +4,10 @@ package ident
 import (
 	"fmt"
 	"go/ast"
+	"strings"
+	"unicode"
+
+	"github.com/wimspaargaren/final-unit/internal/utils"
 )
 
 // IGen variable generator interface
@@ -35,6 +39,7 @@ func NewGenWithGlobal(global map[string]int) IGen {
 
 // Create creates a new local scope identifier
 func (g *Gen) Create(i *ast.Ident) *ast.Ident {
+	i = identToLower(i)
 	_, ok := g.GlobaleScopeMem[i.Name]
 	if ok {
 		return g.CreateGlobal(i)
@@ -53,6 +58,7 @@ func (g *Gen) Create(i *ast.Ident) *ast.Ident {
 
 // CreateGlobal creates new global scope identifier
 func (g *Gen) CreateGlobal(i *ast.Ident) *ast.Ident {
+	i = globalIdentPrefix(i)
 	defer g.increaseGlobalMem(i.Name)
 	x, ok := g.GlobaleScopeMem[i.Name]
 	if !ok {
@@ -79,4 +85,21 @@ func (g *Gen) increaseGlobalMem(name string) {
 
 func newLocalScope() map[string]int {
 	return map[string]int{"s": 1}
+}
+
+func globalIdentPrefix(i *ast.Ident) *ast.Ident {
+	if unicode.IsLower(rune(i.Name[0])) {
+		return &ast.Ident{
+			Name: "test" + strings.Title(i.Name),
+		}
+	}
+	return &ast.Ident{
+		Name: "Test" + strings.Title(i.Name),
+	}
+}
+
+func identToLower(i *ast.Ident) *ast.Ident {
+	return &ast.Ident{
+		Name: utils.LowerCaseFirstLetter(i.Name),
+	}
 }
