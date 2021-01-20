@@ -12,8 +12,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/wimspaargaren/final-unit/internal/decorator"
 	"github.com/wimspaargaren/final-unit/internal/ident"
+	"github.com/wimspaargaren/final-unit/internal/identlist"
 	"github.com/wimspaargaren/final-unit/internal/importer"
-	"github.com/wimspaargaren/final-unit/internal/utils"
 	"github.com/wimspaargaren/final-unit/pkg/values"
 	"github.com/wimspaargaren/final-unit/pkg/variables"
 )
@@ -230,9 +230,7 @@ func (g *TestCase) GetFuncReceiverStmts(recv *ast.FieldList, funcName string, po
 
 	hasVal := g.Deco.HasReceiverVal(fileName, funcName)
 	if hasVal && g.Opts.ValTestCase.DecoratorVal() {
-		newIdent := &ast.Ident{
-			Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
-		}
+		newIdent := g.Opts.IdentGen.Create(&ast.Ident{Name: funcName})
 		result.Idents = append(result.Idents, newIdent)
 		values := g.Deco.GetReceiverVal(fileName, funcName)
 		result.Statements = append(result.Statements, assignStmt(newIdent, values[g.Opts.ValTestCase.DecoratorIndex(len(values))].Call))
@@ -293,6 +291,7 @@ type RecursionInput struct {
 	varName    string
 	pkgPointer *importer.PkgResolverPointer
 	counter    CycleInfo
+	identList  identlist.IdentList
 }
 
 // FreshCycleInfo creates a fresh cycle info struct
@@ -313,6 +312,7 @@ func (r *RecursionInput) Copy() *RecursionInput {
 		counter:    FreshCycleInfo(),
 		pkgPointer: r.pkgPointer,
 		varName:    r.varName,
+		identList:  r.identList,
 	}
 }
 
@@ -334,7 +334,7 @@ func (g *TestCase) FieldToAssignStmt(p *ast.Field, funcName string, pointer *imp
 			res = append(res, assignStmt(newIdent, values[g.Opts.ValTestCase.DecoratorIndex(len(values))].Call))
 			continue
 		}
-		i := NewRecursionInput(p.Type, newIdent.Name, pointer)
+		i := NewRecursionInput(p.Type, newIdent.Name, pointer, newIdent)
 
 		recursionResult := g.TypeExprToValExpr(i)
 
@@ -391,6 +391,7 @@ func (g *TestCase) TypeExprToValExpr(input *RecursionInput) *TypeExprToValExprRe
 		return g.UnnamedStructToValExpr(t, input)
 	// Handle identifiers
 	case *ast.Ident:
+		input.identList.Add(t)
 		if t.Obj == nil {
 			return g.IdentWithNilObjectToValExpr(t, input)
 		}
@@ -431,6 +432,7 @@ func (g *TestCase) TypeExprToValExpr(input *RecursionInput) *TypeExprToValExprRe
 			counter:    input.counter,
 			pkgPointer: input.pkgPointer,
 			varName:    input.varName,
+			identList:  input.identList,
 		})
 	// Default should not be hit all types are handled accordingly
 	default:
@@ -449,6 +451,7 @@ func (g *TestCase) TypeSpecToValExpr(t *ast.Ident, objectDeclType *ast.TypeSpec,
 			varName:    objectDeclType.Name.Name,
 			pkgPointer: input.pkgPointer,
 			counter:    input.counter,
+			identList:  input.identList,
 		})
 	default:
 		// Detect if we are dealing with ungeneratable interfaces
@@ -457,6 +460,7 @@ func (g *TestCase) TypeSpecToValExpr(t *ast.Ident, objectDeclType *ast.TypeSpec,
 			counter:    FreshCycleInfo(),
 			pkgPointer: input.pkgPointer,
 			varName:    input.varName,
+			identList:  input.identList,
 		})
 		if shouldReturn {
 			return g.InterfaceNilFunc(t, input)
@@ -468,6 +472,7 @@ func (g *TestCase) TypeSpecToValExpr(t *ast.Ident, objectDeclType *ast.TypeSpec,
 			counter:    FreshCycleInfo(),
 			pkgPointer: input.pkgPointer,
 			varName:    input.varName,
+			identList:  input.identList,
 		})
 		if shouldReturn {
 			return g.FuncNilFunc(t, input)
@@ -478,6 +483,7 @@ func (g *TestCase) TypeSpecToValExpr(t *ast.Ident, objectDeclType *ast.TypeSpec,
 			varName:    input.varName,
 			pkgPointer: input.pkgPointer,
 			counter:    input.counter,
+			identList:  input.identList,
 		})
 
 		// we don't need to create call expression for interface type
@@ -518,6 +524,7 @@ func (g *TestCase) IdentWithNilObjectToValExpr(t *ast.Ident, input *RecursionInp
 		varName:    t.Name,
 		pkgPointer: newPointer,
 		counter:    input.counter,
+		identList:  input.identList,
 	})
 }
 
@@ -558,6 +565,7 @@ func (g *TestCase) SelectorExprToValExpr(input *RecursionInput) *TypeExprToValEx
 			counter:    FreshCycleInfo(),
 			pkgPointer: newPointer,
 			varName:    input.varName,
+			identList:  input.identList,
 		})
 		if shouldReturn {
 			return g.InterfaceNilFunc(t, input)
@@ -567,6 +575,7 @@ func (g *TestCase) SelectorExprToValExpr(input *RecursionInput) *TypeExprToValEx
 			varName:    input.varName,
 			pkgPointer: newPointer,
 			counter:    input.counter,
+			identList:  input.identList,
 		})
 		result := &TypeExprToValExprRes{}
 		result.Merge(recursionResult)
@@ -654,9 +663,8 @@ func (g *TestCase) InterfaceTypeToValExpr(input *RecursionInput) *TypeExprToValE
 	// Detect interface cycles!
 	input.counter.Interfaces[t]++
 	// Create name for interface implementation
-	interfaceImplIdent := &ast.Ident{
-		Name: strings.Title(g.Opts.VarTestCase.Generate()),
-	}
+	interfaceImplIdent := g.Opts.IdentGen.CreateGlobal(input.identList.Current())
+
 	result := &TypeExprToValExprRes{}
 
 	interfaceGenDecl := g.InterfaceGenDecl(input, interfaceImplIdent)
@@ -723,6 +731,7 @@ func (g *TestCase) InterfaceTypeToFuncImpl(input *RecursionInput, interfaceImplI
 				varName:    input.varName,
 				pkgPointer: input.pkgPointer,
 				counter:    input.counter,
+				identList:  input.identList,
 			})
 			result.Merge(recursionResult)
 			// Statements are used for body
@@ -765,6 +774,7 @@ func (g *TestCase) InterfaceTypeToFuncImpl(input *RecursionInput, interfaceImplI
 						counter:    input.counter,
 						pkgPointer: input.pkgPointer,
 						varName:    input.varName,
+						identList:  input.identList,
 					}, interfaceImplIdent)
 					result.Merge(recursionResult)
 				} else {
@@ -794,6 +804,7 @@ func (g *TestCase) InterfaceTypeToFuncImpl(input *RecursionInput, interfaceImplI
 				counter:    input.counter,
 				pkgPointer: input.pkgPointer,
 				varName:    input.varName,
+				identList:  input.identList,
 			}, interfaceImplIdent)
 			result.Merge(recursionResult)
 		} else {
@@ -805,9 +816,7 @@ func (g *TestCase) InterfaceTypeToFuncImpl(input *RecursionInput, interfaceImplI
 
 // ChanTypeToValExpr converts a chan type to a value expression
 func (g *TestCase) ChanTypeToValExpr(t *ast.ChanType, input *RecursionInput) *TypeExprToValExprRes {
-	newIdent := &ast.Ident{
-		Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
-	}
+	newIdent := g.Opts.IdentGen.Create(input.identList.Current())
 
 	res := &ast.CallExpr{
 		Fun:  &ast.Ident{Name: "make"},
@@ -901,18 +910,17 @@ func (g *TestCase) FuncReturnListToBodyStatements(input *RecursionInput) *TypeEx
 
 // ReturnFieldToStmt converts return field to statement and declarations
 func (g *TestCase) ReturnFieldToStmt(res *ast.Field, input *RecursionInput) *TypeExprToValExprRes {
-	resName := utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate())
+	newIdent := g.Opts.IdentGen.Create(&ast.Ident{Name: "o"})
 	result := &TypeExprToValExprRes{
-		Expr: &ast.Ident{
-			Name: resName,
-		},
+		Expr: newIdent,
 	}
 
 	recursionResult := g.TypeExprToValExpr(&RecursionInput{
 		e:          res.Type,
-		varName:    resName,
+		varName:    newIdent.Name,
 		pkgPointer: input.pkgPointer,
 		counter:    input.counter,
+		identList:  input.identList,
 	})
 	result.Merge(recursionResult)
 	// Create assignment statement of return value
@@ -941,6 +949,7 @@ func (g *TestCase) ArrayExprToValExpr(input *RecursionInput) *TypeExprToValExprR
 			varName:    input.varName,
 			pkgPointer: input.pkgPointer,
 			counter:    input.counter,
+			identList:  input.identList,
 		})
 		result.Merge(recursionResult)
 		exprRes = append(exprRes, recursionResult.Expr)
@@ -985,6 +994,7 @@ func (g *TestCase) MapExprToValExpr(input *RecursionInput) *TypeExprToValExprRes
 			varName:    input.varName,
 			pkgPointer: input.pkgPointer,
 			counter:    input.counter,
+			identList:  input.identList,
 		})
 		isDupl := duplCheck.IsDuplExpr(keyRecursionResult.Expr)
 		if isDupl {
@@ -997,6 +1007,7 @@ func (g *TestCase) MapExprToValExpr(input *RecursionInput) *TypeExprToValExprRes
 			varName:    input.varName,
 			pkgPointer: input.pkgPointer,
 			counter:    input.counter,
+			identList:  input.identList,
 		})
 		result.Merge(valRecursionInput)
 
@@ -1017,20 +1028,19 @@ func (g *TestCase) StarExprToValExpr(input *RecursionInput) *TypeExprToValExprRe
 		log.Warningf("StarExprToValExpr is not  used correctly: %T", input.e)
 		return EmptyResult()
 	}
-	tempVarName := utils.LowerCaseFirstLetter(input.varName) + g.Opts.VarTestCase.Generate()
-	// Create temporary variable name
-	identTemp := &ast.Ident{
-		Name: tempVarName,
-	}
+	identTemp := g.Opts.IdentGen.Create(&ast.Ident{
+		Name: "pointer" + strings.Title(input.identList.Previous().Name),
+	})
 
 	result := &TypeExprToValExprRes{}
 
 	// Get value of t.X
 	recursionResult := g.TypeExprToValExpr(&RecursionInput{
 		e:          t.X,
-		varName:    tempVarName,
+		varName:    identTemp.Name,
 		pkgPointer: input.pkgPointer,
 		counter:    input.counter,
+		identList:  input.identList,
 	})
 	result.Merge(recursionResult)
 	// Create assignment of initial val
@@ -1118,6 +1128,7 @@ func (g *TestCase) StructFieldsToKeyValExpr(res *ast.CompositeLit, input *Recurs
 				varName:    n.Name,
 				pkgPointer: input.pkgPointer,
 				counter:    input.counter,
+				identList:  input.identList,
 			})
 			result.Merge(recursionResult)
 			elts = append(elts, &ast.KeyValueExpr{
@@ -1138,6 +1149,7 @@ func (g *TestCase) StructFieldsToKeyValExpr(res *ast.CompositeLit, input *Recurs
 				counter:    FreshCycleInfo(),
 				pkgPointer: input.pkgPointer,
 				varName:    input.varName,
+				identList:  input.identList,
 			})
 			if cantGen {
 				continue
@@ -1148,6 +1160,7 @@ func (g *TestCase) StructFieldsToKeyValExpr(res *ast.CompositeLit, input *Recurs
 				varName:    n.Name,
 				pkgPointer: input.pkgPointer,
 				counter:    input.counter,
+				identList:  input.identList,
 			})
 			result.Merge(recursionResult)
 			elts = append(elts, &ast.KeyValueExpr{

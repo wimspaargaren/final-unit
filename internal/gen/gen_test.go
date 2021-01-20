@@ -144,7 +144,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "IntPointerFunc",
-					ResStmts: []string{"alfaalfa := 42", "alfa := &alfaalfa", "IntPointerFunc(alfa)"},
+					ResStmts: []string{"alfa := 42", "alfa := &alfa", "IntPointerFunc(alfa)"},
 				},
 				{
 					Func:     "IntArrayFunc",
@@ -152,15 +152,15 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "IntPointerArrayFunc",
-					ResStmts: []string{"alfaalfa := 42", "alfa := []*int{&alfaalfa}", "IntPointerArrayFunc(alfa)"},
+					ResStmts: []string{"alfa := 42", "alfa := []*int{&alfa}", "IntPointerArrayFunc(alfa)"},
 				},
 				{
 					Func:     "IntArrayPointerFunc",
-					ResStmts: []string{"alfaalfa := []int{42}", "alfa := &alfaalfa", "IntArrayPointerFunc(alfa)"},
+					ResStmts: []string{"alfa := []int{42}", "alfa := &alfa", "IntArrayPointerFunc(alfa)"},
 				},
 				{
 					Func:     "IntPointerArrayPointerFunc",
-					ResStmts: []string{"alfaalfaalfa := 42", "alfaalfa := []*int{&alfaalfaalfa}", "alfa := &alfaalfa", "IntPointerArrayPointerFunc(alfa)"},
+					ResStmts: []string{"alfa := 42", "alfa := []*int{&alfa}", "alfa := &alfa", "IntPointerArrayPointerFunc(alfa)"},
 				},
 				{
 					Func:     "IntArrayLenFunc",
@@ -221,7 +221,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "NormalPointerNestFunc",
-					ResStmts: []string{"xalfa := X(42)", "alfa := PointerNormal{X: &xalfa}", "NormalPointerNestFunc(alfa)"},
+					ResStmts: []string{"alfa := X(42)", "alfa := PointerNormal{X: &alfa}", "NormalPointerNestFunc(alfa)"},
 				},
 				{
 					Func:     "NestedImportFunc",
@@ -229,7 +229,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "NestedImportPointerFunc",
-					ResStmts: []string{"helloalfa := nestedimport.Hello{X: 42}", "alfa := ImportPointerNested{Hello: &helloalfa}", "NestedImportPointerFunc(alfa)"},
+					ResStmts: []string{"alfa := nestedimport.Hello{X: 42}", "alfa := ImportPointerNested{Hello: &alfa}", "NestedImportPointerFunc(alfa)"},
 				},
 			},
 		},
@@ -249,7 +249,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "BoolPointerFunc",
-					ResStmts: []string{"alfaalfa := true", "alfa := &alfaalfa", "BoolPointerFunc(alfa)"},
+					ResStmts: []string{"alfa := true", "alfa := &alfa", "BoolPointerFunc(alfa)"},
 				},
 			},
 		},
@@ -289,7 +289,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "MultiParamPointerFunc",
-					ResStmts: []string{`alfaalfa := "string"`, "alfa := &alfaalfa", `alfaalfa := "string"`, "alfa := &alfaalfa", "MultiParamPointerFunc(alfa, alfa)"},
+					ResStmts: []string{`alfa := "string"`, "alfa := &alfa", `alfa := "string"`, "alfa := &alfa", "MultiParamPointerFunc(alfa, alfa)"},
 				},
 				{
 					Func:     "MultiParamDifTypeFunc",
@@ -334,7 +334,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "BytePointerFunc",
-					ResStmts: []string{`alfaalfa := byte(42)`, `alfa := &alfaalfa`, "BytePointerFunc(alfa)"},
+					ResStmts: []string{`alfa := byte(42)`, `alfa := &alfa`, "BytePointerFunc(alfa)"},
 				},
 				{
 					Func:     "ByteArrayFunc",
@@ -342,7 +342,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "ByteArrayPointerFunc",
-					ResStmts: []string{"alfaalfa := byte(42)", `alfa := []*byte{&alfaalfa}`, "ByteArrayPointerFunc(alfa)"},
+					ResStmts: []string{"alfa := byte(42)", `alfa := []*byte{&alfa}`, "ByteArrayPointerFunc(alfa)"},
 				},
 			},
 		},
@@ -363,7 +363,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "StructFuncComposite",
-					ResStmts: []string{`varStringalfa := "string"`, `alfa := Composite{VarInt: 42, VarString: &varStringalfa}`, "StructFuncComposite(alfa)"},
+					ResStmts: []string{`alfa := "string"`, `alfa := Composite{VarInt: 42, VarString: &alfa}`, "StructFuncComposite(alfa)"},
 				},
 				{
 					Func:     "StructFuncCompositeOther",
@@ -443,11 +443,11 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				{
 					Func: "ArrayPointerStructNoLen",
 					ResStmts: []string{
-						"xalfa := 42",
-						"xalfa := 42",
-						"xalfa := 42",
-						"alfaalfa := []Pointer{Pointer{x: &xalfa}, Pointer{x: &xalfa}, Pointer{x: &xalfa}}",
-						`alfa := &alfaalfa`,
+						"alfa := 42",
+						"alfa := 42",
+						"alfa := 42",
+						"alfa := []Pointer{Pointer{x: &alfa}, Pointer{x: &alfa}, Pointer{x: &alfa}}",
+						`alfa := &alfa`,
 						"ArrayPointerStructNoLen(alfa)",
 					},
 				},
@@ -570,7 +570,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				},
 				{
 					Func:     "ErrorPointerFunc",
-					ResStmts: []string{"alfaalfa := func() error {\n\treturn fmt.Errorf(\"very error\")\n}()", `alfa := &alfaalfa`, "ErrorPointerFunc(alfa)"},
+					ResStmts: []string{"alfa := func() error {\n\treturn fmt.Errorf(\"very error\")\n}()", `alfa := &alfa`, "ErrorPointerFunc(alfa)"},
 				},
 			},
 		},
@@ -611,7 +611,7 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 					ResDecls: []string{
 						"type Alfa struct {\n}",
 						"func (s *Alfa) Hello(x *int) [2]byte {\n\talfa := [2]byte{byte(42), byte(42)}\n\treturn alfa\n}",
-						"func (s *Alfa) World(x Simple) (*Some, error) {\n\talfaalfa := Some{x: \"string\"}\n\talfa := &alfaalfa\n\talfa := func() error {\n\t\treturn fmt.Errorf(\"very error\")\n\t}()\n\treturn alfa, alfa\n}",
+						"func (s *Alfa) World(x Simple) (*Some, error) {\n\talfa := Some{x: \"string\"}\n\talfa := &alfa\n\talfa := func() error {\n\t\treturn fmt.Errorf(\"very error\")\n\t}()\n\treturn alfa, alfa\n}",
 					},
 				},
 				{
@@ -702,13 +702,13 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				{
 					Func: "FuncCycle",
 					ResStmts: []string{
-						"xalfa := A{}",
-						"xalfa := B{X: &xalfa, Y: 42}",
-						"xalfa := A{X: &xalfa, Y: 42}",
-						"xalfa := B{X: &xalfa, Y: 42}",
-						"xalfa := A{X: &xalfa, Y: 42}",
-						"xalfa := B{X: &xalfa, Y: 42}",
-						"alfa := A{X: &xalfa, Y: 42}",
+						"alfa := A{}",
+						"alfa := B{X: &alfa, Y: 42}",
+						"alfa := A{X: &alfa, Y: 42}",
+						"alfa := B{X: &alfa, Y: 42}",
+						"alfa := A{X: &alfa, Y: 42}",
+						"alfa := B{X: &alfa, Y: 42}",
+						"alfa := A{X: &alfa, Y: 42}",
 						`FuncCycle(alfa)`,
 					},
 				},
@@ -730,13 +730,13 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 				{
 					Func: "CycleComplicated",
 					ResStmts: []string{
-						"zalfa := somepkg.A{}",
-						"balfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &zalfa}",
-						"zalfa := somepkg.A{B: &balfa}",
-						"balfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &zalfa}",
-						"zalfa := somepkg.A{B: &balfa}",
-						"balfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &zalfa}",
-						"alfa := somepkg.A{B: &balfa}",
+						"alfa := somepkg.A{}",
+						"alfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &alfa}",
+						"alfa := somepkg.A{B: &alfa}",
+						"alfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &alfa}",
+						"alfa := somepkg.A{B: &alfa}",
+						"alfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &alfa}",
+						"alfa := somepkg.A{B: &alfa}",
 						`CycleComplicated(alfa)`,
 					},
 					ResDecls: []string{
@@ -1134,7 +1134,6 @@ func (s *PrintStmtTestSuite) TestChan() {
 						s.Equal(testResult.ResChanIdents[i], stmt)
 					}
 					s.Require().Equal(len(testResult.ResStmts)-1, len(funcTestCase.Stmts))
-					fmt.Println(funcTestCase.ChanIdents)
 					for i, stmt := range funcTestCase.Stmts {
 						s.Equal(testResult.ResStmts[i], stmt)
 					}
