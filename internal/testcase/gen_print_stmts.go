@@ -69,10 +69,8 @@ func (g *TestCase) FieldToPrintStmt(field *ast.Field, funcName string, pointer *
 	if len(field.Names) != 0 {
 		expressions := []ast.Expr{}
 		printResult := &PrintResult{}
-		for range field.Names {
-			newIdent := &ast.Ident{
-				Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
-			}
+		for _, n := range field.Names {
+			newIdent := g.Opts.IdentGen.Create(n)
 
 			res := g.TypeExpressionToPrintStmt(NewPrintRecursionInput(field.Type, newIdent.Name, pointer))
 			printResult.Stmts = append(printResult.Stmts, res.Stmts...)
@@ -87,9 +85,8 @@ func (g *TestCase) FieldToPrintStmt(field *ast.Field, funcName string, pointer *
 		return expressions, printResult
 	}
 	// Normal returns
-	newIdent := &ast.Ident{
-		Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
-	}
+	newIdent := g.Opts.IdentGen.Create(&ast.Ident{Name: "out"})
+
 	res := g.TypeExpressionToPrintStmt(NewPrintRecursionInput(field.Type, newIdent.Name, pointer))
 	if len(res.Stmts) == 0 {
 		return []ast.Expr{&ast.Ident{
@@ -301,9 +298,7 @@ func (g *TestCase) StarExprToPrintStmt(t *ast.StarExpr, input *PrintRecursionInp
 		},
 	}
 	// Create new identifier for pointer value
-	pointerValIdent := &ast.Ident{
-		Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
-	}
+	pointerValIdent := g.Opts.IdentGen.Create(&ast.Ident{Name: "pointerOut"})
 	newValStmt := &ast.AssignStmt{
 		Lhs: []ast.Expr{
 			pointerValIdent,
@@ -463,7 +458,6 @@ func (g *TestCase) MapExprToPrintStmt(t *ast.MapType, input *PrintRecursionInput
 	if !isBasicLit {
 		return &PrintResult{}
 	}
-
 	keyIdent := &ast.Ident{
 		Name: utils.LowerCaseFirstLetter(g.Opts.VarTestCase.Generate()),
 	}

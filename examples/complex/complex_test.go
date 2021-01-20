@@ -15,7 +15,7 @@ type ComplexSuite struct {
 type TestClient struct{}
 
 func (s *TestClient) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Herophantom"}
+	pointerWorker := Response{Message: "Daggerberry"}
 	o := &pointerWorker
 	o2 := func() error {
 		return fmt.Errorf("very error")
@@ -26,24 +26,24 @@ func (s *TestClient) Do() (*Response, error) {
 func (s *ComplexSuite) TestWorkerSomeFunc0() {
 	pointerW := Worker{Client: &TestClient{}}
 	w := &pointerW
-	input := []int{67, 74, -50, -17, 24}
+	input := []int{74, -57, 57}
 
-	pCaLn, ivoek := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(``), pCaLn)
-	s.Error(ivoek)
+	s.EqualValues(string(``), out)
+	s.Error(out2)
 
-	_ = pCaLn
-	_ = ivoek
+	_ = out
+	_ = out2
 }
 
 type TestClient2 struct{}
 
 func (s *TestClient2) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Huggerplume"}
+	pointerWorker := Response{Message: "Traderlavender"}
 	o := &pointerWorker
 	o2 := func() error {
-		return fmt.Errorf("very error")
+		return nil
 	}()
 	return o, o2
 }
@@ -51,21 +51,21 @@ func (s *TestClient2) Do() (*Response, error) {
 func (s *ComplexSuite) TestWorkerSomeFunc1() {
 	pointerW := Worker{Client: &TestClient2{}}
 	w := &pointerW
-	input := []int{-19, 38, -60, -20, 5}
+	input := []int{-63, 23, -48, -8, 78, 56, 44, -40, 85}
 
-	xDSuT, dSWbz := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(``), xDSuT)
-	s.Error(dSWbz)
+	s.EqualValues(string(`Traderlavender, [-63 23 -48 -8 78 56 44 -40 85]`), out)
+	s.NoError(out2)
 
-	_ = xDSuT
-	_ = dSWbz
+	_ = out
+	_ = out2
 }
 
 type TestClient3 struct{}
 
 func (s *TestClient3) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Ocelotslash"}
+	pointerWorker := Response{Message: "Pythonmaple"}
 	o := &pointerWorker
 	o2 := func() error {
 		return fmt.Errorf("very error")
@@ -76,24 +76,24 @@ func (s *TestClient3) Do() (*Response, error) {
 func (s *ComplexSuite) TestWorkerSomeFunc2() {
 	pointerW := Worker{Client: &TestClient3{}}
 	w := &pointerW
-	input := []int{78, 66}
+	input := []int{-27, -86, -80, 6, -22, -78}
 
-	bvgwI, xgsqV := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(``), bvgwI)
-	s.Error(xgsqV)
+	s.EqualValues(string(``), out)
+	s.Error(out2)
 
-	_ = bvgwI
-	_ = xgsqV
+	_ = out
+	_ = out2
 }
 
 type TestClient4 struct{}
 
 func (s *TestClient4) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Cloakpepper"}
+	pointerWorker := Response{Message: "Ravenplum"}
 	o := &pointerWorker
 	o2 := func() error {
-		return fmt.Errorf("very error")
+		return nil
 	}()
 	return o, o2
 }
@@ -103,19 +103,19 @@ func (s *ComplexSuite) TestWorkerSomeFunc3() {
 	w := &pointerW
 	input := []int{}
 
-	eRHHe, exDnm := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(``), eRHHe)
-	s.Error(exDnm)
+	s.EqualValues(string(``), out)
+	s.Error(out2)
 
-	_ = eRHHe
-	_ = exDnm
+	_ = out
+	_ = out2
 }
 
 type TestClient5 struct{}
 
 func (s *TestClient5) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Sighttide"}
+	pointerWorker := Response{Message: "Mothlavender"}
 	o := &pointerWorker
 	o2 := func() error {
 		return fmt.Errorf("very error")
@@ -126,46 +126,21 @@ func (s *TestClient5) Do() (*Response, error) {
 func (s *ComplexSuite) TestWorkerSomeFunc4() {
 	pointerW := Worker{Client: &TestClient5{}}
 	w := &pointerW
-	input := []int{-92, 14, 79, -66, -26, -28}
+	input := []int{80, 76, 57, 64, 6}
 
-	cWXML, wsbev := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(``), cWXML)
-	s.Error(wsbev)
+	s.EqualValues(string(``), out)
+	s.Error(out2)
 
-	_ = cWXML
-	_ = wsbev
+	_ = out
+	_ = out2
 }
 
 type TestClient6 struct{}
 
 func (s *TestClient6) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Dancerfire"}
-	o := &pointerWorker
-	o2 := func() error {
-		return fmt.Errorf("very error")
-	}()
-	return o, o2
-}
-
-func (s *ComplexSuite) TestWorkerSomeFunc5() {
-	pointerW := Worker{Client: &TestClient6{}}
-	w := &pointerW
-	input := []int{-97, 25}
-
-	srTRT, umlHa := w.SomeFunc(input)
-
-	s.EqualValues(string(``), srTRT)
-	s.Error(umlHa)
-
-	_ = srTRT
-	_ = umlHa
-}
-
-type TestClient7 struct{}
-
-func (s *TestClient7) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Knightmulberry"}
+	pointerWorker := Response{Message: "Roverbranch"}
 	o := &pointerWorker
 	o2 := func() error {
 		return nil
@@ -173,24 +148,24 @@ func (s *TestClient7) Do() (*Response, error) {
 	return o, o2
 }
 
-func (s *ComplexSuite) TestWorkerSomeFunc6() {
-	pointerW := Worker{Client: &TestClient7{}}
+func (s *ComplexSuite) TestWorkerSomeFunc5() {
+	pointerW := Worker{Client: &TestClient6{}}
 	w := &pointerW
-	input := []int{-20, 10, -52}
+	input := []int{}
 
-	fUhbr, xNswY := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(`Knightmulberry, [-20 10 -52]`), fUhbr)
-	s.NoError(xNswY)
+	s.EqualValues(string(``), out)
+	s.Error(out2)
 
-	_ = fUhbr
-	_ = xNswY
+	_ = out
+	_ = out2
 }
 
-type TestClient8 struct{}
+type TestClient7 struct{}
 
-func (s *TestClient8) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Bunnygrove"}
+func (s *TestClient7) Do() (*Response, error) {
+	pointerWorker := Response{Message: "Painterlapis"}
 	o := &pointerWorker
 	o2 := func() error {
 		return fmt.Errorf("very error")
@@ -198,24 +173,49 @@ func (s *TestClient8) Do() (*Response, error) {
 	return o, o2
 }
 
+func (s *ComplexSuite) TestWorkerSomeFunc6() {
+	pointerW := Worker{Client: &TestClient7{}}
+	w := &pointerW
+	input := []int{-8, 20, -82, -23, 6, -97}
+
+	out, out2 := w.SomeFunc(input)
+
+	s.EqualValues(string(``), out)
+	s.Error(out2)
+
+	_ = out
+	_ = out2
+}
+
+type TestClient8 struct{}
+
+func (s *TestClient8) Do() (*Response, error) {
+	pointerWorker := Response{Message: "Shriekerbutter"}
+	o := &pointerWorker
+	o2 := func() error {
+		return nil
+	}()
+	return o, o2
+}
+
 func (s *ComplexSuite) TestWorkerSomeFunc7() {
 	pointerW := Worker{Client: &TestClient8{}}
 	w := &pointerW
-	input := []int{-13, 93, -39, -76, -60}
+	input := []int{-43, -43, 91, -94, 86, 27, 93, 65}
 
-	tRFjR, oEZMa := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(``), tRFjR)
-	s.Error(oEZMa)
+	s.EqualValues(string(`Shriekerbutter, [-43 -43 91 -94 86 27 93 65]`), out)
+	s.NoError(out2)
 
-	_ = tRFjR
-	_ = oEZMa
+	_ = out
+	_ = out2
 }
 
 type TestClient9 struct{}
 
 func (s *TestClient9) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Donkeyshard"}
+	pointerWorker := Response{Message: "Weedheavy"}
 	o := &pointerWorker
 	o2 := func() error {
 		return fmt.Errorf("very error")
@@ -226,21 +226,21 @@ func (s *TestClient9) Do() (*Response, error) {
 func (s *ComplexSuite) TestWorkerSomeFunc8() {
 	pointerW := Worker{Client: &TestClient9{}}
 	w := &pointerW
-	input := []int{97, -9, 57, 88, 57, -26, -87}
+	input := []int{-43, 8, -30, 84, 59, -27}
 
-	vrKpy, eLwbl := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(``), vrKpy)
-	s.Error(eLwbl)
+	s.EqualValues(string(``), out)
+	s.Error(out2)
 
-	_ = vrKpy
-	_ = eLwbl
+	_ = out
+	_ = out2
 }
 
 type TestClient10 struct{}
 
 func (s *TestClient10) Do() (*Response, error) {
-	pointerWorker := Response{Message: "Flasherdiamond"}
+	pointerWorker := Response{Message: "Dukerazor"}
 	o := &pointerWorker
 	o2 := func() error {
 		return nil
@@ -251,15 +251,15 @@ func (s *TestClient10) Do() (*Response, error) {
 func (s *ComplexSuite) TestWorkerSomeFunc9() {
 	pointerW := Worker{Client: &TestClient10{}}
 	w := &pointerW
-	input := []int{2, 49, 90, -57}
+	input := []int{-2, 38, 92, 89, -94, -56, -6, 49}
 
-	zPXae, qHpjg := w.SomeFunc(input)
+	out, out2 := w.SomeFunc(input)
 
-	s.EqualValues(string(`Flasherdiamond, [2 49 90 -57]`), zPXae)
-	s.NoError(qHpjg)
+	s.EqualValues(string(`Dukerazor, [-2 38 92 89 -94 -56 -6 49]`), out)
+	s.NoError(out2)
 
-	_ = zPXae
-	_ = qHpjg
+	_ = out
+	_ = out2
 }
 
 func TestComplexSuite(t *testing.T) {
