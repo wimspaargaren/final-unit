@@ -13,8 +13,8 @@ import (
 func (o *Organism) UpdateAssertStmts(printed string, firstRun bool) {
 	for _, f := range o.Files {
 		for funcName, testCases := range f.TestCases {
-			mem := []string{}
 			for i, testCase := range testCases {
+				mem := []string{}
 				// Regex output for current organism
 				re := regexp.MustCompile(fmt.Sprintf(`%s\n((.*)\n)*%s`, StartName(funcName, i), EndName(funcName, i)))
 				curFuncOutput := re.FindString(printed)

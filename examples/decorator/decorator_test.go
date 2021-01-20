@@ -12,297 +12,293 @@ type DecoratorSuite struct {
 }
 
 func (s *DecoratorSuite) TestDefaultManager0() {
-	ofcQL := DefaultManager()
+	out := DefaultManager()
 
-	apbtP := *ofcQL
-	ttDYo := *apbtP.Config
-	s.EqualValues(uint32(0x1), ttDYo.time)
-	apbtP = *ofcQL
-	ttDYo = *apbtP.Config
-	s.EqualValues(uint32(0x10000), ttDYo.memory)
-	apbtP = *ofcQL
-	ttDYo = *apbtP.Config
-	s.EqualValues(uint8(0x4), ttDYo.threads)
-	apbtP = *ofcQL
-	ttDYo = *apbtP.Config
-	s.EqualValues(uint32(0x20), ttDYo.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = ofcQL
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager1() {
-	wEHYj := DefaultManager()
+	out := DefaultManager()
 
-	nlnAI := *wEHYj
-	oKdBE := *nlnAI.Config
-	s.EqualValues(uint32(0x1), oKdBE.time)
-	nlnAI = *wEHYj
-	oKdBE = *nlnAI.Config
-	s.EqualValues(uint32(0x10000), oKdBE.memory)
-	nlnAI = *wEHYj
-	oKdBE = *nlnAI.Config
-	s.EqualValues(uint8(0x4), oKdBE.threads)
-	nlnAI = *wEHYj
-	oKdBE = *nlnAI.Config
-	s.EqualValues(uint32(0x20), oKdBE.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = wEHYj
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager2() {
-	biZna := DefaultManager()
+	out := DefaultManager()
 
-	mZtwJ := *biZna
-	jRLxy := *mZtwJ.Config
-	s.EqualValues(uint32(0x1), jRLxy.time)
-	mZtwJ = *biZna
-	jRLxy = *mZtwJ.Config
-	s.EqualValues(uint32(0x10000), jRLxy.memory)
-	mZtwJ = *biZna
-	jRLxy = *mZtwJ.Config
-	s.EqualValues(uint8(0x4), jRLxy.threads)
-	mZtwJ = *biZna
-	jRLxy = *mZtwJ.Config
-	s.EqualValues(uint32(0x20), jRLxy.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = biZna
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager3() {
-	qcMYQ := DefaultManager()
+	out := DefaultManager()
 
-	uhgho := *qcMYQ
-	lMFsQ := *uhgho.Config
-	s.EqualValues(uint32(0x1), lMFsQ.time)
-	uhgho = *qcMYQ
-	lMFsQ = *uhgho.Config
-	s.EqualValues(uint32(0x10000), lMFsQ.memory)
-	uhgho = *qcMYQ
-	lMFsQ = *uhgho.Config
-	s.EqualValues(uint8(0x4), lMFsQ.threads)
-	uhgho = *qcMYQ
-	lMFsQ = *uhgho.Config
-	s.EqualValues(uint32(0x20), lMFsQ.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = qcMYQ
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager4() {
-	iDngj := DefaultManager()
+	out := DefaultManager()
 
-	hmibQ := *iDngj
-	jCUaT := *hmibQ.Config
-	s.EqualValues(uint32(0x1), jCUaT.time)
-	hmibQ = *iDngj
-	jCUaT = *hmibQ.Config
-	s.EqualValues(uint32(0x10000), jCUaT.memory)
-	hmibQ = *iDngj
-	jCUaT = *hmibQ.Config
-	s.EqualValues(uint8(0x4), jCUaT.threads)
-	hmibQ = *iDngj
-	jCUaT = *hmibQ.Config
-	s.EqualValues(uint32(0x20), jCUaT.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = iDngj
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager5() {
-	vHVSF := DefaultManager()
+	out := DefaultManager()
 
-	yWuNp := *vHVSF
-	naqQY := *yWuNp.Config
-	s.EqualValues(uint32(0x1), naqQY.time)
-	yWuNp = *vHVSF
-	naqQY = *yWuNp.Config
-	s.EqualValues(uint32(0x10000), naqQY.memory)
-	yWuNp = *vHVSF
-	naqQY = *yWuNp.Config
-	s.EqualValues(uint8(0x4), naqQY.threads)
-	yWuNp = *vHVSF
-	naqQY = *yWuNp.Config
-	s.EqualValues(uint32(0x20), naqQY.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = vHVSF
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager6() {
-	vNibJ := DefaultManager()
+	out := DefaultManager()
 
-	zEfeh := *vNibJ
-	wOvID := *zEfeh.Config
-	s.EqualValues(uint32(0x1), wOvID.time)
-	zEfeh = *vNibJ
-	wOvID = *zEfeh.Config
-	s.EqualValues(uint32(0x10000), wOvID.memory)
-	zEfeh = *vNibJ
-	wOvID = *zEfeh.Config
-	s.EqualValues(uint8(0x4), wOvID.threads)
-	zEfeh = *vNibJ
-	wOvID = *zEfeh.Config
-	s.EqualValues(uint32(0x20), wOvID.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = vNibJ
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager7() {
-	uAwBm := DefaultManager()
+	out := DefaultManager()
 
-	pXvBD := *uAwBm
-	wNnqA := *pXvBD.Config
-	s.EqualValues(uint32(0x1), wNnqA.time)
-	pXvBD = *uAwBm
-	wNnqA = *pXvBD.Config
-	s.EqualValues(uint32(0x10000), wNnqA.memory)
-	pXvBD = *uAwBm
-	wNnqA = *pXvBD.Config
-	s.EqualValues(uint8(0x4), wNnqA.threads)
-	pXvBD = *uAwBm
-	wNnqA = *pXvBD.Config
-	s.EqualValues(uint32(0x20), wNnqA.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = uAwBm
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager8() {
-	mAYou := DefaultManager()
+	out := DefaultManager()
 
-	anWvl := *mAYou
-	qxtzr := *anWvl.Config
-	s.EqualValues(uint32(0x1), qxtzr.time)
-	anWvl = *mAYou
-	qxtzr = *anWvl.Config
-	s.EqualValues(uint32(0x10000), qxtzr.memory)
-	anWvl = *mAYou
-	qxtzr = *anWvl.Config
-	s.EqualValues(uint8(0x4), qxtzr.threads)
-	anWvl = *mAYou
-	qxtzr = *anWvl.Config
-	s.EqualValues(uint32(0x20), qxtzr.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = mAYou
+	_ = out
 }
 
 func (s *DecoratorSuite) TestDefaultManager9() {
-	ziyFY := DefaultManager()
+	out := DefaultManager()
 
-	jkmSR := *ziyFY
-	gldCC := *jkmSR.Config
-	s.EqualValues(uint32(0x1), gldCC.time)
-	jkmSR = *ziyFY
-	gldCC = *jkmSR.Config
-	s.EqualValues(uint32(0x10000), gldCC.memory)
-	jkmSR = *ziyFY
-	gldCC = *jkmSR.Config
-	s.EqualValues(uint8(0x4), gldCC.threads)
-	jkmSR = *ziyFY
-	gldCC = *jkmSR.Config
-	s.EqualValues(uint32(0x20), gldCC.keyLen)
+	pointerOut := *out
+	pointerOut2 := *pointerOut.Config
+	s.EqualValues(uint32(0x1), pointerOut2.time)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x10000), pointerOut2.memory)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint8(0x4), pointerOut2.threads)
+	pointerOut = *out
+	pointerOut2 = *pointerOut.Config
+	s.EqualValues(uint32(0x20), pointerOut2.keyLen)
 
-	_ = ziyFY
+	_ = out
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword0() {
-	pointerM2 := PasswordConfig{time: uint32(43), memory: uint32(25), threads: uint8(77), keyLen: uint32(68)}
+	pointerM2 := PasswordConfig{time: uint32(49), memory: uint32(14), threads: uint8(90), keyLen: uint32(30)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
 	password := defaultPasswd()
-	hash := defaultHash()
+	hash := wrongHash()
 
-	aRzav, tCVxP := m.ComparePassword(password, hash)
+	out, out2 := m.ComparePassword(password, hash)
 
-	s.False(aRzav)
-	s.NoError(tCVxP)
+	s.False(out)
+	s.Error(out2)
 
-	_ = aRzav
-	_ = tCVxP
+	_ = out
+	_ = out2
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword1() {
-	pointerM2 := PasswordConfig{time: uint32(86), memory: uint32(57), threads: uint8(62), keyLen: uint32(78)}
+	pointerM2 := PasswordConfig{time: uint32(3), memory: uint32(55), threads: uint8(73), keyLen: uint32(9)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Ninjacord"
-	hash := defaultHash()
+	password := defaultPasswd()
+	hash := wrongHash()
 
-	cKgkM, xptzs := m.ComparePassword(password, hash)
+	out, out2 := m.ComparePassword(password, hash)
 
-	s.False(cKgkM)
-	s.NoError(xptzs)
+	s.False(out)
+	s.Error(out2)
 
-	_ = cKgkM
-	_ = xptzs
+	_ = out
+	_ = out2
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword2() {
-	pointerM2 := PasswordConfig{time: uint32(99), memory: uint32(46), threads: uint8(93), keyLen: uint32(59)}
+	pointerM2 := PasswordConfig{time: uint32(18), memory: uint32(40), threads: uint8(24), keyLen: uint32(35)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := defaultPasswd()
-	hash := defaultHash()
+	password := "Keeperfancy"
+	hash := wrongHash()
 
-	svxkw, fnVMh := m.ComparePassword(password, hash)
+	out, out2 := m.ComparePassword(password, hash)
 
-	s.False(svxkw)
-	s.NoError(fnVMh)
+	s.False(out)
+	s.Error(out2)
 
-	_ = svxkw
-	_ = fnVMh
+	_ = out
+	_ = out2
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword3() {
-	pointerM2 := PasswordConfig{time: uint32(62), memory: uint32(82), threads: uint8(89), keyLen: uint32(76)}
+	pointerM2 := PasswordConfig{time: uint32(8), memory: uint32(94), threads: uint8(64), keyLen: uint32(15)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := defaultPasswd()
-	hash := defaultHash()
+	password := "Cowlfair"
+	hash := wrongHash()
 
-	uLBPp, ylJhn := m.ComparePassword(password, hash)
+	out, out2 := m.ComparePassword(password, hash)
 
-	s.False(uLBPp)
-	s.NoError(ylJhn)
+	s.False(out)
+	s.Error(out2)
 
-	_ = uLBPp
-	_ = ylJhn
+	_ = out
+	_ = out2
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword4() {
-	pointerM2 := PasswordConfig{time: uint32(5), memory: uint32(84), threads: uint8(20), keyLen: uint32(56)}
+	pointerM2 := PasswordConfig{time: uint32(79), memory: uint32(87), threads: uint8(42), keyLen: uint32(30)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
 	password := defaultPasswd()
-	hash := wrongHash()
+	hash := "Mistressdandelion"
 
-	wPviu, dGaMQ := m.ComparePassword(password, hash)
-
-	s.False(wPviu)
-	s.Error(dGaMQ)
-
-	_ = wPviu
-	_ = dGaMQ
+	s.Panics(func() {
+		m.ComparePassword(password, hash)
+	})
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword5() {
-	pointerM2 := PasswordConfig{time: uint32(41), memory: uint32(1), threads: uint8(69), keyLen: uint32(59)}
+	pointerM2 := PasswordConfig{time: uint32(39), memory: uint32(71), threads: uint8(93), keyLen: uint32(15)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
 	password := defaultPasswd()
-	hash := wrongHash()
+	hash := defaultHash()
 
-	jmcOx, bXtuK := m.ComparePassword(password, hash)
+	out, out2 := m.ComparePassword(password, hash)
 
-	s.False(jmcOx)
-	s.Error(bXtuK)
+	s.False(out)
+	s.NoError(out2)
 
-	_ = jmcOx
-	_ = bXtuK
+	_ = out
+	_ = out2
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword6() {
-	pointerM2 := PasswordConfig{time: uint32(0), memory: uint32(60), threads: uint8(96), keyLen: uint32(84)}
+	pointerM2 := PasswordConfig{time: uint32(90), memory: uint32(45), threads: uint8(58), keyLen: uint32(85)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Slothquark"
-	hash := defaultHash()
+	password := defaultPasswd()
+	hash := "Goosefir"
 
 	s.Panics(func() {
 		m.ComparePassword(password, hash)
@@ -310,153 +306,151 @@ func (s *DecoratorSuite) TestPWManagerComparePassword6() {
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword7() {
-	pointerM2 := PasswordConfig{time: uint32(56), memory: uint32(21), threads: uint8(87), keyLen: uint32(67)}
+	pointerM2 := PasswordConfig{time: uint32(39), memory: uint32(24), threads: uint8(62), keyLen: uint32(64)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
 	password := defaultPasswd()
-	hash := wrongHash()
+	hash := defaultHash()
 
-	pbEuE, sstLZ := m.ComparePassword(password, hash)
+	out, out2 := m.ComparePassword(password, hash)
 
-	s.False(pbEuE)
-	s.Error(sstLZ)
+	s.False(out)
+	s.NoError(out2)
 
-	_ = pbEuE
-	_ = sstLZ
+	_ = out
+	_ = out2
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword8() {
-	pointerM2 := PasswordConfig{time: uint32(14), memory: uint32(32), threads: uint8(95), keyLen: uint32(72)}
+	pointerM2 := PasswordConfig{time: uint32(68), memory: uint32(58), threads: uint8(79), keyLen: uint32(85)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
 	password := defaultPasswd()
 	hash := wrongHash()
 
-	quaAN, kLuWQ := m.ComparePassword(password, hash)
+	out, out2 := m.ComparePassword(password, hash)
 
-	s.False(quaAN)
-	s.Error(kLuWQ)
+	s.False(out)
+	s.Error(out2)
 
-	_ = quaAN
-	_ = kLuWQ
+	_ = out
+	_ = out2
 }
 
 func (s *DecoratorSuite) TestPWManagerComparePassword9() {
-	pointerM2 := PasswordConfig{time: uint32(98), memory: uint32(63), threads: uint8(78), keyLen: uint32(63)}
+	pointerM2 := PasswordConfig{time: uint32(33), memory: uint32(43), threads: uint8(30), keyLen: uint32(88)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := defaultPasswd()
-	hash := wrongHash()
+	password := "Hornethill"
+	hash := defaultHash()
 
-	wduMO, rtbSd := m.ComparePassword(password, hash)
+	out, out2 := m.ComparePassword(password, hash)
 
-	s.False(wduMO)
-	s.Error(rtbSd)
+	s.False(out)
+	s.NoError(out2)
 
-	_ = wduMO
-	_ = rtbSd
+	_ = out
+	_ = out2
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword0() {
-	pointerM2 := PasswordConfig{time: uint32(70), memory: uint32(94), threads: uint8(53), keyLen: uint32(35)}
+	pointerM2 := PasswordConfig{time: uint32(11), memory: uint32(31), threads: uint8(59), keyLen: uint32(36)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Griffinsky"
+	password := "Maskgossamer"
 
 	// FIXME: non deterministic results detected, please add assert statements manually
 	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword1() {
-	pointerM2 := PasswordConfig{time: uint32(72), memory: uint32(1), threads: uint8(64), keyLen: uint32(88)}
+	pointerM2 := PasswordConfig{time: uint32(91), memory: uint32(22), threads: uint8(21), keyLen: uint32(8)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Flybush"
+	password := "Ringerzenith"
 
 	// FIXME: non deterministic results detected, please add assert statements manually
 	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword2() {
-	pointerM2 := PasswordConfig{time: uint32(30), memory: uint32(79), threads: uint8(17), keyLen: uint32(4)}
+	pointerM2 := PasswordConfig{time: uint32(61), memory: uint32(31), threads: uint8(1), keyLen: uint32(63)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Servantspring"
+	password := "Riderstorm"
 
 	// FIXME: non deterministic results detected, please add assert statements manually
 	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword3() {
-	pointerM2 := PasswordConfig{time: uint32(89), memory: uint32(67), threads: uint8(94), keyLen: uint32(81)}
+	pointerM2 := PasswordConfig{time: uint32(43), memory: uint32(51), threads: uint8(26), keyLen: uint32(6)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Moleblossom"
+	password := "Hoofmorning"
 
 	// FIXME: non deterministic results detected, please add assert statements manually
 	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword4() {
-	pointerM2 := PasswordConfig{time: uint32(20), memory: uint32(8), threads: uint8(42), keyLen: uint32(93)}
+	pointerM2 := PasswordConfig{time: uint32(47), memory: uint32(90), threads: uint8(14), keyLen: uint32(6)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Roarersprinkle"
+	password := "Guardianneon"
 
 	// FIXME: non deterministic results detected, please add assert statements manually
 	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword5() {
-	pointerM2 := PasswordConfig{time: uint32(63), memory: uint32(95), threads: uint8(11), keyLen: uint32(42)}
+	pointerM2 := PasswordConfig{time: uint32(23), memory: uint32(44), threads: uint8(83), keyLen: uint32(39)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Jackalmad"
+	password := "Butterflypetal"
 
 	// FIXME: non deterministic results detected, please add assert statements manually
 	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword6() {
-	pointerM2 := PasswordConfig{time: uint32(72), memory: uint32(21), threads: uint8(23), keyLen: uint32(82)}
+	pointerM2 := PasswordConfig{time: uint32(46), memory: uint32(56), threads: uint8(42), keyLen: uint32(17)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Bellfast"
+	password := "Crownrattle"
 
 	// FIXME: non deterministic results detected, please add assert statements manually
 	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword7() {
-	pointerM2 := PasswordConfig{time: uint32(0), memory: uint32(75), threads: uint8(2), keyLen: uint32(76)}
+	pointerM2 := PasswordConfig{time: uint32(85), memory: uint32(92), threads: uint8(13), keyLen: uint32(25)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Heronwell"
+	password := "Hornpollen"
 
-	s.Panics(func() {
-		m.GeneratePassword(password)
-	})
+	// FIXME: non deterministic results detected, please add assert statements manually
+	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword8() {
-	pointerM2 := PasswordConfig{time: uint32(78), memory: uint32(29), threads: uint8(26), keyLen: uint32(39)}
+	pointerM2 := PasswordConfig{time: uint32(95), memory: uint32(18), threads: uint8(97), keyLen: uint32(93)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Pumablaze"
+	password := "Faceshallow"
 
 	// FIXME: non deterministic results detected, please add assert statements manually
 	m.GeneratePassword(password)
 }
 
 func (s *DecoratorSuite) TestPWManagerGeneratePassword9() {
-	pointerM2 := PasswordConfig{time: uint32(75), memory: uint32(71), threads: uint8(0), keyLen: uint32(36)}
+	pointerM2 := PasswordConfig{time: uint32(8), memory: uint32(20), threads: uint8(4), keyLen: uint32(7)}
 	pointerM := PWManager{Config: &pointerM2}
 	m := &pointerM
-	password := "Voleclear"
+	password := "Oxpitch"
 
-	s.Panics(func() {
-		m.GeneratePassword(password)
-	})
+	// FIXME: non deterministic results detected, please add assert statements manually
+	m.GeneratePassword(password)
 }
 
 func TestDecoratorSuite(t *testing.T) {

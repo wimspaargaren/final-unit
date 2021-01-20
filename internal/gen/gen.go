@@ -13,7 +13,6 @@ import (
 	"github.com/wimspaargaren/final-unit/internal/ident"
 	"github.com/wimspaargaren/final-unit/internal/importer"
 	"github.com/wimspaargaren/final-unit/internal/testcase"
-	"github.com/wimspaargaren/final-unit/internal/utils"
 	"github.com/wimspaargaren/final-unit/pkg/values"
 	"github.com/wimspaargaren/final-unit/pkg/variables"
 )
@@ -198,7 +197,7 @@ func (g *Generator) TestCasePrefix(funcDecl *ast.FuncDecl) string {
 		return g.TypeToPrefix(funcDecl.Recv.List[0].Type)
 	}
 	log.Warningf("expected func receiver to have only one field")
-	return utils.LowerCaseFirstLetter(g.Opts.VarGenerator.Generate())
+	return g.Opts.IdentGen.Create(&ast.Ident{Name: "prefix"}).Name
 }
 
 // TypeToPrefix converts a function receiver type to a prefix
@@ -212,6 +211,6 @@ func (g *Generator) TypeToPrefix(e ast.Expr) string {
 		return g.TypeToPrefix(t.X)
 	default:
 		log.Warningf("unexpected field receiver type found: %T", e)
-		return utils.LowerCaseFirstLetter(g.Opts.VarGenerator.Generate())
+		return g.Opts.IdentGen.Create(&ast.Ident{Name: "prefix"}).Name
 	}
 }
