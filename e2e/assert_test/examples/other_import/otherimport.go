@@ -1,6 +1,9 @@
 package otherimport
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 type Y struct {
 	x int
@@ -27,4 +30,8 @@ func Second(x *A) *A {
 // ReaderFromFile creates csv reader from file at given filepath
 func ReaderFromFile() (*os.File, error) {
 	return &os.File{}, nil
+}
+
+func Err() error {
+	return fmt.Errorf("error")
 }

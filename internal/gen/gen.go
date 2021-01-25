@@ -29,8 +29,19 @@ const (
 // Organism organism is a set of testcases for functions of files in a given directory
 type Organism struct {
 	Fitness float64
-	// DNA = Files
+	// Create test cases for all files in a pkg
 	Files []*File
+}
+
+// UpdateAssertStmts sets an os assert statements based on printed runtime result
+func (o *Organism) UpdateAssertStmts(printed string, firstRun bool) {
+	for _, f := range o.Files {
+		for funcName, testCases := range f.TestCases {
+			for i, testCase := range testCases {
+				testCase.RunTimeInfo.AssertStmtsForTestCase(printed, firstRun, funcName, i)
+			}
+		}
+	}
 }
 
 // File file contains test cases for functions of a given file
