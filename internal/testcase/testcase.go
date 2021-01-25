@@ -14,6 +14,7 @@ import (
 	"github.com/wimspaargaren/final-unit/internal/ident"
 	"github.com/wimspaargaren/final-unit/internal/identlist"
 	"github.com/wimspaargaren/final-unit/internal/importer"
+	"github.com/wimspaargaren/final-unit/internal/runtime"
 	"github.com/wimspaargaren/final-unit/pkg/values"
 	"github.com/wimspaargaren/final-unit/pkg/variables"
 )
@@ -35,7 +36,7 @@ type TestCase struct {
 	Opts        Options
 	Deco        *decorator.Deco
 	Dynamic     Dynamic
-	RunTimeInfo RunTimeInfo
+	RunTimeInfo *runtime.Info
 
 	// Properties used to create value stmts in test cases
 	Decls      []string
@@ -70,36 +71,11 @@ func New(f *ast.FuncDecl,
 		PackageInfo: pkgInfo,
 		Opts:        opts,
 		Deco:        decorator,
+		RunTimeInfo: &runtime.Info{},
 		Dynamic: Dynamic{
 			CanGenInterface: make(map[string]bool),
 		},
 	}
-}
-
-// RunTimeInfo information about values on runtime
-type RunTimeInfo struct {
-	IsValid     bool
-	Panics      bool
-	AssertStmts []string
-	SecondRun   []string
-}
-
-// SetIsValid verifies that created runtime info is valid
-// used when generating end result
-func (r *RunTimeInfo) SetIsValid() bool {
-	if len(r.AssertStmts) != len(r.SecondRun) {
-		r.IsValid = false
-		return false
-	}
-
-	for i := 0; i < len(r.AssertStmts); i++ {
-		if r.AssertStmts[i] != r.SecondRun[i] {
-			r.IsValid = false
-			return false
-		}
-	}
-	r.IsValid = true
-	return true
 }
 
 // Dynamic struct for performance improvements using dynamic programming
