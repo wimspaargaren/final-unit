@@ -26,8 +26,9 @@ type AssertStmt struct {
 	Value    string
 }
 
-// AssertStmtPrinter printer for assert statements
-type AssertStmtPrinter interface {
+// StmtPrinter printer for assert statements
+type StmtPrinter interface {
+	fmt.Stringer
 	PrintAssertStmt(astmt AssertStmt) string
 }
 
@@ -37,8 +38,8 @@ type TestifySuitePrinter struct {
 }
 
 // NewTestifySuitePrinter new testify suite
-func NewTestifySuitePrinter(receiver string) TestifySuitePrinter {
-	return TestifySuitePrinter{
+func NewTestifySuitePrinter(receiver string) StmtPrinter {
+	return &TestifySuitePrinter{
 		Receiver: receiver,
 	}
 }
@@ -56,6 +57,10 @@ func (t *TestifySuitePrinter) PrintAssertStmt(astmt AssertStmt) string {
 		return fmt.Sprintf("%s.%s(%s)", t.Receiver, astmt.Type, astmt.Expected)
 	default:
 		log.Warningf("unexpected assert stmt type")
-		return fmt.Sprintf("%s.%s(%s)", t.Receiver, astmt.Type, astmt.Expected)
+		return fmt.Sprintf("// FIXME: unknown assertion %s.%s(%s,%s)", t.Receiver, astmt.Type, astmt.Expected, astmt.Value)
 	}
+}
+
+func (t *TestifySuitePrinter) String() string {
+	return "testify suite printer"
 }
