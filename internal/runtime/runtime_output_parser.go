@@ -19,13 +19,18 @@ type Output struct {
 }
 
 // ParseLine parses a line of output
-func ParseLine(jsonString string, mem *[]string) []string {
+func (info *Info) ParseLine(jsonString string, mem *[]string) []string {
 	data := Output{}
 	err := json.Unmarshal([]byte(jsonString), &data)
 	if err != nil {
 		log.WithError(err).WithField("line", jsonString).Errorf("unable to parse runtime output")
 	}
-	return AssertStmts(&data, []Replacement{}, TypeCorrections{}, []string{}, mem)
+	stmts := AssertStmts(&data, []Replacement{}, TypeCorrections{}, []Stmt{}, mem)
+	res := []string{}
+	for _, stmt := range stmts {
+		res = append(res, info.Printer.PrintStmt(stmt))
+	}
+	return res
 }
 
 // Replacement struct which contains keys and replacement values
@@ -42,7 +47,7 @@ type TypeCorrections struct {
 }
 
 // AssertStmts new assert statement from runtime output
-func AssertStmts(data *Output, replacements []Replacement, typeCorrection TypeCorrections, resStmts []string, mem *[]string) []string {
+func AssertStmts(data *Output, replacements []Replacement, typeCorrection TypeCorrections, resStmts []Stmt, mem *[]string) []Stmt {
 	if data.Child == nil {
 		return CreateAssertStmts(data, replacements, typeCorrection, resStmts)
 	}
@@ -76,14 +81,22 @@ func AssertStmts(data *Output, replacements []Replacement, typeCorrection TypeCo
 			// sanity check
 			if data.Child == nil {
 				log.Warningf("unable to create assert stmts, expected pointer to have child")
-				return []string{}
+				return []Stmt{}
 			}
 			pointerStmt := fmt.Sprintf("%s := *%s", data.Child.VarName, data.VarName)
 			if !Contains(*mem, pointerStmt) {
 				*mem = append(*mem, fmt.Sprintf("%s :=", data.Child.VarName))
-				resStmts = append(resStmts, fmt.Sprintf("%s := *%s", data.Child.VarName, data.VarName))
+				resStmts = append(resStmts, &AssignStmt{
+					AssignStmtType: AssignStmtTypeDefine,
+					LeftHand:       data.Child.VarName,
+					RightHand:      "*" + data.VarName,
+				})
 			} else {
-				resStmts = append(resStmts, fmt.Sprintf("%s = *%s", data.Child.VarName, data.VarName))
+				resStmts = append(resStmts, &AssignStmt{
+					AssignStmtType: AssignSTmtTypeAssign,
+					LeftHand:       data.Child.VarName,
+					RightHand:      "*" + data.VarName,
+				})
 			}
 		}
 		// If nil just continue recursion
@@ -94,13 +107,13 @@ func AssertStmts(data *Output, replacements []Replacement, typeCorrection TypeCo
 }
 
 // CreateAssertStmts creates the eventual assert statement based on runtime output and corrections
-func CreateAssertStmts(runtimeOutput *Output, replacements []Replacement, typeCorrection TypeCorrections, resStmts []string) []string {
+func CreateAssertStmts(runtimeOutput *Output, replacements []Replacement, typeCorrection TypeCorrections, resStmts []Stmt) []Stmt {
 	for i := 0; i < len(replacements); i++ {
 		runtimeOutput.VarName = strings.ReplaceAll(runtimeOutput.VarName, replacements[i].Key, replacements[i].Val)
 	}
 	for j := 0; j < len(resStmts); j++ {
 		for i := 0; i < len(replacements); i++ {
-			resStmts[j] = strings.ReplaceAll(resStmts[j], replacements[i].Key, replacements[i].Val)
+			resStmts[j].Replace(replacements[i].Key, replacements[i].Val)
 		}
 	}
 	switch runtimeOutput.Type {
@@ -119,26 +132,53 @@ func CreateAssertStmts(runtimeOutput *Output, replacements []Replacement, typeCo
 		"int16",
 		"int32",
 		"int64":
-		return append(resStmts, fmt.Sprintf("s.EqualValues(%s%s(%s)%s,%s)", typeCorrection.Prefix, runtimeOutput.Type, runtimeOutput.Val, typeCorrection.Suffix, runtimeOutput.VarName))
+		return append(resStmts, &AssertStmt{
+			AssertStmtType: AssertStmtTypeEqualValues,
+			Expected:       fmt.Sprintf("%s%s(%s)%s", typeCorrection.Prefix, runtimeOutput.Type, runtimeOutput.Val, typeCorrection.Suffix),
+			Value:          runtimeOutput.VarName,
+		})
 	case "string":
-		return append(resStmts, fmt.Sprintf("s.EqualValues(%s%s(`%s`)%s,%s)", typeCorrection.Prefix, runtimeOutput.Type, runtimeOutput.Val, typeCorrection.Suffix, runtimeOutput.VarName))
+		return append(resStmts, &AssertStmt{
+			AssertStmtType: AssertStmtTypeEqualValues,
+			Expected:       fmt.Sprintf("%s%s(`%s`)%s", typeCorrection.Prefix, runtimeOutput.Type, runtimeOutput.Val, typeCorrection.Suffix),
+			Value:          runtimeOutput.VarName,
+		})
 	case "bool":
 		if runtimeOutput.Val == "true" {
-			return append(resStmts, fmt.Sprintf("s.True(%s)", runtimeOutput.VarName))
+			return append(resStmts, &AssertStmt{
+				AssertStmtType: AssertStmtTypeTrue,
+				Expected:       runtimeOutput.VarName,
+			})
 		}
-		return append(resStmts, fmt.Sprintf("s.False(%s)", runtimeOutput.VarName))
+		return append(resStmts, &AssertStmt{
+			AssertStmtType: AssertStmtTypeFalse,
+			Expected:       runtimeOutput.VarName,
+		})
 	case "complex64", "complex128":
-		return append(resStmts, fmt.Sprintf("s.EqualValues(%s%s%s%s,%s)", typeCorrection.Prefix, runtimeOutput.Type, runtimeOutput.Val, typeCorrection.Suffix, runtimeOutput.VarName))
+		return append(resStmts, &AssertStmt{
+			AssertStmtType: AssertStmtTypeEqualValues,
+			Expected:       fmt.Sprintf("%s%s%s%s", typeCorrection.Prefix, runtimeOutput.Type, runtimeOutput.Val, typeCorrection.Suffix),
+			Value:          runtimeOutput.VarName,
+		})
 	// Only nil pointers will reach this point
 	case "pointer":
-		return append(resStmts, fmt.Sprintf("s.Nil(%s)", runtimeOutput.VarName))
+		return append(resStmts, &AssertStmt{
+			AssertStmtType: AssertStmtTypeNil,
+			Expected:       runtimeOutput.VarName,
+		})
 	case "error":
 		if runtimeOutput.Val == "nil" {
-			return append(resStmts, fmt.Sprintf("s.NoError(%s)", runtimeOutput.VarName))
+			return append(resStmts, &AssertStmt{
+				AssertStmtType: AssertStmtTypeNoError,
+				Expected:       runtimeOutput.VarName,
+			})
 		}
-		return append(resStmts, fmt.Sprintf("s.Error(%s)", runtimeOutput.VarName))
+		return append(resStmts, &AssertStmt{
+			AssertStmtType: AssertStmtTypeError,
+			Expected:       runtimeOutput.VarName,
+		})
 	default:
 		log.Warningf("unknown type: %s, value: %s", runtimeOutput.Type, runtimeOutput.Val)
-		return []string{}
+		return []Stmt{}
 	}
 }
