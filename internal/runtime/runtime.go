@@ -13,6 +13,14 @@ type Info struct {
 	Panics      bool
 	AssertStmts []string
 	SecondRun   []string
+	Printer     StmtPrinter
+}
+
+// NewInfo creates new runtime info for given printer
+func NewInfo(printer StmtPrinter) *Info {
+	return &Info{
+		Printer: printer,
+	}
 }
 
 // SetIsValid verifies that created runtime info is valid
@@ -50,7 +58,7 @@ func (info *Info) AssertStmtsForTestCase(printed string, firstRun bool, funcName
 		// Check if line starts with expected JSON
 		if strings.HasPrefix(line, `{ "type":`) {
 			// Create assert statements from JSON line
-			assertStmts := ParseLine(line, &mem)
+			assertStmts := info.ParseLine(line, &mem)
 			if firstRun {
 				info.AssertStmts = append(info.AssertStmts, assertStmts...)
 			} else {

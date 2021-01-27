@@ -11,7 +11,9 @@ type RunTimeTestSuite struct {
 }
 
 func (s *RunTimeTestSuite) TestAssertStmtsForTestCase() {
-	info := &Info{}
+	info := &Info{
+		Printer: NewTestifySuitePrinter("s"),
+	}
 	info.AssertStmtsForTestCase(output, true, "DoubleArray", 1)
 	s.Equal(0, len(info.AssertStmts))
 	info.AssertStmtsForTestCase(output, true, "DoubleArrayx", 0)
@@ -23,7 +25,9 @@ func (s *RunTimeTestSuite) TestAssertStmtsForTestCase() {
 }
 
 func (s *RunTimeTestSuite) TestAssertStmtsForPanicTestCase() {
-	info := &Info{}
+	info := &Info{
+		Printer: NewTestifySuitePrinter("s"),
+	}
 	info.AssertStmtsForTestCase(panicOutput, true, "DoubleArray", 0)
 	s.True(info.Panics)
 }
@@ -32,6 +36,7 @@ func (s *RunTimeTestSuite) TestIsValid() {
 	info := &Info{
 		AssertStmts: []string{},
 		SecondRun:   []string{"hi"},
+		Printer:     NewTestifySuitePrinter("s"),
 	}
 	info.SetIsValid()
 	s.False(info.IsValid)

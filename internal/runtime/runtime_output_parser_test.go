@@ -80,7 +80,9 @@ func (s *RunTimeOutputParserTestSuite) TestExampleOutputs() {
 
 	for _, testCase := range tests {
 		s.Run(testCase.Name, func() {
-			x := ParseLine(testCase.Input, &[]string{})
+			printer := NewTestifySuitePrinter("s")
+			info := NewInfo(printer)
+			x := info.ParseLine(testCase.Input, &[]string{})
 			s.EqualValues(testCase.Output, x)
 		})
 	}

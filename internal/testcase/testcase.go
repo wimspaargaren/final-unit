@@ -71,7 +71,7 @@ func New(f *ast.FuncDecl,
 		PackageInfo: pkgInfo,
 		Opts:        opts,
 		Deco:        decorator,
-		RunTimeInfo: &runtime.Info{},
+		RunTimeInfo: runtime.NewInfo(runtime.NewTestifySuitePrinter("s")),
 		Dynamic: Dynamic{
 			CanGenInterface: make(map[string]bool),
 		},
