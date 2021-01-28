@@ -82,8 +82,10 @@ func (s *RunTimeOutputParserTestSuite) TestExampleOutputs() {
 		s.Run(testCase.Name, func() {
 			printer := NewTestifySuitePrinter("s")
 			info := NewInfo(printer)
-			x := info.ParseLine(testCase.Input, &[]string{})
-			s.EqualValues(testCase.Output, x)
+			outputParser := NewOutputParser()
+			x := outputParser.ParseLine(testCase.Input)
+			info.AssertStmts = x
+			s.EqualValues(testCase.Output, info.GetAssertStmts())
 		})
 	}
 }

@@ -15,11 +15,11 @@ func (s *RunTimeTestSuite) TestAssertStmtsForTestCase() {
 		Printer: NewTestifySuitePrinter("s"),
 	}
 	info.AssertStmtsForTestCase(output, true, "DoubleArray", 1)
-	s.Equal(0, len(info.AssertStmts))
+	s.Equal(0, len(info.GetAssertStmts()))
 	info.AssertStmtsForTestCase(output, true, "DoubleArrayx", 0)
-	s.Equal(0, len(info.AssertStmts))
+	s.Equal(0, len(info.GetAssertStmts()))
 	info.AssertStmtsForTestCase(output, true, "DoubleArray", 0)
-	s.Equal(4, len(info.AssertStmts))
+	s.Equal(4, len(info.GetAssertStmts()))
 	info.AssertStmtsForTestCase(output, false, "DoubleArray", 0)
 	s.Equal(4, len(info.SecondRun))
 }
@@ -33,14 +33,6 @@ func (s *RunTimeTestSuite) TestAssertStmtsForPanicTestCase() {
 }
 
 func (s *RunTimeTestSuite) TestIsValid() {
-	info := &Info{
-		AssertStmts: []string{},
-		SecondRun:   []string{"hi"},
-		Printer:     NewTestifySuitePrinter("s"),
-	}
-	info.SetIsValid()
-	s.False(info.IsValid)
-
 	tests := []struct {
 		Name     string
 		Input    *Info
@@ -49,24 +41,32 @@ func (s *RunTimeTestSuite) TestIsValid() {
 		{
 			Name: "length not equal",
 			Input: &Info{
-				AssertStmts: []string{},
-				SecondRun:   []string{"hi"},
+				AssertStmts: []Stmt{},
+				SecondRun:   []Stmt{&AssertStmt{Expected: "some val"}},
 			},
 			Expected: false,
 		},
 		{
-			Name: "not equal",
+			Name: "not equal val",
 			Input: &Info{
-				AssertStmts: []string{"other val"},
-				SecondRun:   []string{"hi"},
+				AssertStmts: []Stmt{&AssertStmt{Expected: "not equal val"}},
+				SecondRun:   []Stmt{&AssertStmt{Expected: "other val"}},
+			},
+			Expected: false,
+		},
+		{
+			Name: "not equal type",
+			Input: &Info{
+				AssertStmts: []Stmt{&AssignStmt{LeftHand: "not equal val"}},
+				SecondRun:   []Stmt{&AssertStmt{Expected: "other val"}},
 			},
 			Expected: false,
 		},
 		{
 			Name: "equal",
 			Input: &Info{
-				AssertStmts: []string{"equal val"},
-				SecondRun:   []string{"equal val"},
+				AssertStmts: []Stmt{&AssertStmt{Expected: "equal val"}},
+				SecondRun:   []Stmt{&AssertStmt{Expected: "equal val"}},
 			},
 			Expected: true,
 		},
@@ -74,8 +74,8 @@ func (s *RunTimeTestSuite) TestIsValid() {
 
 	for _, testCase := range tests {
 		s.Run(testCase.Name, func() {
-			testCase.Input.SetIsValid()
-			s.Equal(testCase.Expected, testCase.Input.IsValid)
+			testCase.Input.IsValid()
+			s.Equal(testCase.Expected, testCase.Input.IsValid())
 		})
 	}
 }
