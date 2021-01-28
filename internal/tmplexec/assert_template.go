@@ -54,7 +54,7 @@ go func(){
 {{ $testCase.FuncStmt }}
 {{ end }}
 
-{{range  $testCase.RunTimeInfo.AssertStmts}}{{ . }}
+{{range  $testCase.RunTimeInfo.GetAssertStmts }}{{ . }}
 {{end}}
 {{/* Ensure values are always used */}}
 {{range  $testCase.ResultUsageStmts}}{{ . }}

@@ -177,7 +177,6 @@ issues:
         - gomnd
         - gocritic
 
-
     - path: _test\.go
       linters:
         - gocyclo

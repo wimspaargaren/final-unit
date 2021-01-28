@@ -1,18 +1,11 @@
 // Package runtime analyses runtime output and converts it into assert statements
 package runtime
 
-import (
-	"fmt"
-	"regexp"
-	"strings"
-)
-
 // Info information about values on runtime
 type Info struct {
-	IsValid     bool
 	Panics      bool
-	AssertStmts []string
-	SecondRun   []string
+	AssertStmts []Stmt
+	SecondRun   []Stmt
 	Printer     StmtPrinter
 }
 
@@ -23,50 +16,57 @@ func NewInfo(printer StmtPrinter) *Info {
 	}
 }
 
-// SetIsValid verifies that created runtime info is valid
+// GetAssertStmts retrieve the assert statements
+func (info *Info) GetAssertStmts() []string {
+	res := []string{}
+	for _, stmt := range info.AssertStmts {
+		res = append(res, info.Printer.PrintStmt(stmt))
+	}
+	return res
+}
+
+// IsValid verifies that created runtime info is valid
 // used when generating end result
-func (info *Info) SetIsValid() bool {
+func (info *Info) IsValid() bool {
 	if len(info.AssertStmts) != len(info.SecondRun) {
-		info.IsValid = false
 		return false
 	}
 
 	for i := 0; i < len(info.AssertStmts); i++ {
-		if info.AssertStmts[i] != info.SecondRun[i] {
-			info.IsValid = false
+		if info.AssertStmts[i].Type() != info.SecondRun[i].Type() {
 			return false
 		}
+		assertStmt, ok := info.AssertStmts[i].(*AssertStmt)
+		assertStmt2, ok2 := info.SecondRun[i].(*AssertStmt)
+		if ok && ok2 {
+			if *assertStmt != *assertStmt2 {
+				return false
+			}
+			continue
+		}
+		assignStmt, ok := info.AssertStmts[i].(*AssertStmt)
+		assignStmt2, ok2 := info.SecondRun[i].(*AssertStmt)
+		if ok && ok2 {
+			if *assignStmt != *assignStmt2 {
+				return false
+			}
+			continue
+		}
 	}
-	info.IsValid = true
 	return true
 }
 
 // AssertStmtsForTestCase creates assert statements for a testcase
 func (info *Info) AssertStmtsForTestCase(printed string, firstRun bool, funcName string, index int) {
-	mem := []string{}
-	// Regex output for current organism
-	re := regexp.MustCompile(fmt.Sprintf(`%s\n((.*)\n)*%s`, StartName(funcName, index), EndName(funcName, index)))
-	curFuncOutput := re.FindString(printed)
-	// Check if function paniced
-	if strings.Contains(curFuncOutput, fmt.Sprintf("Recovered in Test%s%d", funcName, index)) {
+	outputParser := NewOutputParser()
+	stmts, panics := outputParser.Parse(printed, funcName, index)
+	if panics {
 		info.Panics = true
 		return
 	}
-	// Otherwise split lines
-	lines := strings.Split(curFuncOutput, "\n")
-	for _, line := range lines {
-		// Check if line starts with expected JSON
-		if strings.HasPrefix(line, `{ "type":`) {
-			// Create assert statements from JSON line
-			assertStmts := info.ParseLine(line, &mem)
-			if firstRun {
-				info.AssertStmts = append(info.AssertStmts, assertStmts...)
-			} else {
-				info.SecondRun = append(info.SecondRun, assertStmts...)
-			}
-		}
-	}
-	if !firstRun {
-		info.SetIsValid()
+	if firstRun {
+		info.AssertStmts = append(info.AssertStmts, stmts...)
+	} else {
+		info.SecondRun = append(info.SecondRun, stmts...)
 	}
 }
