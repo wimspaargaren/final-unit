@@ -6,6 +6,7 @@ import (
 	"go/ast"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -152,6 +153,9 @@ func (g *Generator) GetNewOrganism() *Organism {
 
 		org.Files = append(org.Files, file)
 	}
+	sort.Slice(org.Files, func(i, j int) bool {
+		return org.Files[i].FileName < org.Files[j].FileName
+	})
 	return org
 }
 
