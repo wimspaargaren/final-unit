@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/Pallinder/go-randomdata"
-	"github.com/asherascout/final-unit/pkg/chance"
+	"github.com/wimspaargaren/final-unit/pkg/chance"
 )
 
 // IGen the value generator interface

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/asherascout/final-unit/e2e/gen_test/examples/packagewithimports/pkg/some"
+	"github.com/wimspaargaren/final-unit/e2e/gen_test/examples/packagewithimports/pkg/some"
 )
 
 func SomeFunc(s *some.SomeStruct, t time.Time, r http.Request) bool {

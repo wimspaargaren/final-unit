@@ -1,7 +1,10 @@
 name: ci
 on: 
   push:
-    branches: [ "local_test", "main" ] 
+    tags:
+      - v*
+    branches:
+      - main
   pull_request:
 jobs:
   go-mod:
@@ -27,7 +30,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Get go imports
-      run: go get golang.org/x/tools/cmd/goimports@latest
+      run: go get golang.org/x/tools/cmd/goimports
     - name: Test
       run: go test -v -p=4 -cover ./...
   test-e2e:
@@ -40,7 +43,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Get go imports
-      run: go get golang.org/x/tools/cmd/goimports@latest
+      run: go get golang.org/x/tools/cmd/goimports
     - name: Test e2e
       run: go test --tags=e2e -v ./e2e/... 
   golangci:

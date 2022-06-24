@@ -9,9 +9,9 @@ import (
 	"log"
 	"testing"
 
-	"github.com/asherascout/final-unit/internal/evo"
-	"github.com/asherascout/final-unit/internal/gen"
 	"github.com/stretchr/testify/suite"
+	"github.com/wimspaargaren/final-unit/internal/evo"
+	"github.com/wimspaargaren/final-unit/internal/gen"
 )
 
 type EvoTestSuite struct {

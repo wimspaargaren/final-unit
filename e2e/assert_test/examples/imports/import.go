@@ -1,6 +1,6 @@
 package withimport
 
-import "github.com/asherascout/final-unit/e2e/assert_test/examples/imports/someimport"
+import "github.com/wimspaargaren/final-unit/e2e/assert_test/examples/imports/someimport"
 
 func StructImport() someimport.SomeStruct {
 	return someimport.SomeStruct{

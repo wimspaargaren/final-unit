@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/asherascout/final-unit/internal/gen"
-	"github.com/asherascout/final-unit/internal/tmplexec"
 	"github.com/stretchr/testify/suite"
+	"github.com/wimspaargaren/final-unit/internal/gen"
+	"github.com/wimspaargaren/final-unit/internal/tmplexec"
 )
 
 type E2EResultSuite struct {

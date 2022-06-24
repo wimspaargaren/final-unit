@@ -1,7 +1,7 @@
 package directlynestedstruct
 
 import (
-	"github.com/asherascout/final-unit/test/data/inputs/example_directly_nested_struct/nestedimport"
+	"github.com/wimspaargaren/final-unit/test/data/inputs/example_directly_nested_struct/nestedimport"
 )
 
 type X int

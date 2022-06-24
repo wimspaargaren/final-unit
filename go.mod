@@ -1,4 +1,4 @@
-module github.com/asherascout/final-unit
+module github.com/wimspaargaren/final-unit
 
 go 1.15
 

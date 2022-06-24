@@ -6,9 +6,9 @@ import (
 	"go/token"
 	"unicode"
 
-	"github.com/asherascout/final-unit/internal/importer"
-	"github.com/asherascout/final-unit/internal/utils"
 	log "github.com/sirupsen/logrus"
+	"github.com/wimspaargaren/final-unit/internal/importer"
+	"github.com/wimspaargaren/final-unit/internal/utils"
 )
 
 // PrintRecursionInput input object for traversing the AST

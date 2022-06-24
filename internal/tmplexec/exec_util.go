@@ -6,8 +6,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/asherascout/final-unit/internal/gen"
 	log "github.com/sirupsen/logrus"
+	"github.com/wimspaargaren/final-unit/internal/gen"
 )
 
 // Opts opts for template generation and execution
