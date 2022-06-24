@@ -30,4 +30,4 @@ coverage-report:
 
 # Installs current version of generator to cmdline
 install:
-	@go install ${GOPATH}/src/github.com/wimspaargaren/final-unit/cmd/finalunit  
+	@go install ${GOPATH}/src/github.com/asherascout/final-unit/cmd/finalunit  

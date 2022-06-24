@@ -3,7 +3,7 @@
 </p>
 
 # Final Unit
-[![Build Status](https://github.com/wimspaargaren/final-unit/workflows/ci/badge.svg)](https://github.com/wimspaargaren/final-unit/actions)
+[![Build Status](https://github.com/asherascout/final-unit/workflows/ci/badge.svg)](https://github.com/asherascout/final-unit/actions)
 
 Final Unit is a command line tool to automatically generate unit test cases for your Go source code. It uses evolutionary based machine learning in order to try and create a test suite with the highest coverage it can find.
 
@@ -16,7 +16,7 @@ $ go get golang.org/x/tools/cmd/goimports
 
 ### Download latest release
 
-Download the [latest release](https://github.com/wimspaargaren/final-unit/releases/latest).
+Download the [latest release](https://github.com/asherascout/final-unit/releases/latest).
 
 ### Install Dev version
 
@@ -26,7 +26,7 @@ export PATH=$PATH:$GOPATH/bin
 ```
 Install the dev version:
 ```bash
-$ go install github.com/wimspaargaren/final-unit/cmd/finalunit
+$ go install github.com/asherascout/final-unit/cmd/finalunit
 ```
 
 ## Usage

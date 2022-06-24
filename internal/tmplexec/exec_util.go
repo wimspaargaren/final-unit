@@ -6,8 +6,8 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/asherascout/final-unit/internal/gen"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/gen"
 )
 
 // Opts opts for template generation and execution
@@ -34,7 +34,7 @@ func generateFileFromTemplate(organism *gen.Organism, templateString string) err
 		if err != nil {
 			return err
 		}
-		file, err := os.Create(executionPath)
+		file, err := os.Create(filepath.Clean(executionPath))
 		if err != nil {
 			return err
 		}

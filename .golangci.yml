@@ -35,9 +35,6 @@ linters-settings:
   govet:
     check-shadowing: false
 
-  golint:
-    min-confidence: 0.8
-
   gofmt:
     simplify: true
   gocyclo:
@@ -115,7 +112,6 @@ linters:
     - gofmt
     - gofumpt
     - goheader
-    - golint
     - gomnd
     - gomodguard
     - goprintffuncname
@@ -123,14 +119,12 @@ linters:
     - gosimple 
     - govet 
     - ineffassign
-    - interfacer
     - misspell
     - nakedret
     - nestif
     - noctx
     - nolintlint
     - rowserrcheck
-    - scopelint
     - sqlclosecheck
     - staticcheck 
     - structcheck

@@ -6,9 +6,9 @@ import (
 	"go/token"
 	"strconv"
 
+	"github.com/asherascout/final-unit/internal/identlist"
+	"github.com/asherascout/final-unit/internal/importer"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/identlist"
-	"github.com/wimspaargaren/final-unit/internal/importer"
 )
 
 // Writer io writer implementation for gathering element formatted strings

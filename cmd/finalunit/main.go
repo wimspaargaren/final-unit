@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/asherascout/final-unit/internal/evo"
+	"github.com/asherascout/final-unit/internal/gen"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/evo"
-	"github.com/wimspaargaren/final-unit/internal/gen"
 )
 
 // Version current version

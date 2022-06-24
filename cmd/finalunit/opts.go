@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 
+	"github.com/asherascout/final-unit/internal/evo"
+	"github.com/asherascout/final-unit/internal/gen"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/evo"
-	"github.com/wimspaargaren/final-unit/internal/gen"
 )
 
 // Opts current options
@@ -28,13 +28,14 @@ func InitOpts() (*Opts, *gen.Options, evo.PopulationOpts) {
 	dir := flag.String("d", ".", "dir for which to execute the generator")
 
 	// Pop Opts
-	noImprovedGens := flag.Int("no-improve-gens", 10, "max amount of generations without improvements before the generator halts")
-	targetFitness := flag.Int("target-fitness", 95, "number between 0 and 100 indicating the target coverage we try to hit")
+	const defaultNoImprovedGens, defaultTargetFitness, defaultOrganismAmount, defaultTestCasesPerFunc int = 10, 95, 10, 10
+	noImprovedGens := flag.Int("no-improve-gens", defaultNoImprovedGens, "max amount of generations without improvements before the generator halts")
+	targetFitness := flag.Int("target-fitness", defaultTargetFitness, "number between 0 and 100 indicating the target coverage we try to hit")
 	// override := flag.Bool("override-test-cases", false, "if set overrides already existing test cases")
 
 	// Gen opts
-	organismAmount := flag.Int("org-amount", 10, "amount of organisms in the population")
-	testCasesPerFunc := flag.Int("test-cases-func", 10, "amount of test cases created for every function")
+	organismAmount := flag.Int("org-amount", defaultOrganismAmount, "amount of organisms in the population")
+	testCasesPerFunc := flag.Int("test-cases-func", defaultTestCasesPerFunc, "amount of test cases created for every function")
 
 	// Parse flags
 	flag.Parse()
@@ -61,7 +62,8 @@ func InitOpts() (*Opts, *gen.Options, evo.PopulationOpts) {
 	popOpts.MaxNoImprovGens = *noImprovedGens
 	// popOpts.OverrideTestCases = *override
 	customFitness := float64(*targetFitness)
-	if customFitness >= 0 && customFitness <= 100 {
+	const fitnessLower, fitnessUpper float64 = 0, 100
+	if customFitness >= fitnessLower && customFitness <= fitnessUpper {
 		popOpts.Target = float64(*targetFitness)
 	} else {
 		log.Warningf("incorrect fitness specified, should be in range 0 and 100, using default")

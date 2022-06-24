@@ -1,6 +1,6 @@
 package cycle
 
-import "github.com/wimspaargaren/final-unit/test/data/inputs/example_cycle/somepkg"
+import "github.com/asherascout/final-unit/test/data/inputs/example_cycle/somepkg"
 
 type A struct {
 	X *B

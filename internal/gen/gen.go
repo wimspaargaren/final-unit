@@ -9,13 +9,15 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/asherascout/final-unit/internal/decorator"
+	"github.com/asherascout/final-unit/internal/ident"
+	"github.com/asherascout/final-unit/internal/importer"
+	"github.com/asherascout/final-unit/internal/testcase"
+	"github.com/asherascout/final-unit/pkg/values"
+	"github.com/asherascout/final-unit/pkg/variables"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/decorator"
-	"github.com/wimspaargaren/final-unit/internal/ident"
-	"github.com/wimspaargaren/final-unit/internal/importer"
-	"github.com/wimspaargaren/final-unit/internal/testcase"
-	"github.com/wimspaargaren/final-unit/pkg/values"
-	"github.com/wimspaargaren/final-unit/pkg/variables"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // Default constants
@@ -63,7 +65,7 @@ func (f *File) SuiteName() string {
 	fileParts := reg.Split(fileWithoutExt, -1)
 	res := ""
 	for _, part := range fileParts {
-		res += strings.Title(part)
+		res += cases.Title(language.English).String(part)
 	}
 	return res
 }

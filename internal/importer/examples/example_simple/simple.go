@@ -3,8 +3,8 @@ package simple
 import (
 	"fmt"
 
+	"github.com/asherascout/final-unit/internal/importer/examples/example_simple/pkg/somepkg"
 	foo "github.com/gofrs/uuid"
-	"github.com/wimspaargaren/final-unit/internal/importer/examples/example_simple/pkg/somepkg"
 )
 
 func HelloWorld(x somepkg.SomeStruct, id foo.UUID) {

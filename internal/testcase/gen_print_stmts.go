@@ -6,9 +6,9 @@ import (
 	"go/token"
 	"unicode"
 
+	"github.com/asherascout/final-unit/internal/importer"
+	"github.com/asherascout/final-unit/internal/utils"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/importer"
-	"github.com/wimspaargaren/final-unit/internal/utils"
 )
 
 // PrintRecursionInput input object for traversing the AST
@@ -96,77 +96,80 @@ func (g *TestCase) FieldToPrintStmt(field *ast.Field, funcName string, pointer *
 	return []ast.Expr{newIdent}, res
 }
 
-// TypeExpressionToPrintStmt converts type expression of a result to print statement
-func (g *TestCase) TypeExpressionToPrintStmt(input *PrintRecursionInput) *PrintResult { // nolint: gocyclo, funlen
-	switch t := input.e.(type) {
-	case *ast.Ident:
-		if t.Obj == nil {
-			if g.IsBasicLit(t.Name) {
-				return g.BasicExprToPrintStmt(input, t.Name, input.varName)
-			}
-			if g.IsError(t.Name) {
-				return g.ErrExprToPrintStmt(input)
-			}
-			// t.Name != basic val this is from another file in the same package
-			found, expr, newPointer := g.PackageInfo.FindInCurrent(input.pkgPointer, t.Name)
-			if !found {
-				log.Warningf("identifier not present in this file not found in other file: %s", t.Name)
-			} else {
-				return g.TypeExpressionToPrintStmt(&PrintRecursionInput{
-					e:          expr,
-					varName:    input.varName,
-					pkgPointer: newPointer,
-					counter:    input.counter,
-					prefix:     input.prefix,
-					suffix:     input.suffix,
-				})
-			}
+func (g *TestCase) PreIdentToPrintStmt(t *ast.Ident, input *PrintRecursionInput) *PrintResult {
+	if t.Obj == nil {
+		if g.IsBasicLit(t.Name) {
+			return g.BasicExprToPrintStmt(input, t.Name, input.varName)
 		}
-		// handle objects
-		switch objectDeclType := t.Obj.Decl.(type) {
-		// Object type
-		case *ast.TypeSpec:
-			switch oType := objectDeclType.Type.(type) {
-			case *ast.StructType:
-				return g.StructExprToPrintStmt(&PrintRecursionInput{
-					e:          oType,
-					varName:    input.varName,
-					pkgPointer: input.pkgPointer,
-					counter:    input.counter,
-					prefix:     input.prefix,
-					suffix:     input.suffix,
-				})
-			case *ast.Ident:
-				return g.IdentToPrintStmt(t, oType, input)
-			case *ast.ArrayType:
-				// In case of  array we dont need to adjust prefix and suffix
-				return g.ArrayExprToPrintStmt(oType, input)
-			case *ast.MapType:
-				// In case of map we dont need to adjust prefix and suffix
-				return g.MapExprToPrintStmt(oType, input)
-				// ignore types
-			case *ast.ChanType,
-				*ast.InterfaceType,
-				*ast.FuncType:
-				return &PrintResult{}
-			case *ast.SelectorExpr:
-				return g.SelectorExprToPrintStmt(&PrintRecursionInput{
-					e:          oType,
-					counter:    input.counter,
-					pkgPointer: input.pkgPointer,
-					prefix:     input.prefix,
-					suffix:     input.suffix,
-					varName:    input.varName,
-				})
-			default:
-				log.Warningf("Unsupported validate type: %T", oType)
-				return &PrintResult{}
-			}
+		if g.IsError(t.Name) {
+			return g.ErrExprToPrintStmt(input)
+		}
+		// t.Name != basic val this is from another file in the same package
+		found, expr, newPointer := g.PackageInfo.FindInCurrent(input.pkgPointer, t.Name)
+		if !found {
+			log.Warningf("identifier not present in this file not found in other file: %s", t.Name)
+		} else {
+			return g.TypeExpressionToPrintStmt(&PrintRecursionInput{
+				e:          expr,
+				varName:    input.varName,
+				pkgPointer: newPointer,
+				counter:    input.counter,
+				prefix:     input.prefix,
+				suffix:     input.suffix,
+			})
+		}
+	}
+	// handle objects
+	switch objectDeclType := t.Obj.Decl.(type) {
+	// Object type
+	case *ast.TypeSpec:
+		switch oType := objectDeclType.Type.(type) {
+		case *ast.StructType:
+			return g.StructExprToPrintStmt(&PrintRecursionInput{
+				e:          oType,
+				varName:    input.varName,
+				pkgPointer: input.pkgPointer,
+				counter:    input.counter,
+				prefix:     input.prefix,
+				suffix:     input.suffix,
+			})
+		case *ast.Ident:
+			return g.IdentToPrintStmt(t, oType, input)
+		case *ast.ArrayType:
+			// In case of  array we dont need to adjust prefix and suffix
+			return g.ArrayExprToPrintStmt(oType, input)
+		case *ast.MapType:
+			// In case of map we dont need to adjust prefix and suffix
+			return g.MapExprToPrintStmt(oType, input)
+			// ignore types
+		case *ast.ChanType,
+			*ast.InterfaceType,
+			*ast.FuncType:
+			return &PrintResult{}
+		case *ast.SelectorExpr:
+			return g.SelectorExprToPrintStmt(&PrintRecursionInput{
+				e:          oType,
+				counter:    input.counter,
+				pkgPointer: input.pkgPointer,
+				prefix:     input.prefix,
+				suffix:     input.suffix,
+				varName:    input.varName,
+			})
 		default:
-			log.Warningf("unimplemented object declaration type")
+			log.Warningf("Unsupported validate type: %T", oType)
 			return &PrintResult{}
 		}
+	default:
+		log.Warningf("unimplemented object declaration type")
+		return &PrintResult{}
+	}
+}
 
+// TypeExpressionToPrintStmt converts type expression of a result to print statement
+func (g *TestCase) TypeExpressionToPrintStmt(input *PrintRecursionInput) *PrintResult {
+	switch t := input.e.(type) {
+	case *ast.Ident:
+		return g.PreIdentToPrintStmt(t, input)
 	case *ast.ArrayType:
 		return g.ArrayExprToPrintStmt(t, input)
 	case *ast.StarExpr:

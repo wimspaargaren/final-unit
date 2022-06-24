@@ -1,7 +1,7 @@
 package tmplexec
 
 import (
-	"github.com/wimspaargaren/final-unit/internal/gen"
+	"github.com/asherascout/final-unit/internal/gen"
 	"gopkg.in/pipe.v2"
 )
 

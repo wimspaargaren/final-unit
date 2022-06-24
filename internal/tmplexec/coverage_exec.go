@@ -9,8 +9,8 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/asherascout/final-unit/internal/gen"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/gen"
 	"gopkg.in/pipe.v2"
 )
 
@@ -41,7 +41,7 @@ func (v *CoverageExecutor) Execute(organism *gen.Organism) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		file, err := os.Create(executionPath)
+		file, err := os.Create(filepath.Clean(executionPath))
 		if err != nil {
 			return "", err
 		}
@@ -80,7 +80,8 @@ func (v *CoverageExecutor) Execute(organism *gen.Organism) (string, error) {
 		return "0", nil
 	}
 	result := strings.Split(splitted[1], "%")[0]
-	f, err := strconv.ParseFloat(result, 64)
+	const bitSize = 64
+	f, err := strconv.ParseFloat(result, bitSize)
 	if err != nil {
 		return "", err
 	}
