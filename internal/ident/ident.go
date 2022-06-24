@@ -4,10 +4,11 @@ package ident
 import (
 	"fmt"
 	"go/ast"
-	"strings"
 	"unicode"
 
-	"github.com/wimspaargaren/final-unit/internal/utils"
+	"github.com/asherascout/final-unit/internal/utils"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // IGen variable generator interface
@@ -90,11 +91,11 @@ func newLocalScope() map[string]int {
 func globalIdentPrefix(i *ast.Ident) *ast.Ident {
 	if unicode.IsLower(rune(i.Name[0])) {
 		return &ast.Ident{
-			Name: "test" + strings.Title(i.Name),
+			Name: "test" + cases.Title(language.English).String(i.Name),
 		}
 	}
 	return &ast.Ident{
-		Name: "Test" + strings.Title(i.Name),
+		Name: "Test" + cases.Title(language.English).String(i.Name),
 	}
 }
 

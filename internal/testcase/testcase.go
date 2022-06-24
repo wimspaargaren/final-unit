@@ -6,17 +6,18 @@ import (
 	"go/ast"
 	"go/token"
 	"path/filepath"
-	"strings"
 	"unicode"
 
+	"github.com/asherascout/final-unit/internal/decorator"
+	"github.com/asherascout/final-unit/internal/ident"
+	"github.com/asherascout/final-unit/internal/identlist"
+	"github.com/asherascout/final-unit/internal/importer"
+	"github.com/asherascout/final-unit/internal/runtime"
+	"github.com/asherascout/final-unit/pkg/values"
+	"github.com/asherascout/final-unit/pkg/variables"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/decorator"
-	"github.com/wimspaargaren/final-unit/internal/ident"
-	"github.com/wimspaargaren/final-unit/internal/identlist"
-	"github.com/wimspaargaren/final-unit/internal/importer"
-	"github.com/wimspaargaren/final-unit/internal/runtime"
-	"github.com/wimspaargaren/final-unit/pkg/values"
-	"github.com/wimspaargaren/final-unit/pkg/variables"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // Options test case generation options
@@ -64,7 +65,8 @@ func New(f *ast.FuncDecl,
 	pointer *importer.PkgResolverPointer,
 	pkgInfo *importer.PackageInfo,
 	opts Options,
-	decorator *decorator.Deco) *TestCase {
+	decorator *decorator.Deco,
+) *TestCase {
 	return &TestCase{
 		FuncDecl:    f,
 		Pointer:     pointer,
@@ -99,13 +101,14 @@ func (g *TestCase) Create() {
 	// Create function statements for just calling(used for evolution execution)
 	// as well as assigning the return values(used for creating assert stmts)
 	funcStmt, funcPrintStmt := g.FuncDeclToExprStmt(g.FuncDecl, receiverResult.Idents, fieldToAssignResult.Idents, identsPrint)
-
-	tempStmts := append(receiverResult.Statements, fieldToAssignResult.Statements...)
+	tempStmts := receiverResult.Statements
+	tempStmts = append(tempStmts, fieldToAssignResult.Statements...)
 	resStmts := []string{}
 	for _, tempStmt := range tempStmts {
 		resStmts = append(resStmts, MustPrettyPrintElement(tempStmt))
 	}
-	tempDecls := append(receiverResult.Declarations, fieldToAssignResult.Declarations...)
+	tempDecls := receiverResult.Declarations
+	tempDecls = append(tempDecls, fieldToAssignResult.Declarations...)
 	resDecls := []string{}
 	for _, tempDecl := range tempDecls {
 		resDecls = append(resDecls, MustPrettyPrintElement(tempDecl))
@@ -688,8 +691,50 @@ func (g *TestCase) InterfaceTypeToValExpr(input *RecursionInput) *TypeExprToValE
 	return result
 }
 
+func (g *TestCase) MethodFuncTypeToFuncImpl(funcType *ast.FuncType, method *ast.Field, input *RecursionInput, interfaceImplIdent *ast.Ident, result *TypeExprToValExprRes) *TypeExprToValExprRes {
+	recursionResult := g.FuncReturnListToBodyStatements(&RecursionInput{
+		e:          funcType,
+		varName:    input.varName,
+		pkgPointer: input.pkgPointer,
+		counter:    input.counter,
+		identList:  input.identList,
+	})
+	result.Merge(recursionResult)
+	// Statements are used for body
+	result.Statements = []ast.Stmt{}
+
+	if len(method.Names) != 1 {
+		log.Warningf("expected 1 method name got: %d", len(method.Names))
+	}
+
+	funcExpr := g.CorrectTypeExpr(funcType, input)
+	if x, ok := funcExpr.(*ast.FuncType); ok {
+		funcType = x
+	}
+	// Create the function declaration
+	result.Declarations = append(result.Declarations, &ast.FuncDecl{
+		Recv: &ast.FieldList{
+			List: []*ast.Field{
+				{
+					// use one receiver name for consistency
+					Names: []*ast.Ident{{Name: "s"}},
+					Type: &ast.StarExpr{
+						X: interfaceImplIdent,
+					},
+				},
+			},
+		},
+		Name: method.Names[0],
+		Type: funcType,
+		Body: &ast.BlockStmt{
+			List: recursionResult.Statements,
+		},
+	})
+	return result
+}
+
 // InterfaceTypeToFuncImpl converts interface type to function implementation declarations
-func (g *TestCase) InterfaceTypeToFuncImpl(input *RecursionInput, interfaceImplIdent *ast.Ident) *TypeExprToValExprRes { // nolint: funlen, gocognit
+func (g *TestCase) InterfaceTypeToFuncImpl(input *RecursionInput, interfaceImplIdent *ast.Ident) *TypeExprToValExprRes {
 	t, ok := input.e.(*ast.InterfaceType)
 	// Sanity check
 	if !ok {
@@ -701,45 +746,7 @@ func (g *TestCase) InterfaceTypeToFuncImpl(input *RecursionInput, interfaceImplI
 		// Normal method definitions
 		// nolint: nestif
 		if funcType, ok := method.Type.(*ast.FuncType); ok {
-			// Generate body statements for every method
-			recursionResult := g.FuncReturnListToBodyStatements(&RecursionInput{
-				e:          funcType,
-				varName:    input.varName,
-				pkgPointer: input.pkgPointer,
-				counter:    input.counter,
-				identList:  input.identList,
-			})
-			result.Merge(recursionResult)
-			// Statements are used for body
-			result.Statements = []ast.Stmt{}
-
-			if len(method.Names) != 1 {
-				log.Warningf("expected 1 method name got: %d", len(method.Names))
-			}
-
-			funcExpr := g.CorrectTypeExpr(funcType, input)
-			if x, ok := funcExpr.(*ast.FuncType); ok {
-				funcType = x
-			}
-			// Create the function declaration
-			result.Declarations = append(result.Declarations, &ast.FuncDecl{
-				Recv: &ast.FieldList{
-					List: []*ast.Field{
-						{
-							// use one receiver name for consistency
-							Names: []*ast.Ident{{Name: "s"}},
-							Type: &ast.StarExpr{
-								X: interfaceImplIdent,
-							},
-						},
-					},
-				},
-				Name: method.Names[0],
-				Type: funcType,
-				Body: &ast.BlockStmt{
-					List: recursionResult.Statements,
-				},
-			})
+			result = g.MethodFuncTypeToFuncImpl(funcType, method, input, interfaceImplIdent, result)
 			// Nested interface
 		} else if ident, ok := method.Type.(*ast.Ident); ok {
 			// Resolve directly nested interfaces
@@ -1005,7 +1012,7 @@ func (g *TestCase) StarExprToValExpr(input *RecursionInput) *TypeExprToValExprRe
 		return EmptyResult()
 	}
 	identTemp := g.Opts.IdentGen.Create(&ast.Ident{
-		Name: "pointer" + strings.Title(input.identList.Previous().Name),
+		Name: "pointer" + cases.Title(language.English).String(input.identList.Previous().Name),
 	})
 
 	result := &TypeExprToValExprRes{}

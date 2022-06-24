@@ -3,7 +3,7 @@ project_name: final-unit
 
 release:
   github:
-    owner: wimspaargaren
+    owner: asherascout
     name: final-unit
 
 builds:

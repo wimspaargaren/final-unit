@@ -1,6 +1,6 @@
 package weirdinterface
 
-import "github.com/wimspaargaren/final-unit/e2e/assert_test/examples/weird_interface/interfaceimport"
+import "github.com/asherascout/final-unit/e2e/assert_test/examples/weird_interface/interfaceimport"
 
 type y struct{}
 

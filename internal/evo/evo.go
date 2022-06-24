@@ -7,11 +7,11 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/asherascout/final-unit/internal/gen"
+	"github.com/asherascout/final-unit/internal/testcase"
+	"github.com/asherascout/final-unit/internal/tmplexec"
+	"github.com/asherascout/final-unit/pkg/chance"
 	log "github.com/sirupsen/logrus"
-	"github.com/wimspaargaren/final-unit/internal/gen"
-	"github.com/wimspaargaren/final-unit/internal/testcase"
-	"github.com/wimspaargaren/final-unit/internal/tmplexec"
-	"github.com/wimspaargaren/final-unit/pkg/chance"
 )
 
 // error definitions

@@ -3,8 +3,8 @@ package importsexample
 import (
 	"time"
 
-	"github.com/wimspaargaren/final-unit/test/data/inputs/example_imports/pkg/nestedimportpkg"
-	"github.com/wimspaargaren/final-unit/test/data/inputs/example_imports/pkg/somepkg"
+	"github.com/asherascout/final-unit/test/data/inputs/example_imports/pkg/nestedimportpkg"
+	"github.com/asherascout/final-unit/test/data/inputs/example_imports/pkg/somepkg"
 )
 
 func SimpleImport(x somepkg.SomeStruct) {}

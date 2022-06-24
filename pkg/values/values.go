@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/Pallinder/go-randomdata"
-	"github.com/wimspaargaren/final-unit/pkg/chance"
+	"github.com/asherascout/final-unit/pkg/chance"
 )
 
 // IGen the value generator interface
@@ -231,20 +231,23 @@ func (g *Gen) MapLen() int {
 
 // IntVal create random int value and converts it to string
 func IntVal() string {
-	val := randomdata.Number(-100, 100)
+	const lower, upper int = -100, 100
+	val := randomdata.Number(lower, upper)
 	return strconv.Itoa(val)
 }
 
 // UIntVal create random uint value and converts it to string
 func UIntVal() string {
-	val := randomdata.Number(0, 100)
+	const lower, upper int = 0, 100
+	val := randomdata.Number(lower, upper)
 	return strconv.Itoa(val)
 }
 
 // FloatVal create random float value and converts it to string
 func FloatVal() string {
 	const maxAmountDecimalPoints = 5
+	const lower, upper int = -100, 100
 	decimalPoints := randomdata.Number(maxAmountDecimalPoints)
-	val := randomdata.Decimal(-100, 100, decimalPoints)
+	val := randomdata.Decimal(lower, upper, decimalPoints)
 	return fmt.Sprintf("%f", val)
 }
