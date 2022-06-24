@@ -1,6 +1,6 @@
 package directlynestedstruct
 
-import "github.com/asherascout/final-unit/e2e/gen_test/examples/example_directly_nested_struct/nestedimport"
+import "github.com/wimspaargaren/final-unit/e2e/gen_test/examples/example_directly_nested_struct/nestedimport"
 
 type X int
 

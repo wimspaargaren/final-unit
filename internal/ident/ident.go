@@ -6,7 +6,7 @@ import (
 	"go/ast"
 	"unicode"
 
-	"github.com/asherascout/final-unit/internal/utils"
+	"github.com/wimspaargaren/final-unit/internal/utils"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )

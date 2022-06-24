@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/asherascout/final-unit/internal/ident"
-	"github.com/asherascout/final-unit/internal/testcase"
-	"github.com/asherascout/final-unit/pkg/values"
-	"github.com/asherascout/final-unit/pkg/variables"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"github.com/wimspaargaren/final-unit/internal/ident"
+	"github.com/wimspaargaren/final-unit/internal/testcase"
+	"github.com/wimspaargaren/final-unit/pkg/values"
+	"github.com/wimspaargaren/final-unit/pkg/variables"
 )
 
 type TestResult struct {
