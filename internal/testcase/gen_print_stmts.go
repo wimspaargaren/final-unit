@@ -96,6 +96,7 @@ func (g *TestCase) FieldToPrintStmt(field *ast.Field, funcName string, pointer *
 	return []ast.Expr{newIdent}, res
 }
 
+// PreIdentToPrintStmt converts an Ident type to print statements(diff from IdentToPrintStmt, using by TypeExpressionToPrintStmt)
 func (g *TestCase) PreIdentToPrintStmt(t *ast.Ident, input *PrintRecursionInput) *PrintResult {
 	if t.Obj == nil {
 		if g.IsBasicLit(t.Name) {

@@ -12,8 +12,8 @@ import (
 
 // error definitions
 var (
-	ErrMissingGoImports error = fmt.Errorf("go imports not found please install using: go get golang.org/x/tools/cmd/goimports")
-	ErrNoGoFiles        error = fmt.Errorf("no go files found in given directory")
+	ErrMissingGoImports = fmt.Errorf("go imports not found please install using: go get golang.org/x/tools/cmd/goimports")
+	ErrNoGoFiles        = fmt.Errorf("no go files found in given directory")
 )
 
 // UnreadableDir error indicating that directory is unreadable

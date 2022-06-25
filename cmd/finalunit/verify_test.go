@@ -401,10 +401,10 @@ func (s *VerifySuite) TestVerify7() {
 }
 
 func (s *VerifySuite) TestVerify8() {
-	kJZXyfsgLm := Opts{Verbose: true, Version: true, Dir: "Oxjasper", LogLevel: log.Level(uint32(27))}
-	kJZXy := &kJZXyfsgLm
+	jJZXyfsgLm := Opts{Verbose: true, Version: true, Dir: "Oxjasper", LogLevel: log.Level(uint32(27))}
+	jJZXy := &jJZXyfsgLm
 
-	oznhU := Verify(kJZXy)
+	oznhU := Verify(jJZXy)
 
 	s.Error(oznhU)
 

@@ -16,7 +16,7 @@ import (
 
 // error definitions
 var (
-	ErrOrganismCantBreed error = fmt.Errorf("organisms dont match, expected equal amount of files")
+	ErrOrganismCantBreed = fmt.Errorf("organisms dont match, expected equal amount of files")
 )
 
 // nolint: gochecknoinits
