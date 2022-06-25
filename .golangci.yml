@@ -135,6 +135,7 @@ linters:
     - unparam
     - varcheck
     - whitespace
+    - revive
     # Disabled
     # - wsl
     # - depguard
@@ -149,6 +150,9 @@ linters:
     # - prealloc
     # - testpackage
     # - wrapcheck
+    # - golint
+    # - interfacer
+    # - scopelint
   disable-all: false
   fast: false
 
