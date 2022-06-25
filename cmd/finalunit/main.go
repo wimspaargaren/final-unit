@@ -7,7 +7,7 @@ import (
 )
 
 // Version current version
-var Version string = "dev"
+var Version = "dev"
 
 func setLogger(level log.Level) {
 	log.SetLevel(level)

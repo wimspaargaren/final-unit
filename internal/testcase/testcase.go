@@ -691,6 +691,7 @@ func (g *TestCase) InterfaceTypeToValExpr(input *RecursionInput) *TypeExprToValE
 	return result
 }
 
+// MethodFuncTypeToFuncImpl converts func type to function implementation declarations
 func (g *TestCase) MethodFuncTypeToFuncImpl(funcType *ast.FuncType, method *ast.Field, input *RecursionInput, interfaceImplIdent *ast.Ident, result *TypeExprToValExprRes) *TypeExprToValExprRes {
 	recursionResult := g.FuncReturnListToBodyStatements(&RecursionInput{
 		e:          funcType,

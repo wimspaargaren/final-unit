@@ -16,9 +16,9 @@ import (
 
 // error definitions
 var (
-	ErrAtleastOnePackageRequired error = fmt.Errorf("expected atleast one package")
-	ErrIncorrectPackageAmount    error = fmt.Errorf("unexpected amount of packages")
-	ErrUnableToFindIdentifier    error = fmt.Errorf("unable to find identifier")
+	ErrAtleastOnePackageRequired = fmt.Errorf("expected atleast one package")
+	ErrIncorrectPackageAmount    = fmt.Errorf("unexpected amount of packages")
+	ErrUnableToFindIdentifier    = fmt.Errorf("unable to find identifier")
 )
 
 // PkgResolverPointer pointer of a the package resolver

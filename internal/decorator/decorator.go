@@ -19,13 +19,13 @@ import (
 
 // error definitions
 var (
-	ErrIncorrectDecoratorType    error = fmt.Errorf("incorrect dececorator type")
-	ErrParamNotFoundInFunc       error = fmt.Errorf("param name not found")
-	ErrReceiverNotFoundInFunc    error = fmt.Errorf("receiver not found")
-	ErrNoInputParamsExpected     error = fmt.Errorf("expected no input parameters")
-	ErrExpectedOneRetrunVal      error = fmt.Errorf("expected only one return value")
-	ErrDecoratorFuncNameNotFound error = fmt.Errorf("decorator func name not found")
-	ErrMissingFileName           error = fmt.Errorf("missing file name")
+	ErrIncorrectDecoratorType    = fmt.Errorf("incorrect dececorator type")
+	ErrParamNotFoundInFunc       = fmt.Errorf("param name not found")
+	ErrReceiverNotFoundInFunc    = fmt.Errorf("receiver not found")
+	ErrNoInputParamsExpected     = fmt.Errorf("expected no input parameters")
+	ErrExpectedOneRetrunVal      = fmt.Errorf("expected only one return value")
+	ErrDecoratorFuncNameNotFound = fmt.Errorf("decorator func name not found")
+	ErrMissingFileName           = fmt.Errorf("missing file name")
 )
 
 // Deco result of a decorator file
