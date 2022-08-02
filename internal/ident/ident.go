@@ -45,13 +45,11 @@ func (g *Gen) Create(i *ast.Ident) *ast.Ident {
 	if ok {
 		return g.CreateGlobal(i)
 	}
-
 	defer g.increaseLocalMem(i.Name)
 	x, ok := g.LocalScopeMem[i.Name]
 	if !ok {
 		return i
 	}
-
 	return &ast.Ident{
 		Name: fmt.Sprintf("%s%d", i.Name, x+1),
 	}
@@ -85,7 +83,7 @@ func (g *Gen) increaseGlobalMem(name string) {
 }
 
 func newLocalScope() map[string]int {
-	return map[string]int{"s": 1}
+	return map[string]int{}
 }
 
 func globalIdentPrefix(i *ast.Ident) *ast.Ident {

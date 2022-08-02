@@ -19,11 +19,6 @@ var (
 	ErrOrganismCantBreed = fmt.Errorf("organisms dont match, expected equal amount of files")
 )
 
-// nolint: gochecknoinits
-func init() {
-	rand.Seed(time.Now().Unix())
-}
-
 // Default values for population
 const (
 	DefaultMutationRate float64 = 5
@@ -48,14 +43,12 @@ type PopulationOpts struct {
 	MutationRate      float64
 	Target            float64
 	MaxNoImprovGens   int
-	OrgGenerator      *gen.Generator
 	OverrideTestCases bool
 }
 
 // DefaultPopOpts create some default options for the population
-func DefaultPopOpts(gen *gen.Generator) PopulationOpts {
+func DefaultPopOpts() PopulationOpts {
 	return PopulationOpts{
-		OrgGenerator:      gen,
 		MutationRate:      DefaultMutationRate,
 		Target:            DefaultTarget,
 		MaxNoImprovGens:   DefaultNoImprovGens,
@@ -65,25 +58,27 @@ func DefaultPopOpts(gen *gen.Generator) PopulationOpts {
 
 // Population a population which is evolving
 type Population struct {
-	Organisms []*gen.Organism
-	BestFit   *gen.Organism
-	Opts      PopulationOpts
-	Stats     PopulationStats
-	Fitness   float64
-
-	Executor tmplexec.IExecutor
+	Organisms    []*gen.Organism
+	BestFit      *gen.Organism
+	Opts         PopulationOpts
+	Stats        PopulationStats
+	Fitness      float64
+	OrgGenerator *gen.Generator
+	Executor     tmplexec.IExecutor
+	Dir          string
 	// StatChan  chan PopulationStats
 }
 
 // NewPopulation creates a new population for specified options
-func NewPopulation(dir string, opts PopulationOpts) (*Population, error) {
-	// Create first generation
-	organisms := opts.OrgGenerator.GetTestCases()
+func NewPopulation(dir string, generator *gen.Generator, opts PopulationOpts) (*Population, error) {
 	p := &Population{
-		Organisms: organisms,
-		Opts:      opts,
-		Executor:  tmplexec.NewCoverageExecutor(tmplexec.Opts{Dir: dir, Override: opts.OverrideTestCases}),
+		Dir:          dir,
+		OrgGenerator: generator,
+		Opts:         opts,
+		Executor:     tmplexec.NewCoverageExecutor(tmplexec.Opts{Dir: dir, Override: opts.OverrideTestCases}),
 	}
+	// Create first generation
+	p.Organisms = p.OrgGenerator.GetTestCases()
 	err := p.GetFitnessForOrganisms()
 	if err != nil {
 		return nil, err
@@ -149,7 +144,7 @@ func (p *Population) Evolve() error {
 
 // CreateBestFitResult creates result for best fit
 func (p *Population) CreateBestFitResult() error {
-	path := p.Opts.OrgGenerator.Dir
+	path := p.Dir
 	valueExecutor := tmplexec.NewValueExecutor(tmplexec.Opts{Dir: path, Override: p.Opts.OverrideTestCases})
 
 	// First run
@@ -208,7 +203,6 @@ func (p *Population) crossover(a, b *gen.Organism) (*gen.Organism, error) {
 	for i, af := range a.Files {
 		bf := b.Files[i]
 		x := &gen.File{
-			Dir:         af.Dir,
 			FileName:    af.FileName,
 			PackageName: af.PackageName,
 			TestCases:   make(map[string][]*testcase.TestCase),
@@ -240,7 +234,7 @@ func (p *Population) createSelectionPool() []int {
 		pool = append(pool, i)
 	}
 	for i, o := range p.Organisms {
-		num := int((o.Fitness) * fullPercent)
+		num := int(o.Fitness * fullPercent)
 		for j := 0; j < num; j++ {
 			pool = append(pool, i)
 		}

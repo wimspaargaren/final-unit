@@ -36,7 +36,7 @@ type TestCase struct {
 	PackageInfo *importer.PackageInfo
 	Opts        Options
 	Deco        *decorator.Deco
-	Dynamic     Dynamic
+	Dynamic
 	RunTimeInfo *runtime.Info
 
 	// Properties used to create value stmts in test cases
@@ -85,11 +85,42 @@ type Dynamic struct {
 	CanGenInterface map[string]bool
 }
 
+// TestCasePrefix in case of receiver create prefix
+// this is need to ensure test results dont override eachother in case of:
+// func X() func (r T) X()
+func (g *TestCase) TestCasePrefix(funcDecl *ast.FuncDecl) string {
+	if funcDecl.Recv == nil {
+		return ""
+	}
+	// Sanity check, a function can only have 1 receiver
+	if len(funcDecl.Recv.List) == 1 {
+		return g.TypeToPrefix(funcDecl.Recv.List[0].Type)
+	}
+	log.Warningf("expected func receiver to have only one field")
+	return g.Opts.IdentGen.Create(&ast.Ident{Name: "prefix"}).Name
+}
+
+// TypeToPrefix converts a function receiver type to a prefix
+func (g *TestCase) TypeToPrefix(e ast.Expr) string {
+	switch t := e.(type) {
+	case *ast.Ident:
+		return t.Name
+	case *ast.SelectorExpr:
+		return g.TypeToPrefix(t.X)
+	case *ast.StarExpr:
+		return g.TypeToPrefix(t.X)
+	default:
+		log.Warningf("unexpected field receiver type found: %T", e)
+		return g.Opts.IdentGen.Create(&ast.Ident{Name: "prefix"}).Name
+	}
+}
+
 // Create converts a function declaration to a list of assignment statements
 // and declaration statements
 func (g *TestCase) Create() {
 	// Reset local scope counter whenever creating new testcase
 	g.Opts.IdentGen.ResetLocal()
+	g.Opts.IdentGen.Create(&ast.Ident{Name: "s"})
 
 	// Get receiver statements and declarations
 	receiverResult := g.GetFuncReceiverStmts(g.FuncDecl.Recv, g.FuncDecl.Name.Name, g.Pointer)
@@ -415,6 +446,9 @@ func (g *TestCase) TypeExprToValExpr(input *RecursionInput) *TypeExprToValExprRe
 		})
 	// Default should not be hit all types are handled accordingly
 	default:
+		if input.e == nil {
+			return g.InterfaceTypeToValExpr(input)
+		}
 		log.Warningf("typeExprToValExpr not implemented yet: %T", t)
 		return EmptyResult()
 	}
@@ -621,16 +655,16 @@ func (g *TestCase) FuncNilFunc(t ast.Expr, input *RecursionInput) *TypeExprToVal
 func (g *TestCase) InterfaceTypeToValExpr(input *RecursionInput) *TypeExprToValExprRes {
 	t, ok := input.e.(*ast.InterfaceType)
 	// Sanity check
-	if !ok {
-		log.Warningf("InterfaceTypeToValExpr is not  used correctly: %T", input.e)
+	if input.e != nil && !ok {
+		log.Warningf("InterfaceTypeToValExpr is not used correctly: %T", input.e)
 		return EmptyResult()
 	}
 
-	if t.Incomplete {
+	if ok && t.Incomplete {
 		log.Warningf("Incomplete interface detected")
 	}
 	// Empty interface
-	if t.Methods.List == nil {
+	if input.e == nil || t.Methods.List == nil {
 		return &TypeExprToValExprRes{
 			Expr:         g.BasicExprToValExpr(g.Opts.ValTestCase.Type()),
 			Statements:   []ast.Stmt{},
@@ -808,13 +842,6 @@ func (g *TestCase) ChanTypeToValExpr(t *ast.ChanType, input *RecursionInput) *Ty
 	}
 	if t.Dir != ast.RECV {
 		// FIXME use recevier chan values
-		// recursionResult := g.TypeExprToValExpr(&RecursionInput{
-		// 	e:          t.Value,
-		// 	counter:    input.counter,
-		// 	pkgPointer: input.pkgPointer,
-		// 	varName:    input.varName,
-		// })
-
 		return &TypeExprToValExprRes{
 			Expr:         newIdent,
 			Statements:   []ast.Stmt{assignStmt(newIdent, res)},

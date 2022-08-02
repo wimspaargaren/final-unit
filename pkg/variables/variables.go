@@ -4,7 +4,6 @@ package variables
 
 import (
 	"math/rand"
-	"time"
 )
 
 // IGen variable name generator interface
@@ -25,7 +24,6 @@ type Generator struct{}
 
 // NewGenerator creates a new generator
 func NewGenerator() IGen {
-	rand.Seed(time.Now().UnixNano())
 	return &Generator{}
 }
 

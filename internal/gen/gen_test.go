@@ -4,12 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
-	"github.com/wimspaargaren/final-unit/internal/ident"
 	"github.com/wimspaargaren/final-unit/internal/testcase"
-	"github.com/wimspaargaren/final-unit/pkg/values"
-	"github.com/wimspaargaren/final-unit/pkg/variables"
+	"github.com/wimspaargaren/final-unit/pkg/seed"
 )
 
 type TestResult struct {
@@ -24,34 +21,26 @@ type PrintStmtTestSuite struct {
 
 func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 	tests := []struct {
-		Name            string
-		Path            string
-		ValuesMockSetup func() *values.GenMock
-		TestResults     []TestResult
+		Name        string
+		Path        string
+		TestResults []TestResult
 	}{
 		{
 			Name: "ellipsis test",
 			Path: "../../test/data/inputs/example_ellipsis",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				genMock.On("String").Return(`"string"`)
-				genMock.On("Int").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "EllipsisStringFunc",
 					ResStmts: []string{
-						`alfa := "string"`,
-						"EllipsisStringFunc(alfa)",
+						"x := \"Bart Beatty\"",
+						"EllipsisStringFunc(x)",
 					},
 				},
 				{
 					Func: "EllipsisStructFunc",
 					ResStmts: []string{
-						`alfa := SomeStruct{X: 42}`,
-						"EllipsisStructFunc(alfa)",
+						`x := SomeStruct{X: -73}`,
+						"EllipsisStructFunc(x)",
 					},
 				},
 			},
@@ -59,149 +48,119 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "base types test",
 			Path: "../../test/data/inputs/example_base_types",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("Int8").Return(`42`)
-				genMock.On("Int16").Return(`42`)
-				genMock.On("Int32").Return(`42`)
-				genMock.On("Int64").Return(`42`)
-				genMock.On("UInt").Return(`42`)
-				genMock.On("UInt8").Return(`42`)
-				genMock.On("UInt16").Return(`42`)
-				genMock.On("UInt32").Return(`42`)
-				genMock.On("UInt64").Return(`42`)
-				genMock.On("UIntPtr").Return(`42`)
-				genMock.On("Complex64").Return(`42`)
-				genMock.On("Complex128").Return(`42`)
-				genMock.On("Rune").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "UIntFunc",
-					ResStmts: []string{`alfa := uint(42)`, "UIntFunc(alfa)"},
+					ResStmts: []string{`x := uint(76)`, "UIntFunc(x)"},
 				},
 				{
 					Func:     "UInt8Func",
-					ResStmts: []string{`alfa := uint8(42)`, "UInt8Func(alfa)"},
+					ResStmts: []string{`x := uint8(35)`, "UInt8Func(x)"},
 				},
 				{
 					Func:     "UInt16Func",
-					ResStmts: []string{`alfa := uint16(42)`, "UInt16Func(alfa)"},
+					ResStmts: []string{`x := uint16(64)`, "UInt16Func(x)"},
 				},
 				{
 					Func:     "UInt32Func",
-					ResStmts: []string{`alfa := uint32(42)`, "UInt32Func(alfa)"},
+					ResStmts: []string{`x := uint32(8)`, "UInt32Func(x)"},
 				},
 				{
 					Func:     "UInt64Func",
-					ResStmts: []string{`alfa := uint64(42)`, "UInt64Func(alfa)"},
+					ResStmts: []string{`x := uint64(35)`, "UInt64Func(x)"},
 				},
 				{
 					Func:     "Int8Func",
-					ResStmts: []string{`alfa := int8(42)`, "Int8Func(alfa)"},
+					ResStmts: []string{`x := int8(-47)`, "Int8Func(x)"},
 				},
 				{
 					Func:     "Int16Func",
-					ResStmts: []string{`alfa := int16(42)`, "Int16Func(alfa)"},
+					ResStmts: []string{`x := int16(28)`, "Int16Func(x)"},
 				},
 				{
 					Func:     "Int32Func",
-					ResStmts: []string{`alfa := int32(42)`, "Int32Func(alfa)"},
+					ResStmts: []string{`x := int32(31)`, "Int32Func(x)"},
 				},
 				{
 					Func:     "Int64Func",
-					ResStmts: []string{`alfa := int64(42)`, "Int64Func(alfa)"},
+					ResStmts: []string{`x := int64(41)`, "Int64Func(x)"},
 				},
 				{
 					Func:     "RuneFunc",
-					ResStmts: []string{`alfa := rune(42)`, "RuneFunc(alfa)"},
+					ResStmts: []string{`x := rune(-61)`, "RuneFunc(x)"},
 				},
 				{
 					Func:     "Complex64Func",
-					ResStmts: []string{`alfa := complex64(42)`, "Complex64Func(alfa)"},
+					ResStmts: []string{`x := complex64(42)`, "Complex64Func(x)"},
 				},
 				{
 					Func:     "Complex128Func",
-					ResStmts: []string{`alfa := complex128(42)`, "Complex128Func(alfa)"},
+					ResStmts: []string{`x := complex128(90)`, "Complex128Func(x)"},
 				},
 			},
 		},
 		{
 			Name: "int test",
 			Path: "../../test/data/inputs/example_int",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				genMock.On("Int").Return("42")
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "IntFunc",
-					ResStmts: []string{"alfa := 42", "IntFunc(alfa)"},
+					ResStmts: []string{"x := -80", "IntFunc(x)"},
 				},
 				{
 					Func:     "IntPointerFunc",
-					ResStmts: []string{"alfa := 42", "alfa := &alfa", "IntPointerFunc(alfa)"},
+					ResStmts: []string{"pointerX := -45", "x := &pointerX", "IntPointerFunc(x)"},
 				},
 				{
 					Func:     "IntArrayFunc",
-					ResStmts: []string{"alfa := []int{42}", "IntArrayFunc(alfa)"},
+					ResStmts: []string{"x := []int{-73, -92, 70, -41, 89, -47, 28}", "IntArrayFunc(x)"},
 				},
 				{
 					Func:     "IntPointerArrayFunc",
-					ResStmts: []string{"alfa := 42", "alfa := []*int{&alfa}", "IntPointerArrayFunc(alfa)"},
+					ResStmts: []string{"pointerX := 31", "pointerX2 := 41", "pointerX3 := -61", "pointerX4 := 90", "pointerX5 := -37", "pointerX6 := -77", "pointerX7 := 70", "pointerX8 := -95", "pointerX9 := -12", "x := []*int{&pointerX, &pointerX2, &pointerX3, &pointerX4, &pointerX5, &pointerX6, &pointerX7, &pointerX8, &pointerX9}", "IntPointerArrayFunc(x)"},
 				},
 				{
 					Func:     "IntArrayPointerFunc",
-					ResStmts: []string{"alfa := []int{42}", "alfa := &alfa", "IntArrayPointerFunc(alfa)"},
+					ResStmts: []string{"pointerX := []int{25, -85, -68, 91, -49, 60, 9, 2}", "x := &pointerX", "IntArrayPointerFunc(x)"},
 				},
 				{
 					Func:     "IntPointerArrayPointerFunc",
-					ResStmts: []string{"alfa := 42", "alfa := []*int{&alfa}", "alfa := &alfa", "IntPointerArrayPointerFunc(alfa)"},
+					ResStmts: []string{"pointerX := []*int{}", "x := &pointerX", "IntPointerArrayPointerFunc(x)"},
 				},
 				{
 					Func:     "IntArrayLenFunc",
-					ResStmts: []string{"alfa := [2]int{42}", "IntArrayLenFunc(alfa)"},
+					ResStmts: []string{"x := [2]int{38, 90}", "IntArrayLenFunc(x)"},
 				},
 				{
 					Func:     "IntDoubleArrayFunc",
-					ResStmts: []string{"alfa := [][]int{[]int{42}}", "IntDoubleArrayFunc(alfa)"},
+					ResStmts: []string{"x := [][]int{}", "IntDoubleArrayFunc(x)"},
 				},
 				{
 					Func:     "IntDoubleArrayLenFunc",
-					ResStmts: []string{"alfa := [][2]int{[2]int{42}}", "IntDoubleArrayLenFunc(alfa)"},
+					ResStmts: []string{"x := [][2]int{[2]int{81, 13}}", "IntDoubleArrayLenFunc(x)"},
 				},
 			},
 		},
 		{
 			Name: "unnamed test",
 			Path: "../../test/data/inputs/example_unnamed",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return("42")
-				genMock.On("String").Return(`"string"`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "SimpleUnnamed",
 					ResStmts: []string{
-						"alfa := Simple{X: struct{ Y string }{Y: \"string\"}, Z: Other{Y: \"string\"}}",
-						"SimpleUnnamed(alfa)",
+						"x := Simple{X: struct{ Y string }{Y: \"Bart Beatty\"}, Z: Other{Y: \"Cordia Jacobi\"}}",
+						"SimpleUnnamed(x)",
 					},
 				},
 				{
 					Func: "SimpleInterfaceUnnamed",
 					ResStmts: []string{
-						"alfa := SimpleInterface{X: &Alfa{}}",
-						"SimpleInterfaceUnnamed(alfa)",
+						"x := SimpleInterface{X: &TestSimpleinterface{}}",
+						"SimpleInterfaceUnnamed(x)",
 					},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Hi(x int) {\n\treturn\n}",
+						"type TestSimpleinterface struct {\n}",
+						"func (s *TestSimpleinterface) Hi(x int) {\n\treturn\n}",
 					},
 				},
 			},
@@ -209,65 +168,48 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "nset struct test",
 			Path: "../../test/data/inputs/example_directly_nested_struct",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return("42")
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "NormalNestFunc",
-					ResStmts: []string{"alfa := Normal{X: X(42)}", "NormalNestFunc(alfa)"},
+					ResStmts: []string{"x := Normal{X: X(-80)}", "NormalNestFunc(x)"},
 				},
 				{
 					Func:     "NormalPointerNestFunc",
-					ResStmts: []string{"alfa := X(42)", "alfa := PointerNormal{X: &alfa}", "NormalPointerNestFunc(alfa)"},
+					ResStmts: []string{"pointerX := X(-45)", "x := PointerNormal{X: &pointerX}", "NormalPointerNestFunc(x)"},
 				},
 				{
 					Func:     "NestedImportFunc",
-					ResStmts: []string{"alfa := ImportNested{Hello: nestedimport.Hello{X: 42}}", "NestedImportFunc(alfa)"},
+					ResStmts: []string{"x := ImportNested{Hello: nestedimport.Hello{X: -73}}", "NestedImportFunc(x)"},
 				},
 				{
 					Func:     "NestedImportPointerFunc",
-					ResStmts: []string{"alfa := nestedimport.Hello{X: 42}", "alfa := ImportPointerNested{Hello: &alfa}", "NestedImportPointerFunc(alfa)"},
+					ResStmts: []string{"pointerX := nestedimport.Hello{X: -92}", "x := ImportPointerNested{Hello: &pointerX}", "NestedImportPointerFunc(x)"},
 				},
 			},
 		},
 		{
 			Name: "bool test",
 			Path: "../../test/data/inputs/example_bool",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				genMock.On("Bool").Return("true")
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "BoolFunc",
-					ResStmts: []string{"alfa := true", "BoolFunc(alfa)"},
+					ResStmts: []string{"x := false", "BoolFunc(x)"},
 				},
 				{
 					Func:     "BoolPointerFunc",
-					ResStmts: []string{"alfa := true", "alfa := &alfa", "BoolPointerFunc(alfa)"},
+					ResStmts: []string{"pointerX := true", "x := &pointerX", "BoolPointerFunc(x)"},
 				},
 			},
 		},
 		{
 			Name: "string test",
 			Path: "../../test/data/inputs/example_string",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				genMock.On("String").Return(`"string"`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "StringFunc",
 					ResStmts: []string{
-						`alfa := "string"`,
-						"StringFunc(alfa)",
+						"x := \"Bart Beatty\"",
+						"StringFunc(x)",
 					},
 				},
 			},
@@ -275,180 +217,138 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "multi param test",
 			Path: "../../test/data/inputs/example_multi_param_same_name",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("String").Return(`"string"`)
-				genMock.On("Int").Return(`42`)
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "MultiParamFunc",
-					ResStmts: []string{`alfa := "string"`, `alfa := "string"`, "MultiParamFunc(alfa, alfa)"},
+					ResStmts: []string{"x := \"Bart Beatty\"", "y := \"Cordia Jacobi\"", "MultiParamFunc(x, y)"},
 				},
 				{
 					Func:     "MultiParamPointerFunc",
-					ResStmts: []string{`alfa := "string"`, "alfa := &alfa", `alfa := "string"`, "alfa := &alfa", "MultiParamPointerFunc(alfa, alfa)"},
+					ResStmts: []string{"pointerX := \"Nickolas Emard\"", "x := &pointerX", "pointerY := \"Hollis Dickens\"", "y := &pointerY", "MultiParamPointerFunc(x, y)"},
 				},
 				{
 					Func:     "MultiParamDifTypeFunc",
-					ResStmts: []string{"alfa := 42", `alfa := "string"`, "MultiParamDifTypeFunc(alfa, alfa)"},
+					ResStmts: []string{"x := 28", "y := \"Marc Murphy\"", "MultiParamDifTypeFunc(x, y)"},
 				},
 			},
 		},
 		{
 			Name: "float test",
 			Path: "../../test/data/inputs/example_float",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Float64").Return(`64.0`)
-				genMock.On("Float32").Return(`32.0`)
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "Float32Func",
-					ResStmts: []string{`alfa := float32(32.0)`, "Float32Func(alfa)"},
+					ResStmts: []string{`x := float32(20.932058)`, "Float32Func(x)"},
 				},
 				{
 					Func:     "Float64Func",
-					ResStmts: []string{`alfa := 64.0`, "Float64Func(alfa)"},
+					ResStmts: []string{`x := 88.101818`, "Float64Func(x)"},
 				},
 			},
 		},
 		{
 			Name: "byte test",
 			Path: "../../test/data/inputs/example_byte",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Byte").Return(`42`)
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "ByteFunc",
-					ResStmts: []string{`alfa := byte(42)`, "ByteFunc(alfa)"},
+					ResStmts: []string{`x := byte(76)`, "ByteFunc(x)"},
 				},
 				{
 					Func:     "BytePointerFunc",
-					ResStmts: []string{`alfa := byte(42)`, `alfa := &alfa`, "BytePointerFunc(alfa)"},
+					ResStmts: []string{`pointerX := byte(35)`, `x := &pointerX`, "BytePointerFunc(x)"},
 				},
 				{
 					Func:     "ByteArrayFunc",
-					ResStmts: []string{`alfa := []byte{byte(42)}`, "ByteArrayFunc(alfa)"},
+					ResStmts: []string{`x := []byte{byte(64), byte(8), byte(35), byte(92), byte(37), byte(16), byte(0)}`, "ByteArrayFunc(x)"},
 				},
 				{
 					Func:     "ByteArrayPointerFunc",
-					ResStmts: []string{"alfa := byte(42)", `alfa := []*byte{&alfa}`, "ByteArrayPointerFunc(alfa)"},
+					ResStmts: []string{"pointerX := byte(46)", "pointerX2 := byte(64)", "pointerX3 := byte(36)", "pointerX4 := byte(60)", "pointerX5 := byte(27)", "pointerX6 := byte(42)", "pointerX7 := byte(41)", "pointerX8 := byte(20)", "pointerX9 := byte(21)", "x := []*byte{&pointerX, &pointerX2, &pointerX3, &pointerX4, &pointerX5, &pointerX6, &pointerX7, &pointerX8, &pointerX9}", "ByteArrayPointerFunc(x)"},
 				},
 			},
 		},
 		{
 			Name: "struct test",
 			Path: "../../test/data/inputs/example_struct",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("String").Return(`"string"`)
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "StructFuncSimple",
-					ResStmts: []string{`alfa := Simple{Var: 42}`, "StructFuncSimple(alfa)"},
+					ResStmts: []string{`x := Simple{Var: -80}`, "StructFuncSimple(x)"},
 				},
 				{
 					Func:     "StructFuncComposite",
-					ResStmts: []string{`alfa := "string"`, `alfa := Composite{VarInt: 42, VarString: &alfa}`, "StructFuncComposite(alfa)"},
+					ResStmts: []string{"pointerX := \"Cordia Jacobi\"", "x := Composite{VarInt: -45, VarString: &pointerX}", "StructFuncComposite(x)"},
 				},
 				{
 					Func:     "StructFuncCompositeOther",
-					ResStmts: []string{`alfa := CompositeOther{x: 42, y: 42}`, "StructFuncCompositeOther(alfa)"},
+					ResStmts: []string{`x := CompositeOther{x: 70, y: -41}`, "StructFuncCompositeOther(x)"},
 				},
 				{
 					Func:     "StructFuncNested",
-					ResStmts: []string{`alfa := Nested{X: Simple{Var: 42}}`, "StructFuncNested(alfa)"},
+					ResStmts: []string{"x := Nested{X: Simple{Var: 89}}", "StructFuncNested(x)"},
 				},
 				{
 					Func:     "StructFuncNestedNested",
-					ResStmts: []string{"alfa := NestedNested{Nested: Nested{X: Simple{Var: 42}}, x: 42}", "StructFuncNestedNested(alfa)"},
+					ResStmts: []string{"x := NestedNested{Nested: Nested{X: Simple{Var: -47}}, x: 28}", "StructFuncNestedNested(x)"},
 				},
 				{
 					Func:     "StructFuncNestedInt",
-					ResStmts: []string{"alfa := NestedInt{int: 42, x: \"string\"}", "StructFuncNestedInt(alfa)"},
+					ResStmts: []string{"x := NestedInt{int: 31, x: \"Aleen Legros\"}", "StructFuncNestedInt(x)"},
 				},
 				{
 					Func:     "StructFuncNestedCustomType",
-					ResStmts: []string{"alfa := NestedCustomType{CustomType: CustomType(func(x int) string {\n\talfa := \"string\"\n\treturn alfa\n}), x: \"string\"}", "StructFuncNestedCustomType(alfa)"},
+					ResStmts: []string{"x := NestedCustomType{CustomType: CustomType(func(x int) string {\n\to := \"Adelia Metz\"\n\treturn o\n}), x: \"Sunny Gerlach\"}", "StructFuncNestedCustomType(x)"},
 				},
 			},
 		},
 		{
 			Name: "custom type test",
 			Path: "../../test/data/inputs/example_custom_type",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("Byte").Return(`42`)
-				genMock.On("ArrayLen", mock.Anything).Return(1)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "CustomTypeSimple",
-					ResStmts: []string{`alfa := CustomIntArray([]int{42})`, "CustomTypeSimple(alfa)"},
+					ResStmts: []string{`x := CustomIntArray([]int{-80, -45, -73, -92, 70, -41, 89})`, "CustomTypeSimple(x)"},
 				},
 				{
 					Func:     "CustomTypeStructType",
-					ResStmts: []string{`alfa := StructType(Test{X: 42})`, "CustomTypeStructType(alfa)"},
+					ResStmts: []string{"x := StructType(Test{X: -47})", "CustomTypeStructType(x)"},
 				},
 				{
 					Func:     "CustomByteArray",
-					ResStmts: []string{`alfa := UUID([8]byte{byte(42)})`, "CustomByteArray(alfa)"},
+					ResStmts: []string{"x := UUID([8]byte{byte(0), byte(46), byte(64), byte(36), byte(60), byte(27), byte(42), byte(41)})", "CustomByteArray(x)"},
 				},
 			},
 		},
 		{
 			Name: "array test",
 			Path: "../../test/data/inputs/example_array",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("ArrayLen", 0).Return(0)
-				genMock.On("ArrayLen", 5).Return(5)
-				genMock.On("ArrayLen", -1).Return(3)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "ArrayLenZero",
-					ResStmts: []string{`alfa := [0]int{}`, "ArrayLenZero(alfa)"},
+					ResStmts: []string{`x := [0]int{}`, "ArrayLenZero(x)"},
 				},
 				{
 					Func:     "ArrayLenFive",
-					ResStmts: []string{`alfa := [5]int{42, 42, 42, 42, 42}`, "ArrayLenFive(alfa)"},
+					ResStmts: []string{`x := [5]int{-80, -45, -73, -92, 70}`, "ArrayLenFive(x)"},
 				},
 				{
 					Func:     "ArrayNoLen",
-					ResStmts: []string{`alfa := []int{42, 42, 42}`, "ArrayNoLen(alfa)"},
+					ResStmts: []string{`x := []int{-41, 89, -47, 28, 31, 41, -61}`, "ArrayNoLen(x)"},
 				},
 				{
 					Func:     "ArrayStructNoLen",
-					ResStmts: []string{`alfa := []Simple{Simple{X: 42}, Simple{X: 42}, Simple{X: 42}}`, "ArrayStructNoLen(alfa)"},
+					ResStmts: []string{`x := []Simple{Simple{X: 90}}`, "ArrayStructNoLen(x)"},
 				},
 				{
 					Func: "ArrayPointerStructNoLen",
 					ResStmts: []string{
-						"alfa := 42",
-						"alfa := 42",
-						"alfa := 42",
-						"alfa := []Pointer{Pointer{x: &alfa}, Pointer{x: &alfa}, Pointer{x: &alfa}}",
-						`alfa := &alfa`,
-						"ArrayPointerStructNoLen(alfa)",
+						"pointerX2 := -37",
+						"pointerX3 := -77",
+						"pointerX4 := 70",
+						"pointerX := []Pointer{Pointer{x: &pointerX2}, Pointer{x: &pointerX3}, Pointer{x: &pointerX4}, Pointer{}, Pointer{}}",
+						`x := &pointerX`,
+						"ArrayPointerStructNoLen(x)",
 					},
 				},
 			},
@@ -456,26 +356,21 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "func on struct",
 			Path: "../../test/data/inputs/example_func_on_struct",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "SimpleSimpleFuncOnStruct",
 					ResStmts: []string{
-						"alfa := Simple{X: 42}",
-						`alfa := 42`,
-						`alfa.SimpleFuncOnStruct(alfa)`,
+						"s2 := Simple{X: -80}",
+						`x := -45`,
+						`s2.SimpleFuncOnStruct(x)`,
 					},
 				},
 				{
 					Func: "CustomTypeFuncOnCustomType",
 					ResStmts: []string{
-						"alfa := CustomType(42)",
-						`alfa := 42`,
-						`alfa.FuncOnCustomType(alfa)`,
+						"c := CustomType(-73)",
+						`x := -92`,
+						`c.FuncOnCustomType(x)`,
 					},
 				},
 			},
@@ -483,26 +378,19 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "map test",
 			Path: "../../test/data/inputs/example_map",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("String").Return(`"string"`)
-				genMock.On("MapLen").Return(2)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "MapFunc",
 					ResStmts: []string{
-						"alfa := map[int]string{42: \"string\"}",
-						`MapFunc(alfa)`,
+						"x := map[int]string{-80: \"Gerson Beahan\"}",
+						`MapFunc(x)`,
 					},
 				},
 				{
 					Func: "MapFuncNested",
 					ResStmts: []string{
-						"alfa := map[int]map[int]string{42: map[int]string{42: \"string\"}}",
-						`MapFuncNested(alfa)`,
+						"x := map[int]map[int]string{-92: map[int]string{70: \"Lawson Kreiger\", -47: \"Stacy Dietrich\", 41: \"Eunice Kunde\", -37: \"Sunny Gerlach\", -95: \"Anika Durgan\", -85: \"Delaney Howell\", -49: \"Christian Bartoletti\"}, 2: map[int]string{38: \"Gerda Rosenbaum\", 13: \"Elias Roob\", -82: \"Alexandra Halvorson\", 12: \"Guido Witting\", 5: \"Sim Erdman\", -87: \"Vincenza Jacobi\", 56: \"Skye Lemke\", -33: \"Dorian Hartmann\", -57: \"Brody Walker\"}, 96: map[int]string{-16: \"Oleta Haley\"}, 78: map[int]string{-52: \"Eugenia Skiles\", 62: \"Mariah Bergstrom\", 95: \"Brittany Hermann\", 52: \"Makayla Kuhn\", -78: \"Alexandria Kihn\", -17: \"Ericka Schmitt\", -31: \"Marlene Wisozk\", 42: \"Amos Funk\"}, 58: map[int]string{-83: \"Olaf Flatley\", -33: \"Jewell Cartwright\", -40: \"Larry Kemmer\", -64: \"Minnie Adams\"}, 19: map[int]string{}, 18: map[int]string{-79: \"Osbaldo Ruecker\", -7: \"Nicholaus Gerhold\", -58: \"Filiberto Pollich\", 48: \"Adah McGlynn\", 7: \"Lempi Legros\", -68: \"Giovani Gorczany\"}}",
+						`MapFuncNested(x)`,
 					},
 				},
 			},
@@ -510,21 +398,16 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "interface import test",
 			Path: "../../test/data/inputs/example_interface_import",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "SomeFuncImportingInterface",
 					ResStmts: []string{
-						"alfa := &Alfa{}",
-						`SomeFuncImportingInterface(alfa)`,
+						"x := &testX{}",
+						`SomeFuncImportingInterface(x)`,
 					},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) SomeFunc(someimport.Y) someimport.Y {\n\talfa := someimport.Y{X: 42}\n\treturn alfa\n}",
+						"type testX struct {\n}",
+						"func (s *testX) SomeFunc(someimport.Y) someimport.Y {\n\to := someimport.Y{X: -80}\n\treturn o\n}",
 					},
 				},
 			},
@@ -532,25 +415,15 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "interface private return test",
 			Path: "../../test/data/inputs/example_priv_ret_interface",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("UInt").Return(`42`)
-				genMock.On("UInt32").Return(`42`)
-				genMock.On("ArrayLen", mock.Anything).Return(42)
-				genMock.On("String").Return(`"string"`)
-				genMock.On("Bool").Return(`true`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "ReflectType",
-					ResStmts: []string{"alfa := func() reflect.Type {\n\treturn nil\n}()", "ReflectType(alfa)"},
+					ResStmts: []string{"x := func() reflect.Type {\n\treturn nil\n}()", "ReflectType(x)"},
 					ResDecls: []string{},
 				},
 				{
 					Func:     "AstSelection",
-					ResStmts: []string{"alfa := func() ast.Selection {\n\treturn nil\n}()", "AstSelection(alfa)"},
+					ResStmts: []string{"x := func() ast.Selection {\n\treturn nil\n}()", "AstSelection(x)"},
 					ResDecls: []string{},
 				},
 			},
@@ -558,69 +431,54 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "error test",
 			Path: "../../test/data/inputs/example_error",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Error").Return(true)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "ErrorFunc",
-					ResStmts: []string{"alfa := func() error {\n\treturn fmt.Errorf(\"very error\")\n}()", "ErrorFunc(alfa)"},
+					ResStmts: []string{"x := func() error {\n\treturn nil\n}()", "ErrorFunc(x)"},
 				},
 				{
 					Func:     "ErrorPointerFunc",
-					ResStmts: []string{"alfa := func() error {\n\treturn fmt.Errorf(\"very error\")\n}()", `alfa := &alfa`, "ErrorPointerFunc(alfa)"},
+					ResStmts: []string{"pointerX := func() error {\n\treturn fmt.Errorf(\"very error\")\n}()", `x := &pointerX`, "ErrorPointerFunc(x)"},
 				},
 			},
 		},
 		{
 			Name: "interface test",
 			Path: "../../test/data/inputs/example_interface",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("String").Return(`"string"`)
-				genMock.On("Error").Return(true)
-				genMock.On("Int").Return(`42`)
-				genMock.On("Type").Return(`int`)
-				genMock.On("Byte").Return(`42`)
-				genMock.On("ArrayLen", mock.Anything).Return(2)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "InterfaceFuncEmpty",
-					ResStmts: []string{`alfa := 42`, "InterfaceFuncEmpty(alfa)"},
+					ResStmts: []string{"x := uint64(35)", "InterfaceFuncEmpty(x)"},
 				},
 				{
 					Func:     "InterfaceFuncSimple",
-					ResStmts: []string{`alfa := &Alfa{}`, "InterfaceFuncSimple(alfa)"},
-					ResDecls: []string{"type Alfa struct {\n}", "func (s *Alfa) Hello(x int) {\n\treturn\n}"},
+					ResStmts: []string{"x := &TestSimple{}", "InterfaceFuncSimple(x)"},
+					ResDecls: []string{"type TestSimple struct {\n}", "func (s *TestSimple) Hello(x int) {\n\treturn\n}"},
 				},
 				{
 					Func:     "InterfaceFuncSimpleWithReturn",
-					ResStmts: []string{`alfa := &Alfa{}`, "InterfaceFuncSimpleWithReturn(alfa)"},
+					ResStmts: []string{"x := &TestSimplewithreturn{}", "InterfaceFuncSimpleWithReturn(x)"},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Hello(x int) int {\n\talfa := 42\n\treturn alfa\n}",
+						"type TestSimplewithreturn struct {\n}",
+						"func (s *TestSimplewithreturn) Hello(x int) int {\n\to := -73\n\treturn o\n}",
 					},
 				},
 				{
 					Func:     "InterfaceComplex",
-					ResStmts: []string{`alfa := &Alfa{}`, "InterfaceComplex(alfa)"},
+					ResStmts: []string{"x := &TestComplex{}", "InterfaceComplex(x)"},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Hello(x *int) [2]byte {\n\talfa := [2]byte{byte(42), byte(42)}\n\treturn alfa\n}",
-						"func (s *Alfa) World(x Simple) (*Some, error) {\n\talfa := Some{x: \"string\"}\n\talfa := &alfa\n\talfa := func() error {\n\t\treturn fmt.Errorf(\"very error\")\n\t}()\n\treturn alfa, alfa\n}",
+						"type TestComplex struct {\n}",
+						"func (s *TestComplex) Hello(x *int) [2]byte {\n\to := [2]byte{byte(8), byte(35)}\n\treturn o\n}",
+						"func (s *TestComplex) World(x Simple) (*Some, error) {\n\tpointerX := Some{x: \"Lawson Kreiger\"}\n\to2 := &pointerX\n\to3 := func() error {\n\t\treturn nil\n\t}()\n\treturn o2, o3\n}",
 					},
 				},
 				{
 					Func:     "InterfaceNested",
-					ResStmts: []string{`alfa := &Alfa{}`, "InterfaceNested(alfa)"},
+					ResStmts: []string{`x := &TestNested{}`, "InterfaceNested(x)"},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Hello(x int) {\n\treturn\n}",
-						"func (s *Alfa) World(x int) int {\n\talfa := 42\n\treturn alfa\n}",
+						"type TestNested struct {\n}",
+						"func (s *TestNested) Hello(x int) {\n\treturn\n}",
+						"func (s *TestNested) World(x int) int {\n\to := 28\n\treturn o\n}",
 					},
 				},
 			},
@@ -628,19 +486,14 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "interface 2 test",
 			Path: "../../test/data/inputs/example_interface_2",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func:     "NestedDouble",
-					ResStmts: []string{`alfa := &Alfa{}`, "NestedDouble(alfa)"},
+					ResStmts: []string{`x := &TestX{}`, "NestedDouble(x)"},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Hello(int) {\n\treturn\n}",
-						"func (s *Alfa) World(int) {\n\treturn\n}",
+						"type TestX struct {\n}",
+						"func (s *TestX) Hello(int) {\n\treturn\n}",
+						"func (s *TestX) World(int) {\n\treturn\n}",
 					},
 				},
 			},
@@ -648,24 +501,19 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "cant gen func test",
 			Path: "../../test/data/inputs/example_func_return_priv",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "Test",
 					ResStmts: []string{
-						"alfa := exampleimport.SomeFunc(nil)",
-						`Test(alfa)`,
+						"x := exampleimport.SomeFunc(nil)",
+						`Test(x)`,
 					},
 				},
 				{
 					Func: "Test2",
 					ResStmts: []string{
-						"alfa := exampleimport.Other{}",
-						`Test2(alfa)`,
+						"x := exampleimport.Other{}",
+						`Test2(x)`,
 					},
 				},
 			},
@@ -673,18 +521,13 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "chan test",
 			Path: "../../test/data/inputs/example_chan",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "FuncChan",
 					ResStmts: []string{
-						"alfa := make(chan int)",
-						"alfa := alfa",
-						`FuncChan(alfa)`,
+						"x2 := make(chan int)",
+						"x := x2",
+						`FuncChan(x)`,
 					},
 				},
 			},
@@ -692,63 +535,57 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "cycle test",
 			Path: "../../test/data/inputs/example_cycle",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("Error").Return(false)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "FuncCycle",
 					ResStmts: []string{
-						"alfa := A{}",
-						"alfa := B{X: &alfa, Y: 42}",
-						"alfa := A{X: &alfa, Y: 42}",
-						"alfa := B{X: &alfa, Y: 42}",
-						"alfa := A{X: &alfa, Y: 42}",
-						"alfa := B{X: &alfa, Y: 42}",
-						"alfa := A{X: &alfa, Y: 42}",
-						`FuncCycle(alfa)`,
+						"pointerA3 := A{}",
+						"pointerB2 := B{X: &pointerA3, Y: -80}",
+						"pointerA2 := A{X: &pointerB2, Y: -45}",
+						"pointerB := B{X: &pointerA2, Y: -73}",
+						"pointerA := A{X: &pointerB, Y: -92}",
+						"pointerX := B{X: &pointerA, Y: 70}",
+						"x := A{X: &pointerX, Y: -41}",
+						`FuncCycle(x)`,
 					},
 				},
 				{
 					Func: "CycleInterface",
 					ResStmts: []string{
-						"alfa := &Alfa{}",
-						`CycleInterface(alfa)`,
+						"x := &TestX{}",
+						`CycleInterface(x)`,
 					},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"type Alfa struct {\n}",
-						"type Alfa struct {\n}",
-						"func (s *Alfa) X() X {\n\talfa := &Alfa{}\n\treturn alfa\n}",
-						"func (s *Alfa) X() X {\n\talfa := &Alfa{}\n\treturn alfa\n}",
-						"func (s *Alfa) X() X {\n\talfa := &Alfa{}\n\treturn alfa\n}",
+						"type TestX struct {\n}",
+						"type TestX2 struct {\n}",
+						"type TestX3 struct {\n}",
+						"func (s *TestX3) X() X {\n\to3 := &TestX{}\n\treturn o3\n}",
+						"func (s *TestX2) X() X {\n\to2 := &TestX3{}\n\treturn o2\n}",
+						"func (s *TestX) X() X {\n\to := &TestX2{}\n\treturn o\n}",
 					},
 				},
 				{
 					Func: "CycleComplicated",
 					ResStmts: []string{
-						"alfa := somepkg.A{}",
-						"alfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &alfa}",
-						"alfa := somepkg.A{B: &alfa}",
-						"alfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &alfa}",
-						"alfa := somepkg.A{B: &alfa}",
-						"alfa := somepkg.B{X: func() (io.ReadCloser, error) {\n\talfa := &Alfa{}\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}, Y: &Alfa{}, Z: &alfa}",
-						"alfa := somepkg.A{B: &alfa}",
-						`CycleComplicated(alfa)`,
+						"pointerA3 := somepkg.A{}",
+						"pointerB2 := somepkg.B{X: func() (io.ReadCloser, error) {\n\to14 := &TestB{}\n\to15 := func() error {\n\t\treturn fmt.Errorf(\"very error\")\n\t}()\n\treturn o14, o15\n}, Y: &TestB{}, Z: &pointerA3}",
+						"pointerA2 := somepkg.A{B: &pointerB2}",
+						"pointerB := somepkg.B{X: func() (io.ReadCloser, error) {\n\to9 := &TestB3{}\n\to13 := func() error {\n\t\treturn nil\n\t}()\n\treturn o9, o13\n}, Y: &TestB{}, Z: &pointerA2}",
+						"pointerA := somepkg.A{B: &pointerB}",
+						"pointerX := somepkg.B{X: func() (io.ReadCloser, error) {\n\to := &TestB{}\n\to5 := func() error {\n\t\treturn fmt.Errorf(\"very error\")\n\t}()\n\treturn o, o5\n}, Y: &TestB2{}, Z: &pointerA}",
+						"x := somepkg.A{B: &pointerX}",
+						`CycleComplicated(x)`,
 					},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Read(p []byte) (n int, err error) {\n\talfa := 42\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}",
-						"func (s *Alfa) Close() error {\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa\n}",
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Read(p []byte) (n int, err error) {\n\talfa := 42\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}",
-						"func (s *Alfa) Close() error {\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa\n}",
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Read(p []byte) (n int, err error) {\n\talfa := 42\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa, alfa\n}",
-						"func (s *Alfa) Close() error {\n\talfa := func() error {\n\t\treturn nil\n\t}()\n\treturn alfa\n}",
+						"type TestB struct {\n}",
+						"func (s *TestB) Read(p []byte) (n int, err error) {\n\to2 := 89\n\to3 := func() error {\n\t\treturn nil\n\t}()\n\treturn o2, o3\n}",
+						"func (s *TestB) Close() error {\n\to4 := func() error {\n\t\treturn nil\n\t}()\n\treturn o4\n}",
+						"type TestB2 struct {\n}",
+						"func (s *TestB2) Read(p []byte) (n int, err error) {\n\to6 := 41\n\to7 := func() error {\n\t\treturn fmt.Errorf(\"very error\")\n\t}()\n\treturn o6, o7\n}",
+						"func (s *TestB2) Close() error {\n\to8 := func() error {\n\t\treturn nil\n\t}()\n\treturn o8\n}",
+						"type TestB3 struct {\n}",
+						"func (s *TestB3) Read(p []byte) (n int, err error) {\n\to10 := -37\n\to11 := func() error {\n\t\treturn fmt.Errorf(\"very error\")\n\t}()\n\treturn o10, o11\n}",
+						"func (s *TestB3) Close() error {\n\to12 := func() error {\n\t\treturn fmt.Errorf(\"very error\")\n\t}()\n\treturn o12\n}",
 					},
 				},
 			},
@@ -756,31 +593,26 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 		{
 			Name: "func func test",
 			Path: "../../test/data/inputs/example_func",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "FuncFunc",
 					ResStmts: []string{
-						"alfa := func(x int) {\n\treturn\n}",
-						`FuncFunc(alfa)`,
+						"x := func(x int) {\n\treturn\n}",
+						`FuncFunc(x)`,
 					},
 				},
 				{
 					Func: "FuncTypeFunc",
 					ResStmts: []string{
-						"alfa := FuncType(func(x int) {\n\treturn\n})",
-						`FuncTypeFunc(alfa)`,
+						"x := FuncType(func(x int) {\n\treturn\n})",
+						`FuncTypeFunc(x)`,
 					},
 				},
 				{
 					Func: "FuncFuncWithReturn",
 					ResStmts: []string{
-						"alfa := func(x int) int {\n\talfa := 42\n\treturn alfa\n}",
-						`FuncFuncWithReturn(alfa)`,
+						"x := func(x int) int {\n\to := -80\n\treturn o\n}",
+						`FuncFuncWithReturn(x)`,
 					},
 				},
 			},
@@ -788,16 +620,13 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 	}
 	for _, test := range tests {
 		s.Run(test.Name, func() {
-			iGen := test.ValuesMockSetup()
 			opts := &Options{
 				MaxRecursion:     3,
 				OrganismAmount:   1,
 				TestCasesPerFunc: 1,
-				ValGenerator:     iGen,
-				VarGenerator:     variables.NewMock(),
-				IdentGen:         ident.NewMock(),
 			}
-			generator, err := New(test.Path, "", opts)
+			seed.SetRandomSeed(1)
+			generator, err := New(test.Path, opts)
 			s.Require().NoError(err)
 			organisms := generator.GetTestCases()
 			s.Require().Equal(1, len(organisms))
@@ -829,44 +658,37 @@ func (s *PrintStmtTestSuite) TestExamplesSingleFile() {
 
 func (s *PrintStmtTestSuite) TestExamplesMultiFile() {
 	tests := []struct {
-		Name            string
-		Path            string
-		ValuesMockSetup func() *values.GenMock
-		TestResults     []TestResult
+		Name        string
+		Path        string
+		TestResults []TestResult
 	}{
 		{
 			Name: "func multi file",
 			Path: "../../test/data/inputs/example_multi_file",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("String").Return(`"string"`)
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "MultFileStruct",
 					ResStmts: []string{
-						"alfa := StructFromOtherFile{X: 42, Y: \"string\"}",
-						`MultFileStruct(alfa)`,
+						"x := StructFromOtherFile{X: -80, Y: \"Gerson Beahan\"}",
+						`MultFileStruct(x)`,
 					},
 				},
 				{
 					Func: "MultFileInterface",
 					ResStmts: []string{
-						"alfa := &Alfa{}",
-						`MultFileInterface(alfa)`,
+						"x := &TestInterfacefromotherfile{}",
+						`MultFileInterface(x)`,
 					},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Method(x int) {\n\treturn\n}",
+						"type TestInterfacefromotherfile struct {\n}",
+						"func (s *TestInterfacefromotherfile) Method(x int) {\n\treturn\n}",
 					},
 				},
 				{
 					Func: "MultFileCustomType",
 					ResStmts: []string{
-						"alfa := CustomType(func(x int) {\n\treturn\n})",
-						`MultFileCustomType(alfa)`,
+						"x := CustomType(func(x int) {\n\treturn\n})",
+						`MultFileCustomType(x)`,
 					},
 				},
 			},
@@ -874,16 +696,13 @@ func (s *PrintStmtTestSuite) TestExamplesMultiFile() {
 	}
 	for _, test := range tests {
 		s.Run(test.Name, func() {
-			iGen := test.ValuesMockSetup()
 			opts := &Options{
 				OrganismAmount:   1,
 				MaxRecursion:     3,
 				TestCasesPerFunc: 1,
-				ValGenerator:     iGen,
-				VarGenerator:     variables.NewMock(),
-				IdentGen:         ident.NewMock(),
 			}
-			generator, err := New(test.Path, "", opts)
+			seed.SetRandomSeed(1)
+			generator, err := New(test.Path, opts)
 			s.Require().NoError(err)
 			organisms := generator.GetTestCases()
 			s.Require().Equal(1, len(organisms))
@@ -913,117 +732,102 @@ func (s *PrintStmtTestSuite) TestExamplesMultiFile() {
 
 func (s *PrintStmtTestSuite) TestExampleImports() {
 	tests := []struct {
-		Name            string
-		Path            string
-		ValuesMockSetup func() *values.GenMock
-		TestResults     []TestResult
+		Name        string
+		Path        string
+		TestResults []TestResult
 	}{
 		{
 			Name: "import funcs",
 			Path: "../../test/data/inputs/example_imports",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				genMock.On("Byte").Return(`42`)
-				genMock.On("UInt64").Return(`42`)
-				genMock.On("UInt8").Return(`42`)
-				genMock.On("Int64").Return(`42`)
-				genMock.On("String").Return(`"string"`)
-				genMock.On("Bool").Return(`true`)
-				genMock.On("MapLen").Return(1)
-				genMock.On("ArrayLen", mock.Anything).Return(8)
-
-				return genMock
-			},
 			TestResults: []TestResult{
 				{
 					Func: "SimpleImport",
 					ResStmts: []string{
-						"alfa := somepkg.SomeStruct{X: 42}",
-						`SimpleImport(alfa)`,
+						"x := somepkg.SomeStruct{X: -80}",
+						`SimpleImport(x)`,
 					},
 				},
 				{
 					Func: "NestedImport",
 					ResStmts: []string{
-						"alfa := nestedimportpkg.NestedStruct{X: somepkg.SomeStruct{X: 42}}",
-						`NestedImport(alfa)`,
+						"x := nestedimportpkg.NestedStruct{X: somepkg.SomeStruct{X: -45}}",
+						`NestedImport(x)`,
 					},
 				},
 				{
 					Func: "ImportInterface",
 					ResStmts: []string{
-						"alfa := &Alfa{}",
-						`ImportInterface(alfa)`,
+						"x := &testX{}",
+						`ImportInterface(x)`,
 					},
-					ResDecls: []string{"type Alfa struct {\n}", "func (s *Alfa) Method(x int) {\n\treturn\n}"},
+					ResDecls: []string{"type testX struct {\n}", "func (s *testX) Method(x int) {\n\treturn\n}"},
 				},
 				{
 					Func: "ImportCustomType",
 					ResStmts: []string{
-						"alfa := somepkg.CustomType(func(x int) {\n\treturn\n})",
-						`ImportCustomType(alfa)`,
+						"x := somepkg.CustomType(func(x int) {\n\treturn\n})",
+						`ImportCustomType(x)`,
 					},
 				},
 				{
 					Func: "ImportCustomTypeUUID",
 					ResStmts: []string{
-						"alfa := somepkg.UUID([8]byte{byte(42), byte(42), byte(42), byte(42), byte(42), byte(42), byte(42), byte(42)})",
-						`ImportCustomTypeUUID(alfa)`,
+						"x := somepkg.UUID([8]byte{byte(64), byte(8), byte(35), byte(92), byte(37), byte(16), byte(0), byte(46)})",
+						`ImportCustomTypeUUID(x)`,
 					},
 				},
 				{
 					Func: "NestedUnitInImport",
 					ResStmts: []string{
-						"alfa := somepkg.NestedStructInImport{X: somepkg.Nested{X: 42}}",
-						`NestedUnitInImport(alfa)`,
+						"x := somepkg.NestedStructInImport{X: somepkg.Nested{X: 41}}",
+						`NestedUnitInImport(x)`,
 					},
 				},
 				{
 					Func: "ImportTime",
 					ResStmts: []string{
-						"alfa := time.Time{}",
-						`ImportTime(alfa)`,
+						"x := time.Time{}",
+						`ImportTime(x)`,
 					},
 				},
 				{
 					Func: "DirectlyNestedInterface",
 					ResStmts: []string{
-						"alfa := &Alfa{}",
-						`DirectlyNestedInterface(alfa)`,
+						"x := &testX2{}",
+						`DirectlyNestedInterface(x)`,
 					},
 					ResDecls: []string{
-						"type Alfa struct {\n}",
-						"func (s *Alfa) Hello(x int) {\n\treturn\n}",
-						"func (s *Alfa) World(x int) {\n\treturn\n}",
+						"type testX2 struct {\n}",
+						"func (s *testX2) Hello(x int) {\n\treturn\n}",
+						"func (s *testX2) World(x int) {\n\treturn\n}",
 					},
 				},
 				{
 					Func: "ImportCustomTypeInstruct",
 					ResStmts: []string{
-						"alfa := somepkg.AStructWithCustomType{CustomTypeInt: somepkg.CustomTypeInt(42)}",
-						`ImportCustomTypeInstruct(alfa)`,
+						"x := somepkg.AStructWithCustomType{CustomTypeInt: somepkg.CustomTypeInt(-61)}",
+						`ImportCustomTypeInstruct(x)`,
 					},
 				},
 				{
 					Func: "ImportedMapVal",
 					ResStmts: []string{
-						"alfa := map[string]somepkg.SomeStruct{\"string\": somepkg.SomeStruct{X: 42}}",
-						`ImportedMapVal(alfa)`,
+						"x := map[string]somepkg.SomeStruct{\"Adelia Metz\": somepkg.SomeStruct{X: -77}, \"Ariane Rice\": somepkg.SomeStruct{X: -12}, \"Briana Bauch\": somepkg.SomeStruct{X: -68}, \"Jarod Wolff\": somepkg.SomeStruct{X: 60}, \"Talia Hudson\": somepkg.SomeStruct{X: 38}, \"Gerda Rosenbaum\": somepkg.SomeStruct{X: 13}, \"Elias Roob\": somepkg.SomeStruct{X: -82}}",
+						`ImportedMapVal(x)`,
 					},
 				},
 				{
 					Func: "ImportCustomTypeInMap",
 					ResStmts: []string{
-						"alfa := map[string]somepkg.CustomType{\"string\": somepkg.CustomType(func(x int) {\n\treturn\n})}",
-						`ImportCustomTypeInMap(alfa)`,
+						"x := map[string]somepkg.CustomType{\"Alexandra Halvorson\": somepkg.CustomType(func(x int) {\n\treturn\n}), \"Miller Cormier\": somepkg.CustomType(func(x int) {\n\treturn\n}), \"Matilde Doyle\": somepkg.CustomType(func(x int) {\n\treturn\n}), \"Sim Erdman\": somepkg.CustomType(func(x int) {\n\treturn\n}), \"Marquise Erdman\": somepkg.CustomType(func(x int) {\n\treturn\n}), \"Helmer Crooks\": somepkg.CustomType(func(x int) {\n\treturn\n}), \"Skye Lemke\": somepkg.CustomType(func(x int) {\n\treturn\n})}",
+						`ImportCustomTypeInMap(x)`,
 					},
 				},
 				{
 					Func: "ImportForm",
 					ResStmts: []string{
-						"alfa := somepkg.Form{File: map[somepkg.SomeStruct][]somepkg.SomeStruct{somepkg.SomeStruct{X: 42}: []somepkg.SomeStruct{somepkg.SomeStruct{X: 42}, somepkg.SomeStruct{X: 42}, somepkg.SomeStruct{X: 42}, somepkg.SomeStruct{X: 42}, somepkg.SomeStruct{X: 42}, somepkg.SomeStruct{X: 42}, somepkg.SomeStruct{X: 42}, somepkg.SomeStruct{X: 42}}}}",
-						`ImportForm(alfa)`,
+						"x := somepkg.Form{File: map[somepkg.SomeStruct][]somepkg.SomeStruct{somepkg.SomeStruct{X: -33}: []somepkg.SomeStruct{somepkg.SomeStruct{X: -57}, somepkg.SomeStruct{X: -22}, somepkg.SomeStruct{X: -57}, somepkg.SomeStruct{X: 89}, somepkg.SomeStruct{X: -84}, somepkg.SomeStruct{X: 96}, somepkg.SomeStruct{X: -16}, somepkg.SomeStruct{X: 56}}, somepkg.SomeStruct{X: -68}: []somepkg.SomeStruct{}}}",
+						`ImportForm(x)`,
 					},
 				},
 			},
@@ -1031,16 +835,13 @@ func (s *PrintStmtTestSuite) TestExampleImports() {
 	}
 	for _, test := range tests {
 		s.Run(test.Name, func() {
-			iGen := test.ValuesMockSetup()
 			opts := &Options{
 				OrganismAmount:   1,
 				TestCasesPerFunc: 1,
 				MaxRecursion:     10,
-				ValGenerator:     iGen,
-				VarGenerator:     variables.NewMock(),
-				IdentGen:         ident.NewMock(),
 			}
-			generator, err := New(test.Path, "", opts)
+			seed.SetRandomSeed(1)
+			generator, err := New(test.Path, opts)
 			s.Require().NoError(err)
 			organisms := generator.GetTestCases()
 			s.Require().Equal(1, len(organisms))
@@ -1077,44 +878,35 @@ type TestChanResult struct {
 
 func (s *PrintStmtTestSuite) TestChan() {
 	tests := []struct {
-		Name            string
-		Path            string
-		ValuesMockSetup func() *values.GenMock
-		TestResults     []TestChanResult
+		Name        string
+		Path        string
+		TestResults []TestChanResult
 	}{
 		{
 			Name: "chan test",
 			Path: "../../test/data/inputs/example_chan",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("Int").Return(`42`)
-				return genMock
-			},
 			TestResults: []TestChanResult{
 				{
 					Func: "FuncChan",
 					ResStmts: []string{
-						"alfa := make(chan int)",
-						"alfa := alfa",
-						`FuncChan(alfa)`,
+						"x2 := make(chan int)",
+						"x := x2",
+						`FuncChan(x)`,
 					},
-					ResChanIdents: []string{"alfa"},
+					ResChanIdents: []string{"x2"},
 				},
 			},
 		},
 	}
 	for _, test := range tests {
 		s.Run(test.Name, func() {
-			iGen := test.ValuesMockSetup()
 			opts := &Options{
 				MaxRecursion:     3,
 				OrganismAmount:   1,
 				TestCasesPerFunc: 1,
-				ValGenerator:     iGen,
-				VarGenerator:     variables.NewMock(),
-				IdentGen:         ident.NewMock(),
 			}
-			generator, err := New(test.Path, "", opts)
+			seed.SetRandomSeed(0)
+			generator, err := New(test.Path, opts)
 			s.Require().NoError(err)
 			organisms := generator.GetTestCases()
 			s.Require().Equal(1, len(organisms))

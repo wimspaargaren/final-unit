@@ -20,20 +20,19 @@ import (
 	"golang.org/x/text/language"
 )
 
-// Default constants
-const (
-	DefaultPopulationSize   = 30
-	DefaultTestCasesPerFunc = 18
-	// Currently the best way to detect cycles is to count
-	// the amount of times some struct is created
-	DefaultAmountRecursion = 3
-)
-
 // Organism organism is a set of testcases for functions of files in a given directory
 type Organism struct {
 	Fitness float64
 	// Create test cases for all files in a pkg
 	Files []*File
+}
+
+// NewOrganism creates a new organism
+func NewOrganism(files []*File) *Organism {
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].FileName < files[j].FileName
+	})
+	return &Organism{Files: files}
 }
 
 // UpdateAssertStmts sets an os assert statements based on printed runtime result
@@ -49,18 +48,40 @@ func (o *Organism) UpdateAssertStmts(printed string, firstRun bool) {
 
 // File file contains test cases for functions of a given file
 type File struct {
-	Version     string
 	PackageName string
-	Dir         string
 	FileName    string
 	// funcName, list of test cases
-	TestCases map[string][]*testcase.TestCase
+	TestCases   map[string][]*testcase.TestCase
+	PackageInfo *importer.PackageInfo
+	IdentGen    ident.IGen
+	Opts        *Options
+	Deco        *decorator.Deco
+}
+
+// NewFile creates a new file object
+func NewFile(pathName string, pkgInfo *importer.PackageInfo, opts *Options, deco *decorator.Deco) *File {
+	astFile, ok := pkgInfo.GetRootPkg()[pathName]
+	if !ok {
+		return nil
+	}
+
+	file := &File{
+		FileName:    pathName,
+		PackageName: pkgInfo.RootPkg,
+		PackageInfo: pkgInfo,
+		Opts:        opts,
+		Deco:        deco,
+		IdentGen:    ident.New(),
+	}
+	file.TestCases = file.GetTestCasesForFunctionsInFile(pathName, astFile)
+	return file
 }
 
 // SuiteName returns the name of the test suite for this file
 func (f *File) SuiteName() string {
-	ext := filepath.Ext(f.FileName)
-	fileWithoutExt := strings.TrimSuffix(f.FileName, ext)
+	_, fileName := filepath.Split(f.FileName)
+	ext := filepath.Ext(fileName)
+	fileWithoutExt := strings.TrimSuffix(fileName, ext)
 	reg := regexp.MustCompile("[^a-zA-Z0-9]+")
 	fileParts := reg.Split(fileWithoutExt, -1)
 	res := ""
@@ -75,27 +96,10 @@ type Options struct {
 	MaxRecursion     int
 	OrganismAmount   int
 	TestCasesPerFunc int
-	ValGenerator     values.IGen
-	// FIXME: Remove var generator as soon as IdentGen can be used everywhere
-	VarGenerator variables.IGen
-	IdentGen     ident.IGen
-}
-
-// DefaultOpts creates default generator options
-func DefaultOpts() *Options {
-	return &Options{
-		MaxRecursion:     DefaultAmountRecursion,
-		OrganismAmount:   DefaultPopulationSize,
-		TestCasesPerFunc: DefaultTestCasesPerFunc,
-		ValGenerator:     values.NewGenerator(),
-		VarGenerator:     variables.NewGenerator(),
-		IdentGen:         ident.New(),
-	}
 }
 
 // Generator the generator
 type Generator struct {
-	Version     string
 	Dir         string
 	PackageInfo *importer.PackageInfo
 	Opts        *Options
@@ -103,7 +107,7 @@ type Generator struct {
 }
 
 // New creates a new generator for generating assignment statements for function parameters
-func New(dir, version string, opts *Options) (*Generator, error) {
+func New(dir string, opts *Options) (*Generator, error) {
 	dir, err := filepath.Abs(dir)
 	if err != nil {
 		return nil, err
@@ -118,7 +122,6 @@ func New(dir, version string, opts *Options) (*Generator, error) {
 		return nil, err
 	}
 	return &Generator{
-		Version:     version,
 		Dir:         dir,
 		PackageInfo: packageInfo,
 		Opts:        opts,
@@ -137,63 +140,54 @@ func (g *Generator) GetTestCases() []*Organism {
 
 // GetNewOrganism get a single organism
 func (g *Generator) GetNewOrganism() *Organism {
-	org := &Organism{}
-	for k, v := range g.PackageInfo.GetRootPkg() {
-		_, fileName := filepath.Split(k)
+	var files []*File
+	for fileName := range g.PackageInfo.GetRootPkg() {
 		if g.Deco.ShouldIgnoreFile(fileName) {
 			continue
 		}
-		file := &File{
-			Version:     g.Version,
-			Dir:         g.Dir,
-			FileName:    fileName,
-			PackageName: v.Name.Name,
-		}
+		file := NewFile(fileName, g.PackageInfo, g.Opts, g.Deco)
 		log.Debugf("GetNewOrganism for file: %s", fileName)
-		testCasesPerFunc := g.GetTestCasesForFunctionsInFile(v, g.PackageInfo.RootPointerForFileName(fileName))
-		file.TestCases = testCasesPerFunc
-
-		org.Files = append(org.Files, file)
+		files = append(files, file)
 	}
-	sort.Slice(org.Files, func(i, j int) bool {
-		return org.Files[i].FileName < org.Files[j].FileName
-	})
-	return org
+	return NewOrganism(files)
 }
 
 // GetTestCasesForFunctionsInFile convert given input ast file
 // to a set of test cases per function
 // test case contains a set of decl and assignment statement to generate test cases
-func (g *Generator) GetTestCasesForFunctionsInFile(f *ast.File, pointer *importer.PkgResolverPointer) map[string][]*testcase.TestCase {
+func (f *File) GetTestCasesForFunctionsInFile(path string, astFile *ast.File) map[string][]*testcase.TestCase {
 	// List of test cases per func name
 	res := make(map[string][]*testcase.TestCase)
-	for _, decl := range f.Decls {
+	for _, decl := range astFile.Decls {
 		switch t := decl.(type) {
 		case *ast.FuncDecl:
 			log.Debugf("GetTestCasesForFunctionsInFile: %s", t.Name.Name)
-			// g.printBodyStatements(t.Body)
 
 			testCases := []*testcase.TestCase{}
-			for i := 0; i < g.Opts.TestCasesPerFunc; i++ {
+			for i := 0; i < f.Opts.TestCasesPerFunc; i++ {
 				if t.Name.Name == "main" {
 					continue
 				}
-				_, fileName := filepath.Split(pointer.File)
 				// Decorator can specify no test generation for given functions
-				if g.Deco.ShouldIgnoreFunc(fileName, t.Name.Name) {
+				if f.Deco.ShouldIgnoreFunc(path, t.Name.Name) {
 					continue
 				}
-				testCase := testcase.New(t, pointer, g.PackageInfo, testcase.Options{
-					ValTestCase:  g.Opts.ValGenerator,
-					VarTestCase:  g.Opts.VarGenerator,
-					MaxRecursion: g.Opts.MaxRecursion,
-					IdentGen:     g.Opts.IdentGen,
-				}, g.Deco)
+				pointer := &importer.PkgResolverPointer{
+					Dir:  f.PackageInfo.RootDir,
+					Pkg:  f.PackageInfo.RootPkg,
+					File: path,
+				}
+				testCase := testcase.New(t, pointer, f.PackageInfo, testcase.Options{
+					ValTestCase:  values.NewGenerator(),
+					VarTestCase:  variables.NewGenerator(),
+					MaxRecursion: f.Opts.MaxRecursion,
+					IdentGen:     f.IdentGen,
+				}, f.Deco)
 				testCase.Create()
 				testCases = append(testCases, testCase)
 			}
 
-			res[g.TestCasePrefix(t)+t.Name.Name] = testCases
+			res[f.TestCasePrefix(t)+t.Name.Name] = testCases
 		default:
 			// Only check function declarations
 			continue
@@ -205,29 +199,29 @@ func (g *Generator) GetTestCasesForFunctionsInFile(f *ast.File, pointer *importe
 // TestCasePrefix in case of receiver create prefix
 // this is need to ensure test results dont override eachother in case of:
 // func X() func (r T) X()
-func (g *Generator) TestCasePrefix(funcDecl *ast.FuncDecl) string {
+func (f *File) TestCasePrefix(funcDecl *ast.FuncDecl) string {
 	if funcDecl.Recv == nil {
 		return ""
 	}
 	// Sanity check, a function can only have 1 receiver
 	if len(funcDecl.Recv.List) == 1 {
-		return g.TypeToPrefix(funcDecl.Recv.List[0].Type)
+		return f.TypeToPrefix(funcDecl.Recv.List[0].Type)
 	}
 	log.Warningf("expected func receiver to have only one field")
-	return g.Opts.IdentGen.Create(&ast.Ident{Name: "prefix"}).Name
+	return f.IdentGen.Create(&ast.Ident{Name: "prefix"}).Name
 }
 
 // TypeToPrefix converts a function receiver type to a prefix
-func (g *Generator) TypeToPrefix(e ast.Expr) string {
+func (f *File) TypeToPrefix(e ast.Expr) string {
 	switch t := e.(type) {
 	case *ast.Ident:
 		return t.Name
 	case *ast.SelectorExpr:
-		return g.TypeToPrefix(t.X)
+		return f.TypeToPrefix(t.X)
 	case *ast.StarExpr:
-		return g.TypeToPrefix(t.X)
+		return f.TypeToPrefix(t.X)
 	default:
 		log.Warningf("unexpected field receiver type found: %T", e)
-		return g.Opts.IdentGen.Create(&ast.Ident{Name: "prefix"}).Name
+		return f.IdentGen.Create(&ast.Ident{Name: "prefix"}).Name
 	}
 }

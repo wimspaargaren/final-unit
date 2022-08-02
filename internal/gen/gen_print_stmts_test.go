@@ -5,10 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/wimspaargaren/final-unit/internal/ident"
 	"github.com/wimspaargaren/final-unit/internal/testcase"
-	"github.com/wimspaargaren/final-unit/pkg/values"
-	"github.com/wimspaargaren/final-unit/pkg/variables"
+	"github.com/wimspaargaren/final-unit/pkg/seed"
 )
 
 type OutputTestResult struct {
@@ -23,121 +21,112 @@ type AssignStmtGeneratorSuite struct {
 
 func (s *AssignStmtGeneratorSuite) TestExampleOutputs() {
 	tests := []struct {
-		Name            string
-		Path            string
-		ValuesMockSetup func() *values.GenMock
-		TestResults     []OutputTestResult
+		Name        string
+		Path        string
+		TestResults []OutputTestResult
 	}{
 		{
 			Name: "basic types",
 			Path: "../../test/data/outputs/example_base_types",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				return genMock
-			},
 			TestResults: []OutputTestResult{
 				{
 					Func: "IntFunc",
 					ResStmts: []string{
-						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `alfa`, alfa)",
+						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `out`, out)",
 						"fmt.Println(\"\")",
 					},
-					FuncStmt: "alfa := IntFunc()",
+					FuncStmt: "out := IntFunc()",
 				},
 				{
 					Func:     "BoolFunc",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `bool`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := BoolFunc()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `bool`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := BoolFunc()",
 				},
 				{
 					Func:     "StringFunc",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": %#v}`, `string`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := StringFunc()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": %#v}`, `string`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := StringFunc()",
 				},
 				{
 					Func:     "Float32Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `float32`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := Float32Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `float32`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := Float32Func()",
 				},
 				{
 					Func:     "Float64Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `float64`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := Float64Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `float64`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := Float64Func()",
 				},
 				{
 					Func:     "UIntFunc",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := UIntFunc()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := UIntFunc()",
 				},
 				{
 					Func:     "UInt8Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint8`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := UInt8Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint8`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := UInt8Func()",
 				},
 				{
 					Func:     "UInt16Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint16`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := UInt16Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint16`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := UInt16Func()",
 				},
 				{
 					Func:     "UInt32Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint32`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := UInt32Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint32`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := UInt32Func()",
 				},
 				{
 					Func:     "UInt64Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint64`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := UInt64Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uint64`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := UInt64Func()",
 				},
 				{
 					Func:     "UIntPtr64Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uintptr`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := UIntPtr64Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `uintptr`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := UIntPtr64Func()",
 				},
 				{
 					Func:     "Int8Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int8`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := Int8Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int8`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := Int8Func()",
 				},
 				{
 					Func:     "Int16Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int16`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := Int16Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int16`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := Int16Func()",
 				},
 				{
 					Func:     "Int32Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int32`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := Int32Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int32`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := Int32Func()",
 				},
 				{
 					Func:     "Int64Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int64`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := Int64Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int64`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := Int64Func()",
 				},
 				{
 					Func:     "RuneFunc",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `rune`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := RuneFunc()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `rune`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := RuneFunc()",
 				},
 				{
 					Func:     "Complex64Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `complex64`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := Complex64Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `complex64`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := Complex64Func()",
 				},
 				{
 					Func:     "Complex128Func",
-					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `complex128`, `alfa`, alfa)", "fmt.Println(\"\")"},
-					FuncStmt: "alfa := Complex128Func()",
+					ResStmts: []string{"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `complex128`, `out`, out)", "fmt.Println(\"\")"},
+					FuncStmt: "out := Complex128Func()",
 				},
 			},
 		},
 		{
 			Name: "ignore types",
 			Path: "../../test/data/outputs/ignore_type",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				return genMock
-			},
 			TestResults: []OutputTestResult{
 				{
 					Func:     "IgnoreChan",
@@ -169,147 +158,117 @@ func (s *AssignStmtGeneratorSuite) TestExampleOutputs() {
 		{
 			Name: "array types",
 			Path: "../../test/data/outputs/example_array",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				return genMock
-			},
 			TestResults: []OutputTestResult{
 				{
 					Func:     "ArrayFunc",
-					ResStmts: []string{"for alfa := 0; alfa < len(alfa); alfa++ {\n\tfmt.Printf(`{ \"type\": \"%s\", \"arr_ident\": \"%s\", \"var_name\": \"%s\", \"val\": \"%+v\", \"child\": `, `arr`, `alfa`, `alfa`, alfa)\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `alfa[alfa]`, alfa[alfa])\n\tfmt.Printf(`}`)\n\tfmt.Println(\"\")\n}"},
-					FuncStmt: "alfa := ArrayFunc()",
+					ResStmts: []string{"for xVlBz := 0; xVlBz < len(out); xVlBz++ {\n\tfmt.Printf(`{ \"type\": \"%s\", \"arr_ident\": \"%s\", \"var_name\": \"%s\", \"val\": \"%+v\", \"child\": `, `arr`, `xVlBz`, `out`, xVlBz)\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `out[xVlBz]`, out[xVlBz])\n\tfmt.Printf(`}`)\n\tfmt.Println(\"\")\n}"},
+					FuncStmt: "out := ArrayFunc()",
 				},
 			},
 		},
 		{
 			Name: "pointer types",
 			Path: "../../test/data/outputs/pointer",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				return genMock
-			},
 			TestResults: []OutputTestResult{
 				{
 					Func: "PointerFunc",
 					ResStmts: []string{
-						"if alfa == nil {\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"nil\" } `, `pointer`, `alfa`)\n\tfmt.Println(\"\")\n} else {\n\talfa := *alfa\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `pointer`, `alfa`)\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `alfa`, alfa)\n\tfmt.Printf(`}`)\n\tfmt.Println(\"\")\n}",
+						"if out == nil {\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"nil\" } `, `pointer`, `out`)\n\tfmt.Println(\"\")\n} else {\n\tpointerOut := *out\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `pointer`, `out`)\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `pointerOut`, pointerOut)\n\tfmt.Printf(`}`)\n\tfmt.Println(\"\")\n}",
 					},
-					FuncStmt: "alfa := PointerFunc()",
+					FuncStmt: "out := PointerFunc()",
 				},
 			},
 		},
 		{
 			Name: "error types",
 			Path: "../../test/data/outputs/errors",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				return genMock
-			},
 			TestResults: []OutputTestResult{
 				{
 					Func: "ErrorFunc",
 					ResStmts: []string{
-						"if alfa == nil {\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"nil\" } `, `error`, `alfa`)\n\tfmt.Println(\"\")\n} else {\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"notnil\" } `, `error`, `alfa`)\n\tfmt.Println(\"\")\n}",
+						"if out == nil {\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"nil\" } `, `error`, `out`)\n\tfmt.Println(\"\")\n} else {\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"notnil\" } `, `error`, `out`)\n\tfmt.Println(\"\")\n}",
 					},
-					FuncStmt: "alfa := ErrorFunc()",
+					FuncStmt: "out := ErrorFunc()",
 				},
 			},
 		},
 		{
 			Name: "map types",
 			Path: "../../test/data/outputs/maps",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				genMock.On("MapLen").Return(2)
-				genMock.On("Int").Return("2")
-				genMock.On("String").Return("2")
-				return genMock
-			},
 			TestResults: []OutputTestResult{
 				{
 					Func: "MapFunc",
 					ResStmts: []string{
-						"for alfa := range alfa {\n\tfmt.Printf(`{ \"type\": \"%s\", \"arr_ident\": \"%s\", \"map_key_type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%+v\", \"child\": `, `map`, `alfa`, `int`, `alfa`, alfa)\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": %#v}`, `string`, `alfa[alfa]`, alfa[alfa])\n\tfmt.Printf(`}`)\n\tfmt.Println(\"\")\n}",
+						"for vlBzg := range out {\n\tfmt.Printf(`{ \"type\": \"%s\", \"arr_ident\": \"%s\", \"map_key_type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%+v\", \"child\": `, `map`, `vlBzg`, `int`, `out`, vlBzg)\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": %#v}`, `string`, `out[vlBzg]`, out[vlBzg])\n\tfmt.Printf(`}`)\n\tfmt.Println(\"\")\n}",
 					},
-					FuncStmt: "alfa := MapFunc(alfa)",
+					FuncStmt: "out := MapFunc(x)",
 				},
 				{
 					Func:     "MapUnSupportedKeyFunc",
 					ResStmts: []string{},
-					FuncStmt: "_ = MapUnSupportedKeyFunc(alfa)",
+					FuncStmt: "_ = MapUnSupportedKeyFunc(x)",
 				},
 				{
 					Func:     "MapUnSupportedValFunc",
 					ResStmts: []string{},
-					FuncStmt: "_ = MapUnSupportedValFunc(alfa)",
+					FuncStmt: "_ = MapUnSupportedValFunc(x)",
 				},
 			},
 		},
 		{
 			Name: "custom types",
 			Path: "../../test/data/outputs/custom_types",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				return genMock
-			},
 			TestResults: []OutputTestResult{
 				{
 					Func: "CustomTypeFunc",
 					ResStmts: []string{
 						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `custom`, `X`)",
-						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `alfa`, alfa)",
+						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `out`, out)",
 						"fmt.Printf(`}`)",
 						"fmt.Println(\"\")",
 					},
-					FuncStmt: "alfa := CustomTypeFunc()",
+					FuncStmt: "out := CustomTypeFunc()",
 				},
 			},
 		},
 		{
 			Name: "struct types",
 			Path: "../../test/data/outputs/struct",
-			ValuesMockSetup: func() *values.GenMock {
-				genMock := &values.GenMock{}
-				return genMock
-			},
 			TestResults: []OutputTestResult{
 				{
 					Func: "StructFunc",
 					ResStmts: []string{
-						"_ = alfa",
-						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `alfa`)",
-						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `alfa.X`, alfa.X)",
+						"_ = out",
+						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `out`)",
+						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `out.X`, out.X)",
 						"fmt.Printf(`}`)",
 						"fmt.Println(\"\")",
-						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `alfa`)",
-						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": %#v}`, `string`, `alfa.y`, alfa.y)",
+						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `out`)",
+						"fmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": %#v}`, `string`, `out.y`, out.y)",
 						"fmt.Printf(`}`)",
 						"fmt.Println(\"\")",
 					},
-					FuncStmt: "alfa := StructFunc()",
+					FuncStmt: "out := StructFunc()",
 				},
 				{
 					Func: "StructCustomTypeDef",
 					ResStmts: []string{
-						"if alfa == nil {\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"nil\" } `, `pointer`, `alfa`)\n\tfmt.Println(\"\")\n} else {\n\talfa := *alfa\n\t_ = alfa\n\tfor alfa := 0; alfa < len(alfa.X); alfa++ {\n\t\t_ = alfa.X[alfa]\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `pointer`, `alfa`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `alfa`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"arr_ident\": \"%s\", \"var_name\": \"%s\", \"val\": \"%+v\", \"child\": `, `arr`, `alfa`, `alfa.X`, alfa)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `alfa.X[alfa]`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `alfa.X[alfa].X`, alfa.X[alfa].X)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Println(\"\")\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `pointer`, `alfa`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `alfa`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"arr_ident\": \"%s\", \"var_name\": \"%s\", \"val\": \"%+v\", \"child\": `, `arr`, `alfa`, `alfa.X`, alfa)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `alfa.X[alfa]`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": %#v}`, `string`, `alfa.X[alfa].y`, alfa.X[alfa].y)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Println(\"\")\n\t}\n}",
+						"if out == nil {\n\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"nil\" } `, `pointer`, `out`)\n\tfmt.Println(\"\")\n} else {\n\tpointerOut := *out\n\t_ = pointerOut\n\tfor xVlBz := 0; xVlBz < len(pointerOut.X); xVlBz++ {\n\t\t_ = pointerOut.X[xVlBz]\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `pointer`, `out`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `pointerOut`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"arr_ident\": \"%s\", \"var_name\": \"%s\", \"val\": \"%+v\", \"child\": `, `arr`, `xVlBz`, `pointerOut.X`, xVlBz)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `pointerOut.X[xVlBz]`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": \"%#v\"}`, `int`, `pointerOut.X[xVlBz].X`, pointerOut.X[xVlBz].X)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Println(\"\")\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `pointer`, `out`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `pointerOut`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"arr_ident\": \"%s\", \"var_name\": \"%s\", \"val\": \"%+v\", \"child\": `, `arr`, `xVlBz`, `pointerOut.X`, xVlBz)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"child\": `, `struct`, `pointerOut.X[xVlBz]`)\n\t\tfmt.Printf(`{ \"type\": \"%s\", \"var_name\": \"%s\", \"val\": %#v}`, `string`, `pointerOut.X[xVlBz].y`, pointerOut.X[xVlBz].y)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Printf(`}`)\n\t\tfmt.Println(\"\")\n\t}\n}",
 					},
-					FuncStmt: "alfa := StructCustomTypeDef()",
+					FuncStmt: "out := StructCustomTypeDef()",
 				},
 			},
 		},
 	}
 	for _, test := range tests {
 		s.Run(test.Name, func() {
-			iGen := test.ValuesMockSetup()
 			opts := &Options{
 				OrganismAmount:   1,
 				MaxRecursion:     3,
 				TestCasesPerFunc: 1,
-				ValGenerator:     iGen,
-				VarGenerator:     variables.NewMock(),
-				IdentGen:         ident.NewMock(),
 			}
-			generator, err := New(test.Path, "", opts)
+			seed.SetRandomSeed(1)
+			generator, err := New(test.Path, opts)
 			s.Require().NoError(err)
 			organisms := generator.GetTestCases()
 			s.Require().Equal(1, len(organisms))

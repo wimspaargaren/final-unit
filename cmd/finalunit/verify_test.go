@@ -4,7 +4,6 @@ package main
 import (
 	"testing"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -13,7 +12,7 @@ type VerifySuite struct {
 }
 
 func (s *VerifySuite) TestCheckGoFiles0() {
-	kffANuAYpu := Opts{Verbose: false, Version: true, Dir: "Servantdirt", LogLevel: log.Level(uint32(88))}
+	kffANuAYpu := Opts{Verbose: false, Version: true, Dir: "Servantdirt"}
 	kffAN := &kffANuAYpu
 
 	klXDI := CheckGoFiles(kffAN)
@@ -24,7 +23,7 @@ func (s *VerifySuite) TestCheckGoFiles0() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles1() {
-	lShEdQbOcI := Opts{Verbose: false, Version: false, Dir: "Musemagenta", LogLevel: log.Level(uint32(4))}
+	lShEdQbOcI := Opts{Verbose: false, Version: false, Dir: "Musemagenta"}
 	lShEd := &lShEdQbOcI
 
 	gitqa := CheckGoFiles(lShEd)
@@ -35,7 +34,7 @@ func (s *VerifySuite) TestCheckGoFiles1() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles2() {
-	qZkfxCUizm := Opts{Verbose: false, Version: false, Dir: "Wyrmfoil", LogLevel: log.Level(uint32(50))}
+	qZkfxCUizm := Opts{Verbose: false, Version: false, Dir: "Wyrmfoil"}
 	qZkfx := &qZkfxCUizm
 
 	jgduU := CheckGoFiles(qZkfx)
@@ -46,7 +45,7 @@ func (s *VerifySuite) TestCheckGoFiles2() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles3() {
-	siNvepYntU := Opts{Verbose: true, Version: true, Dir: "Roverivory", LogLevel: log.Level(uint32(44))}
+	siNvepYntU := Opts{Verbose: true, Version: true, Dir: "Roverivory"}
 	siNve := &siNvepYntU
 
 	mObhv := CheckGoFiles(siNve)
@@ -57,7 +56,7 @@ func (s *VerifySuite) TestCheckGoFiles3() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles4() {
-	bigsTEthCQ := Opts{Verbose: false, Version: true, Dir: "Takerbig", LogLevel: log.Level(uint32(75))}
+	bigsTEthCQ := Opts{Verbose: false, Version: true, Dir: "Takerbig"}
 	bigsT := &bigsTEthCQ
 
 	fZQBb := CheckGoFiles(bigsT)
@@ -68,7 +67,7 @@ func (s *VerifySuite) TestCheckGoFiles4() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles5() {
-	vNsLSDjXfv := Opts{Verbose: true, Version: true, Dir: "Wolfmeteor", LogLevel: log.Level(uint32(55))}
+	vNsLSDjXfv := Opts{Verbose: true, Version: true, Dir: "Wolfmeteor"}
 	vNsLS := &vNsLSDjXfv
 
 	wfHvo := CheckGoFiles(vNsLS)
@@ -79,7 +78,7 @@ func (s *VerifySuite) TestCheckGoFiles5() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles6() {
-	ajwACLLtXs := Opts{Verbose: true, Version: false, Dir: "Whipstellar", LogLevel: log.Level(uint32(11))}
+	ajwACLLtXs := Opts{Verbose: true, Version: false, Dir: "Whipstellar"}
 	ajwAc := &ajwACLLtXs
 
 	jAmzD := CheckGoFiles(ajwAc)
@@ -90,7 +89,7 @@ func (s *VerifySuite) TestCheckGoFiles6() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles7() {
-	dPCgEzwZxL := Opts{Verbose: true, Version: true, Dir: "Ridersmall", LogLevel: log.Level(uint32(65))}
+	dPCgEzwZxL := Opts{Verbose: true, Version: true, Dir: "Ridersmall"}
 	dPCgE := &dPCgEzwZxL
 
 	zLKAN := CheckGoFiles(dPCgE)
@@ -101,7 +100,7 @@ func (s *VerifySuite) TestCheckGoFiles7() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles8() {
-	rzUGYgVwaw := Opts{Verbose: true, Version: false, Dir: "Rabbitribbon", LogLevel: log.Level(uint32(90))}
+	rzUGYgVwaw := Opts{Verbose: true, Version: false, Dir: "Rabbitribbon"}
 	rzUGY := &rzUGYgVwaw
 
 	aUxDy := CheckGoFiles(rzUGY)
@@ -112,7 +111,7 @@ func (s *VerifySuite) TestCheckGoFiles8() {
 }
 
 func (s *VerifySuite) TestCheckGoFiles9() {
-	zLSTCakvTJ := Opts{Verbose: false, Version: true, Dir: "Sargentpaper", LogLevel: log.Level(uint32(61))}
+	zLSTCakvTJ := Opts{Verbose: false, Version: true, Dir: "Sargentpaper"}
 	zLSTC := &zLSTCakvTJ
 
 	lKIhs := CheckGoFiles(zLSTC)
@@ -313,7 +312,7 @@ func (s *VerifySuite) TestUnreadableDirError9() {
 }
 
 func (s *VerifySuite) TestVerify0() {
-	vXjunZilIe := Opts{Verbose: true, Version: true, Dir: "Healermire", LogLevel: log.Level(uint32(13))}
+	vXjunZilIe := Opts{Verbose: true, Version: true, Dir: "Healermire"}
 	vXjun := &vXjunZilIe
 
 	ukeVv := Verify(vXjun)
@@ -324,7 +323,7 @@ func (s *VerifySuite) TestVerify0() {
 }
 
 func (s *VerifySuite) TestVerify1() {
-	oQrnCjHMqz := Opts{Verbose: true, Version: false, Dir: "Slaveshade", LogLevel: log.Level(uint32(81))}
+	oQrnCjHMqz := Opts{Verbose: true, Version: false, Dir: "Slaveshade"}
 	oQrnC := &oQrnCjHMqz
 
 	kpUGG := Verify(oQrnC)
@@ -335,7 +334,7 @@ func (s *VerifySuite) TestVerify1() {
 }
 
 func (s *VerifySuite) TestVerify2() {
-	ckpMNjVFlW := Opts{Verbose: true, Version: false, Dir: "Spriteaquamarine", LogLevel: log.Level(uint32(91))}
+	ckpMNjVFlW := Opts{Verbose: true, Version: false, Dir: "Spriteaquamarine"}
 	ckpMN := &ckpMNjVFlW
 
 	lhHRx := Verify(ckpMN)
@@ -346,7 +345,7 @@ func (s *VerifySuite) TestVerify2() {
 }
 
 func (s *VerifySuite) TestVerify3() {
-	xcbDqnnFSI := Opts{Verbose: false, Version: true, Dir: "Beegrass", LogLevel: log.Level(uint32(96))}
+	xcbDqnnFSI := Opts{Verbose: false, Version: true, Dir: "Beegrass"}
 	xcbDq := &xcbDqnnFSI
 
 	fndRr := Verify(xcbDq)
@@ -357,7 +356,7 @@ func (s *VerifySuite) TestVerify3() {
 }
 
 func (s *VerifySuite) TestVerify4() {
-	oHIlwDWvyW := Opts{Verbose: true, Version: false, Dir: "Stealerwell", LogLevel: log.Level(uint32(14))}
+	oHIlwDWvyW := Opts{Verbose: true, Version: false, Dir: "Stealerwell"}
 	oHIlw := &oHIlwDWvyW
 
 	jELfg := Verify(oHIlw)
@@ -368,7 +367,7 @@ func (s *VerifySuite) TestVerify4() {
 }
 
 func (s *VerifySuite) TestVerify5() {
-	vEAYcOKQvO := Opts{Verbose: true, Version: true, Dir: "Flamebrown", LogLevel: log.Level(uint32(41))}
+	vEAYcOKQvO := Opts{Verbose: true, Version: true, Dir: "Flamebrown"}
 	vEAYc := &vEAYcOKQvO
 
 	oOaCF := Verify(vEAYc)
@@ -379,7 +378,7 @@ func (s *VerifySuite) TestVerify5() {
 }
 
 func (s *VerifySuite) TestVerify6() {
-	mfmufFcQYh := Opts{Verbose: false, Version: false, Dir: "Cowlbramble", LogLevel: log.Level(uint32(6))}
+	mfmufFcQYh := Opts{Verbose: false, Version: false, Dir: "Cowlbramble"}
 	mfmuf := &mfmufFcQYh
 
 	rkQYd := Verify(mfmuf)
@@ -390,7 +389,7 @@ func (s *VerifySuite) TestVerify6() {
 }
 
 func (s *VerifySuite) TestVerify7() {
-	ijiuSkOBiv := Opts{Verbose: false, Version: false, Dir: "Talonshimmer", LogLevel: log.Level(uint32(90))}
+	ijiuSkOBiv := Opts{Verbose: false, Version: false, Dir: "Talonshimmer"}
 	ijiuS := &ijiuSkOBiv
 
 	ldmwv := Verify(ijiuS)
@@ -401,7 +400,7 @@ func (s *VerifySuite) TestVerify7() {
 }
 
 func (s *VerifySuite) TestVerify8() {
-	jJZXyfsgLm := Opts{Verbose: true, Version: true, Dir: "Oxjasper", LogLevel: log.Level(uint32(27))}
+	jJZXyfsgLm := Opts{Verbose: true, Version: true, Dir: "Oxjasper"}
 	jJZXy := &jJZXyfsgLm
 
 	oznhU := Verify(jJZXy)
@@ -412,7 +411,7 @@ func (s *VerifySuite) TestVerify8() {
 }
 
 func (s *VerifySuite) TestVerify9() {
-	eUxmdpHOuc := Opts{Verbose: false, Version: false, Dir: "Batvaliant", LogLevel: log.Level(uint32(37))}
+	eUxmdpHOuc := Opts{Verbose: false, Version: false, Dir: "Batvaliant"}
 	eUxmd := &eUxmdpHOuc
 
 	sJbap := Verify(eUxmd)
