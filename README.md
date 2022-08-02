@@ -26,7 +26,7 @@ export PATH=$PATH:$GOPATH/bin
 ```
 Install the dev version:
 ```bash
-$ go install github.com/wimspaargaren/final-unit/cmd/finalunit
+$ go install github.com/wimspaargaren/final-unit/cmd/finalunit@latest
 ```
 
 ## Usage

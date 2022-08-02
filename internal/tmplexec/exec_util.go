@@ -24,7 +24,7 @@ type IExecutor interface {
 func generateFileFromTemplate(organism *gen.Organism, templateString string) error {
 	for _, f := range organism.Files {
 		ext := filepath.Ext(f.FileName)
-		filePath := filepath.Join(f.Dir, f.FileName)
+		filePath := f.FileName
 		executionPath := strings.TrimSuffix(filePath, ext) + "_test.go"
 		tmpl, err := template.New("").Funcs(template.FuncMap{
 			"add": func(x int) int {

@@ -6,9 +6,8 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"time"
 
-	"github.com/Pallinder/go-randomdata"
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/wimspaargaren/final-unit/pkg/chance"
 )
 
@@ -53,7 +52,6 @@ type Gen struct{}
 
 // NewGenerator creates a new generator
 func NewGenerator() IGen {
-	rand.Seed(time.Now().UnixNano())
 	return &Gen{}
 }
 
@@ -86,7 +84,7 @@ func (g *Gen) Type() string {
 		"complex128",
 	}
 
-	return types[randomdata.Number(0, len(types))]
+	return types[gofakeit.Number(0, len(types)-1)]
 }
 
 // Int8 Generates an int8 value
@@ -141,13 +139,13 @@ func (g *Gen) UIntPtr() string {
 
 // Bool Generates an bool value
 func (g *Gen) Bool() string {
-	val := randomdata.Boolean()
+	val := gofakeit.Bool()
 	return strconv.FormatBool(val)
 }
 
 // String Generates an bool value
 func (g *Gen) String() string {
-	val := randomdata.SillyName()
+	val := gofakeit.Name()
 	return fmt.Sprintf(`"%s"`, val)
 }
 
@@ -183,7 +181,7 @@ func (g *Gen) Rune() string {
 
 // Error Indicates if an error should be returned or nil
 func (g *Gen) Error() bool {
-	val := randomdata.Boolean()
+	val := gofakeit.Bool()
 	return val
 }
 
@@ -232,22 +230,20 @@ func (g *Gen) MapLen() int {
 // IntVal create random int value and converts it to string
 func IntVal() string {
 	const lower, upper int = -100, 100
-	val := randomdata.Number(lower, upper)
+	val := gofakeit.Number(lower, upper)
 	return strconv.Itoa(val)
 }
 
 // UIntVal create random uint value and converts it to string
 func UIntVal() string {
 	const lower, upper int = 0, 100
-	val := randomdata.Number(lower, upper)
+	val := gofakeit.Number(lower, upper)
 	return strconv.Itoa(val)
 }
 
 // FloatVal create random float value and converts it to string
 func FloatVal() string {
-	const maxAmountDecimalPoints = 5
-	const lower, upper int = -100, 100
-	decimalPoints := randomdata.Number(maxAmountDecimalPoints)
-	val := randomdata.Decimal(lower, upper, decimalPoints)
+	const lower, upper float64 = -100, 100
+	val := gofakeit.Float64Range(lower, upper)
 	return fmt.Sprintf("%f", val)
 }

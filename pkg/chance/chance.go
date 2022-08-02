@@ -4,13 +4,7 @@ package chance
 
 import (
 	"math/rand"
-	"time"
 )
-
-// nolint: gochecknoinits
-func init() {
-	rand.Seed(time.Now().Unix())
-}
 
 const fullChance = 100
 

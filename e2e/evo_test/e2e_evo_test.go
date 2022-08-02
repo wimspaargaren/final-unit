@@ -8,10 +8,12 @@ import (
 	"io/ioutil"
 	"log"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/wimspaargaren/final-unit/internal/evo"
 	"github.com/wimspaargaren/final-unit/internal/gen"
+	"github.com/wimspaargaren/final-unit/pkg/seed"
 )
 
 type EvoTestSuite struct {
@@ -24,17 +26,22 @@ func (s *EvoTestSuite) TestExamplesSingleFile() {
 			fmt.Println("Recovered in TestPanicFunc0", r)
 		}
 	}()
-	dir := "examples/simple"
+	dir := "./examples/simple"
 
-	genOpts := gen.DefaultOpts()
-	genOpts.OrganismAmount = 1
-	generator, err := gen.New(dir, "e2e", genOpts)
+	genOpts := &gen.Options{
+		OrganismAmount:   1,
+		MaxRecursion:     3,
+		TestCasesPerFunc: 1,
+	}
+	seed.SetRandomSeed(time.Now().Unix())
+	generator, err := gen.New(dir, genOpts)
 	s.Require().NoError(err)
-	popOpts := evo.DefaultPopOpts(generator)
-	popOpts.OverrideTestCases = true
-	popOpts.Target = 0
-	popOpts.MaxNoImprovGens = 1
-	population, err := evo.NewPopulation(dir, popOpts)
+	popOpts := evo.PopulationOpts{
+		OverrideTestCases: true,
+		Target:            0,
+		MaxNoImprovGens:   1,
+	}
+	population, err := evo.NewPopulation(dir, generator, popOpts)
 	s.Require().NoError(err)
 	err = population.Evolve()
 	s.Require().NoError(err)
@@ -55,15 +62,20 @@ func (s *EvoTestSuite) TestInputExamples() {
 		s.Run(f.Name(), func() {
 			dir := "../../test/data/inputs/" + f.Name()
 
-			genOpts := gen.DefaultOpts()
-			genOpts.OrganismAmount = 1
-			generator, err := gen.New(dir, "e2e", genOpts)
+			genOpts := &gen.Options{
+				OrganismAmount:   1,
+				MaxRecursion:     3,
+				TestCasesPerFunc: 1,
+			}
+			seed.SetRandomSeed(time.Now().Unix())
+			generator, err := gen.New(dir, genOpts)
 			s.Require().NoError(err)
-			popOpts := evo.DefaultPopOpts(generator)
-			popOpts.OverrideTestCases = true
-			popOpts.Target = 0
-			popOpts.MaxNoImprovGens = 1
-			population, err := evo.NewPopulation(dir, popOpts)
+			popOpts := evo.PopulationOpts{
+				OverrideTestCases: true,
+				Target:            0,
+				MaxNoImprovGens:   1,
+			}
+			population, err := evo.NewPopulation(dir, generator, popOpts)
 			s.Require().NoError(err)
 			err = population.Evolve()
 			s.Require().NoError(err)
@@ -85,16 +97,21 @@ func (s *EvoTestSuite) TestOutputExamples() {
 	for _, f := range files {
 		s.Run(f.Name(), func() {
 			dir := "../../test/data/outputs/" + f.Name()
-
-			genOpts := gen.DefaultOpts()
+			genOpts := &gen.Options{
+				OrganismAmount:   1,
+				MaxRecursion:     3,
+				TestCasesPerFunc: 1,
+			}
 			genOpts.OrganismAmount = 1
-			generator, err := gen.New(dir, "e2e", genOpts)
+			seed.SetRandomSeed(time.Now().Unix())
+			generator, err := gen.New(dir, genOpts)
 			s.Require().NoError(err)
-			popOpts := evo.DefaultPopOpts(generator)
-			popOpts.OverrideTestCases = true
-			popOpts.Target = 0
-			popOpts.MaxNoImprovGens = 1
-			population, err := evo.NewPopulation(dir, popOpts)
+			popOpts := evo.PopulationOpts{
+				OverrideTestCases: true,
+				Target:            0,
+				MaxNoImprovGens:   1,
+			}
+			population, err := evo.NewPopulation(dir, generator, popOpts)
 			s.Require().NoError(err)
 			err = population.Evolve()
 			s.Require().NoError(err)

@@ -17,7 +17,7 @@ func (s *IdentTestSuite) TestSuiteScope() {
 		Name: "s",
 	}
 	result1 := gen.Create(ident)
-	s.Equal("s2", result1.Name)
+	s.Equal("s", result1.Name)
 }
 
 func (s *IdentTestSuite) TestDuplWithUpperCaseStart() {
@@ -66,6 +66,17 @@ func (s *IdentTestSuite) TestGlobalDupl() {
 	s.Equal("testX", result1.Name)
 	result2 := gen.CreateGlobal(ident)
 	s.Equal("testX2", result2.Name)
+}
+
+func (s *IdentTestSuite) TestGlobalDupl2() {
+	gen := NewGenWithGlobal(map[string]int{"testX": 2})
+	ident := &ast.Ident{
+		Name: "x",
+	}
+	result1 := gen.CreateGlobal(ident)
+	s.Equal("testX3", result1.Name)
+	result2 := gen.CreateGlobal(ident)
+	s.Equal("testX4", result2.Name)
 }
 
 func TestIdentTestSuite(t *testing.T) {

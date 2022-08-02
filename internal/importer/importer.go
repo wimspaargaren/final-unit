@@ -8,7 +8,6 @@ import (
 	"go/parser"
 	"go/token"
 	"os"
-	"path/filepath"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -36,7 +35,6 @@ type PackageInfo struct {
 	RootPkg string
 	// dir is unique
 
-	// map[dir][packagename]package: []Files
 	PkgInfo map[string]map[string]*ast.Package
 }
 
@@ -47,19 +45,21 @@ func ParseRoot(dir string) (*PackageInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	res := make(map[string]map[string]*ast.Package)
+	if len(pkgs) == 0 {
+		return nil, fmt.Errorf("there's no go file in the directory")
+	}
+	if len(pkgs) > 1 {
+		return nil, fmt.Errorf("multi packages in one directory")
+	}
 	// FIXME checks for parsing root
-	pkg := ""
 	for k := range pkgs {
-		pkg = k
+		return &PackageInfo{
+			RootDir: dir,
+			PkgInfo: map[string]map[string]*ast.Package{dir: pkgs},
+			RootPkg: k,
+		}, nil
 	}
-	res[dir] = pkgs
-	ret := &PackageInfo{
-		RootDir: dir,
-		PkgInfo: res,
-		RootPkg: pkg,
-	}
-	return ret, nil
+	return nil, nil
 }
 
 // FileFilter filter files which should not be included in this case all files which end with _test.go
@@ -140,40 +140,36 @@ func importIdentifier(i *ast.ImportSpec) string {
 	return parts[len(parts)-1]
 }
 
-// RootPointerForFileName get root pointer for given filename
-func (p *PackageInfo) RootPointerForFileName(fileName string) *PkgResolverPointer {
-	return &PkgResolverPointer{
-		Dir:  p.RootDir,
-		Pkg:  p.RootPkg,
-		File: filepath.Join(p.RootDir, fileName),
+func (p *PackageInfo) checkPointer(pointer *PkgResolverPointer) error {
+	pkg, ok := p.PkgInfo[pointer.Dir]
+	if !ok {
+		return fmt.Errorf("directory: %s not found", pointer.Dir)
 	}
+	astPackage, ok := pkg[pointer.Pkg]
+	if !ok {
+		return fmt.Errorf("pkg: %s not found", pointer.Pkg)
+	}
+	if _, ok := astPackage.Files[pointer.File]; !ok {
+		return fmt.Errorf("file: %s not found", pointer.File)
+	}
+	return nil
 }
 
 // FileForPointer retrieve ast file for pointer
 func (p *PackageInfo) FileForPointer(pointer *PkgResolverPointer) *ast.File {
-	// FIME built in sanity checks
-	x, ok := p.PkgInfo[pointer.Dir]
-	if !ok {
-		log.Warningf("directory: %s not found", pointer.Dir)
+	if err := p.checkPointer(pointer); err != nil {
+		log.Warningln(err)
 		return nil
 	}
-
-	pkg, ok := x[pointer.Pkg]
-	if !ok {
-		log.Warningf("pkg: %s not found", pointer.Pkg)
-		return nil
-	}
-	f, ok := pkg.Files[pointer.File]
-	if !ok {
-		log.Warningf("file: %s not found", pointer.File)
-		return nil
-	}
-	return f
+	return p.PkgInfo[pointer.Dir][pointer.Pkg].Files[pointer.File]
 }
 
 // PkgForPointer retrieve ast package for pointer
 func (p *PackageInfo) PkgForPointer(pointer *PkgResolverPointer) *ast.Package {
-	// FIME built in sanity checks
+	if err := p.checkPointer(pointer); err != nil {
+		log.Warningln(err)
+		return nil
+	}
 	return p.PkgInfo[pointer.Dir][pointer.Pkg]
 }
 
@@ -248,6 +244,9 @@ func (p *PackageInfo) FindImport(pointer *PkgResolverPointer, selector, identifi
 // FindInCurrent tries to find an indentifier in current package
 func (p *PackageInfo) FindInCurrent(pointer *PkgResolverPointer, identifier string) (bool, ast.Expr, *PkgResolverPointer) {
 	pkg := p.PkgForPointer(pointer)
+	if pkg == nil {
+		return false, nil, pointer
+	}
 	// Iterate files in root
 	for fileName, f := range pkg.Files {
 		// Iterate declartions in file

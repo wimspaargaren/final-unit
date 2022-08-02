@@ -6,10 +6,12 @@ package e2e
 import (
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/wimspaargaren/final-unit/internal/gen"
 	"github.com/wimspaargaren/final-unit/internal/tmplexec"
+	"github.com/wimspaargaren/final-unit/pkg/seed"
 )
 
 type E2EResultSuite struct {
@@ -111,10 +113,15 @@ func (s *E2EResultSuite) TestOutputs() {
 	}
 	for _, test := range tests {
 		s.Run(test.Dir, func() {
-			opts := gen.DefaultOpts()
+			opts := &gen.Options{
+				OrganismAmount:   1,
+				MaxRecursion:     3,
+				TestCasesPerFunc: 1,
+			}
 			opts.OrganismAmount = test.OrganismAmount
 			opts.TestCasesPerFunc = test.CasesPerFunc
-			g, err := gen.New(test.Dir, "e2e", opts)
+			seed.SetRandomSeed(time.Now().Unix())
+			g, err := gen.New(test.Dir, opts)
 			if err != nil {
 				panic(err)
 			}
