@@ -30,7 +30,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Get go imports
-      run: go get golang.org/x/tools/cmd/goimports
+      run: go install golang.org/x/tools/cmd/goimports@latest
     - name: Test
       run: go test -v -p=4 -cover ./...
   test-e2e:
@@ -43,7 +43,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Get go imports
-      run: go get golang.org/x/tools/cmd/goimports
+      run: go install golang.org/x/tools/cmd/goimports@latest
     - name: Test e2e
       run: go test --tags=e2e -v ./e2e/... 
   golangci:
