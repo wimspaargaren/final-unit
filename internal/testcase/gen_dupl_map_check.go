@@ -41,7 +41,7 @@ func NewDuplMapChecker() *DuplMapChecker {
 }
 
 // IsDuplExpr checks if we are dealing with a duplicate map key expression
-func (d *DuplMapChecker) IsDuplExpr(e ast.Expr) bool { // nolint: funlen
+func (d *DuplMapChecker) IsDuplExpr(e ast.Expr) bool { //nolint: funlen
 	switch t := e.(type) {
 	case *ast.StructType:
 		dupl := d.StructTypeMap[*t]

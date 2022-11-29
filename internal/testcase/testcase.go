@@ -779,7 +779,7 @@ func (g *TestCase) InterfaceTypeToFuncImpl(input *RecursionInput, interfaceImplI
 	result := &TypeExprToValExprRes{}
 	for _, method := range t.Methods.List {
 		// Normal method definitions
-		// nolint: nestif
+		//nolint: nestif
 		if funcType, ok := method.Type.(*ast.FuncType); ok {
 			result = g.MethodFuncTypeToFuncImpl(funcType, method, input, interfaceImplIdent, result)
 			// Nested interface
@@ -1187,8 +1187,8 @@ func (g *TestCase) StructFieldsToKeyValExpr(res *ast.CompositeLit, input *Recurs
 	return result
 }
 
-// nolint: unused
-func (g *TestCase) printBodyStatements(funcBody *ast.BlockStmt) {
+// PrintBodyStatements debug function
+func (g *TestCase) PrintBodyStatements(funcBody *ast.BlockStmt) {
 	if funcBody == nil {
 		return
 	}

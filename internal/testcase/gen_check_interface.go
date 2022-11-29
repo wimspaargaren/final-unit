@@ -87,7 +87,7 @@ func (g *TestCase) CheckIfCanGenFunc(f *ast.FuncType, input *RecursionInput) boo
 }
 
 // CheckIfCanGenExpr recurse interface expression and discover if we find any non exported expressions
-func (g *TestCase) CheckIfCanGenExpr(input *RecursionInput) bool { // nolint: funlen, gocyclo, gocognit
+func (g *TestCase) CheckIfCanGenExpr(input *RecursionInput) bool { //nolint: funlen, gocyclo, gocognit
 	if input.e == nil {
 		return true
 	}

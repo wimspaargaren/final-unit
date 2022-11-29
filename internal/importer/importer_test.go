@@ -1,4 +1,3 @@
-// nolint: goconst
 package importer
 
 import (
@@ -7,6 +6,12 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+)
+
+const (
+	dir  = "examples/example_simple"
+	pkg  = "simple"
+	file = "examples/example_simple/simple.go"
 )
 
 type ImporterTestSuite struct {
@@ -42,10 +47,7 @@ func (s *ImporterTestSuite) TestV2Import() {
 }
 
 func (s *ImporterTestSuite) TestResolveImportsForPointer() {
-	dir := "examples/example_simple"
 	// Package info needed in recursion
-	pkg := "simple"
-	file := "examples/example_simple/simple.go"
 	// On start gen
 	pointer := PkgResolverPointer{
 		Dir:  dir,
@@ -76,10 +78,6 @@ func (s *ImporterTestSuite) TestResolveImportsForPointer() {
 }
 
 func (s *ImporterTestSuite) TestFindInCurrent() {
-	dir := "examples/example_simple"
-	// Package info needed in recursion
-	pkg := "simple"
-	file := "examples/example_simple/simple.go"
 	// On start gen
 	pointer := &PkgResolverPointer{
 		Dir:  dir,
@@ -101,10 +99,6 @@ func (s *ImporterTestSuite) TestFindInCurrent() {
 }
 
 func (s *ImporterTestSuite) TestFindInImport() {
-	dir := "examples/example_simple"
-	// Package info needed in recursion
-	pkg := "simple"
-	file := "examples/example_simple/simple.go"
 	// On start gen
 	pointer := &PkgResolverPointer{
 		Dir:  dir,

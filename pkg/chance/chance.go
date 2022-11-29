@@ -1,5 +1,4 @@
 // Package chance provides functionality for easily dealing with chances
-// nolint: gosec
 package chance
 
 import (

@@ -94,7 +94,6 @@ linters:
   enable:
     - asciicheck
     - bodyclose
-    - deadcode
     - dupl
     - errcheck
     - errorlint
@@ -115,7 +114,6 @@ linters:
     - gomnd
     - gomodguard
     - goprintffuncname
-    - gosec 
     - gosimple 
     - govet 
     - ineffassign
@@ -127,16 +125,16 @@ linters:
     - rowserrcheck
     - sqlclosecheck
     - staticcheck 
-    - structcheck
     - stylecheck
     - tparallel
     - typecheck
     - unconvert
     - unparam
-    - varcheck
+    - unused
     - whitespace
     - revive
     # Disabled
+    # - gosec 
     # - wsl
     # - depguard
     # - dogsled
@@ -153,7 +151,6 @@ linters:
     # - golint
     # - interfacer
     # - scopelint
-  disable-all: false
   fast: false
 
 severity: 

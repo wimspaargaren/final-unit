@@ -1,5 +1,4 @@
 // Package evo provides genetic evolution algorithm for evolving test cases
-// nolint: gosec
 package evo
 
 import (

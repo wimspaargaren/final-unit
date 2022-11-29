@@ -345,7 +345,7 @@ func (g *TestCase) StarExprToPrintStmt(t *ast.StarExpr, input *PrintRecursionInp
 }
 
 // StructExprToPrintStmt converts a struct expression to print statement
-func (g *TestCase) StructExprToPrintStmt(input *PrintRecursionInput) *PrintResult { // nolint: funlen
+func (g *TestCase) StructExprToPrintStmt(input *PrintRecursionInput) *PrintResult { //nolint: funlen
 	t, ok := input.e.(*ast.StructType)
 	// Sanity check
 	if !ok {
@@ -574,7 +574,7 @@ func (g *TestCase) ArrayExprToPrintStmt(t *ast.ArrayType, input *PrintRecursionI
 
 // BasicExprToPrintStmt converts a basic identifier to a print stmt
 func (g *TestCase) BasicExprToPrintStmt(input *PrintRecursionInput, typeIdentifier, varIdentifier string) *PrintResult {
-	// nolint: goconst
+	//nolint: goconst
 	switch typeIdentifier {
 	case "bool",
 		"float32",

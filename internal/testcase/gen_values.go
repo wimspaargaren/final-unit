@@ -80,7 +80,7 @@ func (g *TestCase) ErrExprToValExpr() *TypeExprToValExprRes {
 }
 
 // BasicExprToValExpr converts a basic identifier to an expression
-func (g *TestCase) BasicExprToValExpr(identifier string) ast.Expr { // nolint: gocyclo
+func (g *TestCase) BasicExprToValExpr(identifier string) ast.Expr { //nolint: gocyclo
 	switch identifier {
 	case "int":
 		return &ast.BasicLit{

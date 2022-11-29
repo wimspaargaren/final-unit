@@ -220,7 +220,7 @@ func ValidateRes(res *Deco, dir string) error {
 func ValidateReceiverVals(f *ast.File, funcName string, decoType ast.Expr) error {
 	info := types.Info{}
 	for _, decl := range f.Decls {
-		// nolint: nestif
+		//nolint: nestif
 		if t, ok := decl.(*ast.FuncDecl); ok {
 			if t.Name.Name == funcName {
 				if t.Recv == nil {
@@ -242,7 +242,7 @@ func ValidateReceiverVals(f *ast.File, funcName string, decoType ast.Expr) error
 func ValidateParamVals(f *ast.File, funcName, paramName string, decoType ast.Expr) error {
 	info := types.Info{}
 	for _, decl := range f.Decls {
-		// nolint: nestif
+		//nolint: nestif
 		if t, ok := decl.(*ast.FuncDecl); ok {
 			if t.Name.Name == funcName {
 				for _, p := range t.Type.Params.List {
@@ -264,7 +264,7 @@ func ValidateParamVals(f *ast.File, funcName, paramName string, decoType ast.Exp
 // ParseYaml parses a yaml for given file
 func ParseYaml(dir string) (*Spec, error) {
 	spec := Spec{}
-	// nolint: gosec
+	//nolint: gosec
 	yamlData, err := ioutil.ReadFile(filepath.Join(dir, "evo.yaml"))
 	if err != nil {
 		return nil, err
@@ -278,7 +278,7 @@ func ParseYaml(dir string) (*Spec, error) {
 }
 
 // ConvertSpec convert spec to decorator result
-func ConvertSpec(n *ast.File, spec *Spec) (*Deco, error) { // nolint: gocognit
+func ConvertSpec(n *ast.File, spec *Spec) (*Deco, error) { //nolint: gocognit
 	res := &Deco{
 		Files: make(map[string]*File),
 	}
@@ -342,7 +342,7 @@ func ConvertSpec(n *ast.File, spec *Spec) (*Deco, error) { // nolint: gocognit
 // FindCustomVal find parameter value for given spec
 func FindCustomVal(f *ast.File, funcName string) (*CustomVal, error) {
 	for _, decl := range f.Decls {
-		// nolint: nestif
+		//nolint: nestif
 		if t, ok := decl.(*ast.FuncDecl); ok {
 			if t.Name.Name == funcName {
 				if len(t.Type.Params.List) != 0 {

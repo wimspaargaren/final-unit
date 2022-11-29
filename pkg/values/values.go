@@ -1,5 +1,4 @@
 // Package values provides an interface for generating values
-// nolint: gosec
 package values
 
 import (

@@ -7,7 +7,7 @@ import (
 )
 
 // CorrectTypeExpr corrects type expressions for imports
-func (g *TestCase) CorrectTypeExpr(e ast.Expr, input *RecursionInput) ast.Expr { // nolint: funlen, gocyclo
+func (g *TestCase) CorrectTypeExpr(e ast.Expr, input *RecursionInput) ast.Expr { //nolint: funlen, gocyclo
 	switch t := e.(type) {
 	case *ast.ArrayType:
 		return &ast.ArrayType{

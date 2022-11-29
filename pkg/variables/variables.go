@@ -1,5 +1,4 @@
 // Package variables provides a generator for creating random variable names
-// nolint: gosec
 package variables
 
 import (
@@ -10,10 +9,6 @@ import (
 type IGen interface {
 	Generate() string
 }
-
-// not linted for speeding up generating
-// nolint: gochecknoglobals
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 const (
 	varNameLength = 5
@@ -33,6 +28,7 @@ func (g *Generator) Generate() string {
 }
 
 func randSeq(n int) string {
+	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = letters[rand.Intn(len(letters))]
