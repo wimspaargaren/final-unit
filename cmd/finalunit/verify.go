@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -36,7 +36,7 @@ func Verify(opts *Opts) error {
 
 // CheckGoFiles check if go files exist in current given directory
 func CheckGoFiles(opts *Opts) error {
-	files, err := ioutil.ReadDir(opts.Dir)
+	files, err := os.ReadDir(opts.Dir)
 	if err != nil {
 		return &UnreadableDir{Dir: opts.Dir}
 	}

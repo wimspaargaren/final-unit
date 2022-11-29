@@ -9,7 +9,6 @@ import (
 	"go/parser"
 	"go/token"
 	"go/types"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -265,7 +264,7 @@ func ValidateParamVals(f *ast.File, funcName, paramName string, decoType ast.Exp
 func ParseYaml(dir string) (*Spec, error) {
 	spec := Spec{}
 	//nolint: gosec
-	yamlData, err := ioutil.ReadFile(filepath.Join(dir, "evo.yaml"))
+	yamlData, err := os.ReadFile(filepath.Join(dir, "evo.yaml"))
 	if err != nil {
 		return nil, err
 	}

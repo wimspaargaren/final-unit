@@ -5,8 +5,8 @@ package e2e
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"testing"
 	"time"
 
@@ -53,7 +53,7 @@ func (s *EvoTestSuite) TestInputExamples() {
 			fmt.Println("Recovered in TestPanicFunc0", r)
 		}
 	}()
-	files, err := ioutil.ReadDir("../../test/data/inputs")
+	files, err := os.ReadDir("../../test/data/inputs")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -89,7 +89,7 @@ func (s *EvoTestSuite) TestOutputExamples() {
 			fmt.Println("Recovered in TestPanicFunc0", r)
 		}
 	}()
-	files, err := ioutil.ReadDir("../../test/data/outputs")
+	files, err := os.ReadDir("../../test/data/outputs")
 	if err != nil {
 		log.Fatal(err)
 	}
