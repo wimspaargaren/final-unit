@@ -10,8 +10,8 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
 	github.com/vektah/gqlparser v1.3.1
-	golang.org/x/crypto v0.5.0
-	golang.org/x/text v0.6.0
+	golang.org/x/crypto v0.7.0
+	golang.org/x/text v0.8.0
 	gopkg.in/pipe.v2 v2.0.0-20140414041502-3c2ca4d52544
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -24,7 +24,7 @@ require (
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
-	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/net v0.8.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )
