@@ -3,7 +3,7 @@ module github.com/wimspaargaren/final-unit
 go 1.19
 
 require (
-	github.com/brianvoe/gofakeit/v6 v6.20.1
+	github.com/brianvoe/gofakeit/v6 v6.21.0
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gofrs/uuid v4.3.1+incompatible
 	github.com/sirupsen/logrus v1.9.0
